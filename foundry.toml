@@ -1,0 +1,10 @@
+[profile.default]
+out = 'out'
+remappings = [
+  "interfaces=contracts/interfaces",
+]
+auto_detect_solc=true
+# solc_version='0.8.9'
+
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
