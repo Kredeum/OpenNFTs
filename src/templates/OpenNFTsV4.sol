@@ -51,18 +51,23 @@
 
 pragma solidity 0.8.9;
 
-import "../open/OpenCloneable.sol";
-import "../open/OpenMarketable.sol";
-import "../open/OpenERC721Enumerable.sol";
-import "../open/OpenERC721Metadata.sol";
+import "../components/OpenCloneable.sol";
+import "../components/OpenMarketable.sol";
+import "../components/OpenERC721Enumerable.sol";
+import "../components/OpenERC721Metadata.sol";
 
-import "../interfaces/IOpenNFTs.sol";
 import "../interfaces/IOpenNFTsV4.sol";
 import "../interfaces/IERC20.sol";
 import "../interfaces/IERC2981.sol";
 
 /// @title OpenNFTs smartcontract
-contract OpenNFTsV4 is IOpenNFTsV4, OpenCloneable, OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable {
+contract OpenNFTsV4 is
+    IOpenNFTsV4,
+    OpenCloneable,
+    OpenERC721Enumerable,
+    OpenERC721Metadata,
+    OpenMarketable
+{
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext = 1;
 
@@ -105,13 +110,22 @@ contract OpenNFTsV4 is IOpenNFTsV4, OpenCloneable, OpenERC721Enumerable, OpenERC
         return _mint(msg.sender, jsonURI);
     }
 
-    function mint(address to, string memory jsonURI) external override(IOpenNFTsV4) onlyOwner returns (uint256) {
+    function mint(address to, string memory jsonURI)
+        external
+        override(IOpenNFTsV4)
+        onlyOwner
+        returns (uint256)
+    {
         return _mint(to, jsonURI);
     }
 
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
-    function burn(uint256 tokenID) external override(IOpenNFTsV4) onlyTokenOwnerOrApproved(tokenID) {
+    function burn(uint256 tokenID)
+        external
+        override(IOpenNFTsV4)
+        onlyTokenOwnerOrApproved(tokenID)
+    {
         _burn(tokenID);
     }
 
@@ -120,8 +134,18 @@ contract OpenNFTsV4 is IOpenNFTsV4, OpenCloneable, OpenERC721Enumerable, OpenERC
         payable(to).transfer(address(this).balance);
     }
 
-    function withdrawErc20(address token) external override(IOpenNFTsV4) onlyOwner {
-        require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
+    function withdrawErc20(address token)
+        external
+        override(IOpenNFTsV4)
+        onlyOwner
+    {
+        require(
+            IERC20(token).transfer(
+                msg.sender,
+                IERC20(token).balanceOf(address(this))
+            ),
+            "Withdraw failed"
+        );
     }
 
     function buy(uint256 tokenID) external payable override(IOpenNFTsV4) {
@@ -167,11 +191,15 @@ contract OpenNFTsV4 is IOpenNFTsV4, OpenCloneable, OpenERC721Enumerable, OpenERC
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable)
+        override(
+            OpenMarketable,
+            OpenERC721Metadata,
+            OpenERC721Enumerable,
+            OpenCloneable
+        )
         returns (bool)
     {
         return
-            interfaceId == type(IOpenNFTs).interfaceId ||
             interfaceId == type(IOpenNFTsV4).interfaceId ||
             super.supportsInterface(interfaceId);
     }
@@ -179,7 +207,10 @@ contract OpenNFTsV4 is IOpenNFTsV4, OpenCloneable, OpenERC721Enumerable, OpenERC
     /// @notice _mint
     /// @param minter address of minter
     /// @param jsonURI json URI of NFT metadata
-    function _mint(address minter, string memory jsonURI) internal returns (uint256 tokenID) {
+    function _mint(address minter, string memory jsonURI)
+        internal
+        returns (uint256 tokenID)
+    {
         tokenID = tokenIdNext++;
 
         _mintMetadata(tokenID, jsonURI);

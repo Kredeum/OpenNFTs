@@ -1,8 +1,7 @@
 [profile.default]
+src = 'src'
 out = 'out'
-remappings = [
-  "interfaces=contracts/interfaces",
-]
+remappings = []
 auto_detect_solc=true
 # solc_version='0.8.9'
 
