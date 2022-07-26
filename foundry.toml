@@ -1,8 +1,8 @@
 [profile.default]
-src = 'src'
+src = 'contracts'
 out = 'out'
 remappings = [
-  "OpenNFTs=./src"
+  "OpenNFTs=."
 ]
 auto_detect_solc=true
 # solc_version='0.8.9'
