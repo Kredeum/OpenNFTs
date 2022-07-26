@@ -15,8 +15,8 @@
 
 pragma solidity 0.8.9;
 
-import "./OpenERC173.sol";
-import "../interfaces/IERC2981.sol";
+import "OpenNFTs/components/OpenERC173.sol";
+import "OpenNFTs/interfaces/IERC2981.sol";
 
 abstract contract OpenERC2981 is IERC2981, OpenERC173 {
     struct RoyaltyInfo {
@@ -49,7 +49,14 @@ abstract contract OpenERC2981 is IERC2981, OpenERC173 {
         return (royalty.receiver, royaltyAmount);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
-        return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(OpenERC173)
+        returns (bool)
+    {
+        return
+            interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
     }
 }

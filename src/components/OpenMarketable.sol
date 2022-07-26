@@ -27,11 +27,15 @@
 
 pragma solidity 0.8.9;
 
-import "./OpenERC2981.sol";
-import "./OpenPauseable.sol";
-import "../interfaces/IOpenMarketable.sol";
+import "OpenNFTs/components/OpenERC2981.sol";
+import "OpenNFTs/components/OpenPauseable.sol";
+import "OpenNFTs/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable {
+abstract contract OpenMarketable is
+    IOpenMarketable,
+    OpenERC2981,
+    OpenPauseable
+{
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
@@ -67,11 +71,21 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable 
         uint256 tokenID,
         address receiver,
         uint96 fee
-    ) external override(IOpenMarketable) onlyTokenOwnerOrApproved(tokenID) lessThanMaxFee(fee) {
+    )
+        external
+        override(IOpenMarketable)
+        onlyTokenOwnerOrApproved(tokenID)
+        lessThanMaxFee(fee)
+    {
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function setDefaultPrice(uint256 price) external override(IOpenMarketable) onlyOwner notTooExpensive(price) {
+    function setDefaultPrice(uint256 price)
+        external
+        override(IOpenMarketable)
+        onlyOwner
+        notTooExpensive(price)
+    {
         defaultPrice = price;
     }
 
@@ -95,7 +109,9 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable 
         override(OpenERC2981, OpenPauseable)
         returns (bool)
     {
-        return interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenMarketable).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
     function _setTokenRoyalty(

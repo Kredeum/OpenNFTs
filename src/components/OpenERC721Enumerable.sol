@@ -14,8 +14,8 @@
 
 pragma solidity 0.8.9;
 
-import "./OpenERC721.sol";
-import "../interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/components/OpenERC721.sol";
+import "OpenNFTs/interfaces/IERC721Enumerable.sol";
 
 abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     // Array of all tokens ID
@@ -41,17 +41,34 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         return _ownedTokens[owner][index];
     }
 
-    function totalSupply() external view override(IERC721Enumerable) returns (uint256) {
+    function totalSupply()
+        external
+        view
+        override(IERC721Enumerable)
+        returns (uint256)
+    {
         return _allTokens.length;
     }
 
-    function tokenByIndex(uint256 index) external view override(IERC721Enumerable) returns (uint256) {
+    function tokenByIndex(uint256 index)
+        external
+        view
+        override(IERC721Enumerable)
+        returns (uint256)
+    {
         require(index < _allTokens.length, "Invalid index!");
         return _allTokens[index];
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC721) returns (bool) {
-        return interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(OpenERC721)
+        returns (bool)
+    {
+        return
+            interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
     }
 
     function _mintEnumerable(address to, uint256 tokenID) internal {

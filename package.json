@@ -1,0 +1,20 @@
+{
+  "name": "OpenNFTs",
+  "version": "0.0.1",
+  "description": "OpenNFTs is a library of smarcontract components, enabling the creation of various NFT Collection templates.",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kredeum/OpenNFTs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kredeum/OpenNFTs/issues"
+  },
+  "homepage": "https://github.com/Kredeum/OpenNFTs#readme"
+}

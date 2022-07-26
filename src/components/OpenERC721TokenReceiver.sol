@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-import "./OpenERC721.sol";
-import "../interfaces/IERC721TokenReceiver.sol";
+import "OpenNFTs/components/OpenERC721.sol";
+import "OpenNFTs/interfaces/IERC721TokenReceiver.sol";
 
 contract OpenERC721TokenReceiver is IERC721TokenReceiver, OpenERC721 {
     function onERC721Received(

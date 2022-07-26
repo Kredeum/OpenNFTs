@@ -51,14 +51,14 @@
 
 pragma solidity 0.8.9;
 
-import "../components/OpenCloneable.sol";
-import "../components/OpenMarketable.sol";
-import "../components/OpenERC721Enumerable.sol";
-import "../components/OpenERC721Metadata.sol";
+import "OpenNFTs/components/OpenCloneable.sol";
+import "OpenNFTs/components/OpenMarketable.sol";
+import "OpenNFTs/components/OpenERC721Enumerable.sol";
+import "OpenNFTs/components/OpenERC721Metadata.sol";
 
-import "../interfaces/IOpenNFTsV4.sol";
-import "../interfaces/IERC20.sol";
-import "../interfaces/IERC2981.sol";
+import "OpenNFTs/interfaces/IOpenNFTsV4.sol";
+import "OpenNFTs/interfaces/IERC20.sol";
+import "OpenNFTs/interfaces/IERC2981.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTsV4 is

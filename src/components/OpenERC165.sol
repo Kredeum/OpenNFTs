@@ -8,10 +8,15 @@
 
 pragma solidity 0.8.9;
 
-import "../interfaces/IERC165.sol";
+import "OpenNFTs/interfaces/IERC165.sol";
 
 abstract contract OpenERC165 is IERC165 {
-    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        returns (bool)
+    {
         return interfaceId == 0x01ffc9a7;
     }
 }

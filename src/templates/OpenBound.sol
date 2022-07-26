@@ -43,15 +43,15 @@
 
 pragma solidity ^0.8.9;
 
-import "../components/OpenPauseable.sol";
-import "../components/OpenCloneable.sol";
+import "OpenNFTs/components/OpenPauseable.sol";
+import "OpenNFTs/components/OpenCloneable.sol";
 
-import "../interfaces/IOpenBound.sol";
-import "../interfaces/IERC173.sol";
-import "../interfaces/IERC721.sol";
-import "../interfaces/IERC721Enumerable.sol";
-import "../interfaces/IERC721Metadata.sol";
-import "../libraries/Bafkrey.sol";
+import "OpenNFTs/interfaces/IOpenBound.sol";
+import "OpenNFTs/interfaces/IERC173.sol";
+import "OpenNFTs/interfaces/IERC721.sol";
+import "OpenNFTs/interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/interfaces/IERC721Metadata.sol";
+import "OpenNFTs/libraries/Bafkrey.sol";
 
 /// @title OpenBound smartcontract
 contract OpenBound is
