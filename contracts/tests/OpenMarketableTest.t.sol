@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MITs
 pragma solidity 0.8.9;
 
-import "../../lib/forge-std/src/Test.sol";
+import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
