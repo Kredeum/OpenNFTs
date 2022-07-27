@@ -3,7 +3,7 @@ pragma solidity 0.8.9;
 
 import "../../lib/forge-std/src/Test.sol";
 
-import "../templates/OpenBound.sol";
+import "OpenNFTs/contracts/templates/OpenBoundEx.sol";
 import "OpenNFTs/contracts/interfaces/ITest.sol";
 import {OpenERC721Test} from "./OpenERC721Test.t.sol";
 import {ERC173Test} from "./ERC173Test.t.sol";
@@ -33,8 +33,8 @@ contract OpenBoundTest is
         bool[] memory options = new bool[](1);
         options[0] = true;
 
-        OpenBound collection = new OpenBound();
-        collection.initialize("OpenBound", "BOUND", owner, 0);
+        OpenBoundEx collection = new OpenBoundEx();
+        collection.initialize("OpenBoundEx", "BOUND", owner, 0);
 
         return address(collection);
     }
@@ -45,8 +45,8 @@ contract OpenBoundTest is
         returns (uint256, string memory)
     {
         changePrank(minter);
-        uint256 tokenID = OpenBound(collection).mint(_cid++);
-        string memory tokenURI = OpenBound(collection).tokenURI(tokenID);
+        uint256 tokenID = OpenBoundEx(collection).mint(_cid++);
+        string memory tokenURI = OpenBoundEx(collection).tokenURI(tokenID);
         return (tokenID, tokenURI);
     }
 
@@ -54,14 +54,14 @@ contract OpenBoundTest is
         public
         override(OpenERC721Test, ERC721NonTransferableTest)
     {
-        changePrank(OpenBound(collection).ownerOf(tokenID));
-        OpenBound(collection).burn(tokenID);
+        changePrank(OpenBoundEx(collection).ownerOf(tokenID));
+        OpenBoundEx(collection).burn(tokenID);
     }
 
     function setUp() public override {
         setUpERC173();
         setUpPausable();
-        setUpOpenNFTs("OpenBound", "BOUND");
+        setUpOpenNFTs("OpenBoundEx", "BOUND");
         setUpERC721NonTransferable();
     }
 }

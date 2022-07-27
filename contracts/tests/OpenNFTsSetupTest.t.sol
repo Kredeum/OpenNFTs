@@ -10,7 +10,8 @@ import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
-import "../templates/OpenNFTsV4.sol";
+
+// import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
 
 abstract contract OpenNFTsSetupTest is Test {
     address private _collection;

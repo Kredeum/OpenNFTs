@@ -10,7 +10,7 @@ import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
-import "../templates/OpenNFTsV4.sol";
+import "../templates/OpenNFTsEx.sol";
 
 abstract contract OpenNFTsInitializeTest is Test {
     address private _collection;
@@ -21,7 +21,7 @@ abstract contract OpenNFTsInitializeTest is Test {
     bool[] private _options = new bool[](1);
 
     function setUpOpenNFTsInitialize() public {
-        _collection = address(new OpenNFTsV4());
+        _collection = address(new OpenNFTsEx());
         _options[0] = true;
     }
 

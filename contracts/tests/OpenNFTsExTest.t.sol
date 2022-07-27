@@ -3,7 +3,7 @@ pragma solidity 0.8.9;
 
 import "../../lib/forge-std/src/Test.sol";
 
-import "../templates/OpenNFTsV4.sol";
+// import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
 import "./OpenERC721Test.t.sol";
 import "./OpenNFTsBurnTest.t.sol";
 import "./OpenNFTsBuyTest.t.sol";
@@ -16,7 +16,7 @@ import "./OpenPauseableTest.t.sol";
 import "./OpenMarketableTest.t.sol";
 import "OpenNFTs/contracts/interfaces/ITest.sol";
 
-contract OpenNFTsV4Test is
+contract OpenNFTsExTest is
     ITest,
     OpenERC721Test,
     OpenNFTsBurnTest,
@@ -48,7 +48,7 @@ contract OpenNFTsV4Test is
         bool[] memory options = new bool[](1);
         options[0] = true;
 
-        OpenNFTsV4 collection = new OpenNFTsV4();
+        OpenNFTsEx collection = new OpenNFTsEx();
         collection.initialize("OpenERC721Test", "OPTEST", owner, options);
 
         return address(collection);
@@ -69,15 +69,15 @@ contract OpenNFTsV4Test is
         returns (uint256, string memory)
     {
         changePrank(minter);
-        return (OpenNFTsV4(collection).mint(_TOKEN_URI), _TOKEN_URI);
+        return (OpenNFTsEx(collection).mint(_TOKEN_URI), _TOKEN_URI);
     }
 
     function burnTest(address collection, uint256 tokenID)
         public
         override(OpenERC721Test, OpenNFTsBurnTest)
     {
-        changePrank(OpenNFTsV4(collection).ownerOf(tokenID));
-        OpenNFTsV4(collection).burn(tokenID);
+        changePrank(OpenNFTsEx(collection).ownerOf(tokenID));
+        OpenNFTsEx(collection).burn(tokenID);
     }
 
     function setPriceTest(
@@ -85,7 +85,7 @@ contract OpenNFTsV4Test is
         uint256 tokenID,
         uint256 price
     ) public {
-        OpenNFTsV4(collection).setTokenPrice(tokenID, price);
+        OpenNFTsEx(collection).setTokenPrice(tokenID, price);
     }
 
     function setRoyaltyTest(
@@ -94,7 +94,7 @@ contract OpenNFTsV4Test is
         uint96 fee
     ) public override(ERC2981Test, PriceableTest) returns (uint256 tokenID) {
         (tokenID, ) = mintTest(collection, receiver);
-        OpenNFTsV4(collection).setTokenRoyalty(tokenID, receiver, fee);
+        OpenNFTsEx(collection).setTokenRoyalty(tokenID, receiver, fee);
     }
 
     function setUp() public override {
