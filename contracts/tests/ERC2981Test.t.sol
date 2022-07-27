@@ -13,15 +13,9 @@ abstract contract ERC2981Test is Test {
     address private _minter = address(0x12);
     uint256 private _tokenID0;
 
-    function constructorTest(address owner_)
-        public
-        virtual
-        returns (address contract_);
+    function constructorTest(address owner_) public virtual returns (address contract_);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function setRoyaltyTest(
         address collection_,
@@ -46,8 +40,6 @@ abstract contract ERC2981Test is Test {
     }
 
     function testERC2981SupportsInterface() public {
-        assertTrue(
-            IERC165(_contract).supportsInterface(type(IERC2981).interfaceId)
-        );
+        assertTrue(IERC165(_contract).supportsInterface(type(IERC2981).interfaceId));
     }
 }

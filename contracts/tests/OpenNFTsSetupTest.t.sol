@@ -25,10 +25,7 @@ abstract contract OpenNFTsSetupTest is Test {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function setUpOpenNFTsSetup() public {
         _collection = constructorTest(_owner);
@@ -51,10 +48,7 @@ abstract contract OpenNFTsSetupTest is Test {
     function testToken() public {
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
         assertEq(IERC721Enumerable(_collection).tokenByIndex(0), _tokenID0);
-        assertEq(
-            IERC721Enumerable(_collection).tokenOfOwnerByIndex(_minter, 0),
-            _tokenID0
-        );
+        assertEq(IERC721Enumerable(_collection).tokenOfOwnerByIndex(_minter, 0), _tokenID0);
         assertEq(IERC721Metadata(_collection).tokenURI(_tokenID0), _tokenURI0);
     }
 
@@ -63,8 +57,7 @@ abstract contract OpenNFTsSetupTest is Test {
     }
 
     function testRoyalties() public {
-        (address receiver, uint256 royalties) = IERC2981(_collection)
-            .royaltyInfo(1, 1);
+        (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(1, 1);
         assertEq(receiver, address(0));
         assertEq(royalties, 0);
     }

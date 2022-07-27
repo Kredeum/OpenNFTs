@@ -11,9 +11,7 @@ interface IOpenNFTsEx {
 
     function mint(string memory jsonURI) external returns (uint256 tokenID);
 
-    function mint(address minter, string memory jsonURI)
-        external
-        returns (uint256 tokenID);
+    function mint(address minter, string memory jsonURI) external returns (uint256 tokenID);
 
     function burn(uint256 tokenID) external;
 

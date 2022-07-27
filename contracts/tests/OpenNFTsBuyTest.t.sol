@@ -19,10 +19,7 @@ abstract contract OpenNFTsBuyTest is Test {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function setUpOpenNFTsBuy() public {
         _collection = constructorTest(_owner);
@@ -42,7 +39,7 @@ abstract contract OpenNFTsBuyTest is Test {
         uint256 balMinter = _minter.balance;
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTsEx(_collection).buy{value: 1.5 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1.5 ether }(_tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
@@ -58,8 +55,8 @@ abstract contract OpenNFTsBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 
     function testFailBuyNotEnoughFunds() public {
@@ -69,7 +66,7 @@ abstract contract OpenNFTsBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTsEx(_collection).buy{value: 0.5 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 0.5 ether }(_tokenID0);
     }
 
     function testFailBuyNotToSell() public {
@@ -79,6 +76,6 @@ abstract contract OpenNFTsBuyTest is Test {
         deal(_buyer, 10 ether);
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 }

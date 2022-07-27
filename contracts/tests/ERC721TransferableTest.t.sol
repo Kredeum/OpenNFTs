@@ -21,10 +21,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function setUpERC721Transferable() public {
         _collection = constructorTest(_owner);
@@ -43,12 +40,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
     function testERC721SafeTransferFromWithData() public {
         changePrank(_minter);
 
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            _tester,
-            _tokenID0,
-            "data"
-        );
+        IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
     }
 
@@ -65,17 +57,10 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
         vm.expectEmit(true, true, true, false);
         emit Transfer(_minter, _tester, 1);
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            _tester,
-            _tokenID0,
-            "data"
-        );
+        IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
     }
 
-    function testERC721SafeTransferFromEOAFuzzy(address from, address to)
-        public
-    {
+    function testERC721SafeTransferFromEOAFuzzy(address from, address to) public {
         vm.assume(from != address(0));
         vm.assume(to != address(0));
         vm.assume(to != from);
@@ -93,11 +78,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
     function testERC721TransferFromNotERC721TokenReceiver() public {
         changePrank(_minter);
 
-        IERC721(_collection).transferFrom(
-            _minter,
-            address(_collection),
-            _tokenID0
-        );
+        IERC721(_collection).transferFrom(_minter, address(_collection), _tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), address(_collection));
     }
 
@@ -130,26 +111,15 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     function testFailERC721SafeTransferFromToNotReceiverContract() public {
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            address(this),
-            _tokenID0
-        );
+        IERC721(_collection).safeTransferFrom(_minter, address(this), _tokenID0);
     }
 
     function testERC721SafeTransferFromToReceiverContract() public {
         OpenERC721TokenReceiver receiverContract = new OpenERC721TokenReceiver();
 
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            address(receiverContract),
-            _tokenID0
-        );
-        assertEq(
-            IERC721(_collection).ownerOf(_tokenID0),
-            address(receiverContract)
-        );
+        IERC721(_collection).safeTransferFrom(_minter, address(receiverContract), _tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), address(receiverContract));
     }
 
     function testERC721Approve() public {

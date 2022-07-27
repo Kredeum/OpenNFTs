@@ -11,7 +11,6 @@
 //                     |
 //            OpenERC721Enumerable
 //
-
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC721.sol";
@@ -31,44 +30,22 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     // Mapping from token ID to all index
     mapping(uint256 => uint256) private _allTokensIndex;
 
-    function tokenOfOwnerByIndex(address owner, uint256 index)
-        external
-        view
-        override(IERC721Enumerable)
-        returns (uint256)
-    {
+    function tokenOfOwnerByIndex(address owner, uint256 index) external view override (IERC721Enumerable) returns (uint256) {
         require(index < OpenERC721.balanceOf(owner), "Invalid index!");
         return _ownedTokens[owner][index];
     }
 
-    function totalSupply()
-        external
-        view
-        override(IERC721Enumerable)
-        returns (uint256)
-    {
+    function totalSupply() external view override (IERC721Enumerable) returns (uint256) {
         return _allTokens.length;
     }
 
-    function tokenByIndex(uint256 index)
-        external
-        view
-        override(IERC721Enumerable)
-        returns (uint256)
-    {
+    function tokenByIndex(uint256 index) external view override (IERC721Enumerable) returns (uint256) {
         require(index < _allTokens.length, "Invalid index!");
         return _allTokens[index];
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(OpenERC721)
-        returns (bool)
-    {
-        return
-            interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC721) returns (bool) {
+        return interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
     }
 
     function _mintEnumerable(address to, uint256 tokenID) internal {
@@ -94,11 +71,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         _allTokens.pop();
     }
 
-    function _transferFromBefore(
-        address from,
-        address to,
-        uint256 tokenID
-    ) internal virtual override(OpenERC721) {
+    function _transferFromBefore(address from, address to, uint256 tokenID) internal virtual override (OpenERC721) {
         _removeOwnedToken(from, tokenID);
         _addOwnedToken(to, tokenID);
     }

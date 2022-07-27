@@ -36,7 +36,6 @@
 //                              |                                                  |
 //                         OpenNFTsEx --- IOpenNFTsEx
 //
-
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenCloneable.sol";
@@ -49,13 +48,7 @@ import "OpenNFTs/contracts/interfaces/IERC20.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
 /// @title OpenNFTs smartcontract
-contract OpenNFTsEx is
-    IOpenNFTsEx,
-    OpenCloneable,
-    OpenERC721Enumerable,
-    OpenERC721Metadata,
-    OpenMarketable
-{
+contract OpenNFTsEx is IOpenNFTsEx, OpenCloneable, OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable {
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext = 1;
 
@@ -98,22 +91,13 @@ contract OpenNFTsEx is
         return _mint(msg.sender, jsonURI);
     }
 
-    function mint(address to, string memory jsonURI)
-        external
-        override(IOpenNFTsEx)
-        onlyOwner
-        returns (uint256)
-    {
+    function mint(address to, string memory jsonURI) external override(IOpenNFTsEx) onlyOwner returns (uint256) {
         return _mint(to, jsonURI);
     }
 
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
-    function burn(uint256 tokenID)
-        external
-        override(IOpenNFTsEx)
-        onlyTokenOwnerOrApproved(tokenID)
-    {
+    function burn(uint256 tokenID) external override(IOpenNFTsEx) onlyTokenOwnerOrApproved(tokenID) {
         _burn(tokenID);
     }
 
@@ -122,18 +106,8 @@ contract OpenNFTsEx is
         payable(to).transfer(address(this).balance);
     }
 
-    function withdrawErc20(address token)
-        external
-        override(IOpenNFTsEx)
-        onlyOwner
-    {
-        require(
-            IERC20(token).transfer(
-                msg.sender,
-                IERC20(token).balanceOf(address(this))
-            ),
-            "Withdraw failed"
-        );
+    function withdrawErc20(address token) external override(IOpenNFTsEx) onlyOwner {
+        require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
     }
 
     function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
@@ -179,26 +153,16 @@ contract OpenNFTsEx is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(
-            OpenMarketable,
-            OpenERC721Metadata,
-            OpenERC721Enumerable,
-            OpenCloneable
-        )
+        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable)
         returns (bool)
     {
-        return
-            interfaceId == type(IOpenNFTsEx).interfaceId ||
-            super.supportsInterface(interfaceId);
+        return interfaceId == type(IOpenNFTsEx).interfaceId || super.supportsInterface(interfaceId);
     }
 
     /// @notice _mint
     /// @param minter address of minter
     /// @param jsonURI json URI of NFT metadata
-    function _mint(address minter, string memory jsonURI)
-        internal
-        returns (uint256 tokenID)
-    {
+    function _mint(address minter, string memory jsonURI) internal returns (uint256 tokenID) {
         tokenID = tokenIdNext++;
 
         _mintMetadata(tokenID, jsonURI);

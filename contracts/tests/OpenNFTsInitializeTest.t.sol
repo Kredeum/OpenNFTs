@@ -26,68 +26,33 @@ abstract contract OpenNFTsInitializeTest is Test {
     }
 
     function testInitializeName() public {
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
     }
 
     function testInitializeSymbol() public {
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IERC721Metadata(_collection).symbol(), "TEST");
     }
 
     function testInitializeOwner() public {
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IERC173(_collection).owner(), _owner);
     }
 
     function testInitializeOpen() public {
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 
     function testInitializeNotOpen() public {
         _options[0] = false;
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IOpenNFTsEx(_collection).open(), false);
     }
 
     function testFailInitializeTwice() public {
-        IOpenNFTsEx(_collection).initialize(
-            "OpenERC721Test",
-            "TEST",
-            _owner,
-            _options
-        );
-        IOpenNFTsEx(_collection).initialize(
-            "OpenNFTsOldTestTwice",
-            "OPTEST2",
-            _tester,
-            _options
-        );
+        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
+        IOpenNFTsEx(_collection).initialize("OpenNFTsOldTestTwice", "OPTEST2", _tester, _options);
     }
 }

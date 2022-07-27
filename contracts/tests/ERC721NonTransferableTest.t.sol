@@ -20,10 +20,7 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function burnTest(address collection_, uint256 tokenID_) public virtual;
 
@@ -42,17 +39,10 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
 
     function testFailERC721SafeTransferFromWithData() public {
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            _tester,
-            _tokenID0,
-            "data"
-        );
+        IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
     }
 
-    function testFailERC721SafeTransferFromFuzzy(address from, address to)
-        public
-    {
+    function testFailERC721SafeTransferFromFuzzy(address from, address to) public {
         vm.assume(from != address(0));
         vm.assume(to != address(0));
         vm.assume(to != from);
@@ -65,20 +55,12 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
 
     function testFailERC721SafeTransferFromNotERC721TokenReceiver() public {
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(
-            _minter,
-            address(_collection),
-            _tokenID0
-        );
+        IERC721(_collection).safeTransferFrom(_minter, address(_collection), _tokenID0);
     }
 
     function testFailERC721TransferFromNotERC721TokenReceiver() public {
         changePrank(_minter);
-        IERC721(_collection).transferFrom(
-            _minter,
-            address(_collection),
-            _tokenID0
-        );
+        IERC721(_collection).transferFrom(_minter, address(_collection), _tokenID0);
     }
 
     function testFailERC721TransferFrom() public {

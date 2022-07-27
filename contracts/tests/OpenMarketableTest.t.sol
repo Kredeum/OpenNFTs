@@ -23,10 +23,7 @@ abstract contract PriceableTest is Test {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_)
-        public
-        virtual
-        returns (uint256, string memory);
+    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
     function setRoyaltyTest(
         address collection_,
@@ -49,10 +46,7 @@ abstract contract PriceableTest is Test {
         changePrank(_owner);
         IOpenMarketable(_contract).setDefaultRoyalty(_minter, fee);
 
-        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(
-            tokenID,
-            price
-        );
+        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(tokenID, price);
         assertEq(receiver, _minter);
         assertEq(royalties, (price * fee) / _maxFee);
     }
@@ -66,10 +60,7 @@ abstract contract PriceableTest is Test {
         changePrank(_minter);
         IOpenMarketable(_contract).setTokenRoyalty(_tokenID0, _tester, fee);
 
-        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(
-            _tokenID0,
-            price
-        );
+        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(_tokenID0, price);
         assertEq(receiver, _tester);
         assertEq(royalties, (price * fee) / _maxFee);
     }
@@ -129,10 +120,7 @@ abstract contract PriceableTest is Test {
         changePrank(_owner);
         IOpenMarketable(_contract).setDefaultRoyalty(_minter, fee);
 
-        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(
-            tokenID,
-            price
-        );
+        (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(tokenID, price);
         assertEq(receiver, _minter);
 
         assertEq(royalties, (price * fee) / _maxFee);
@@ -155,10 +143,6 @@ abstract contract PriceableTest is Test {
     }
 
     function testSupportsInterface() public {
-        assertTrue(
-            IERC165(_contract).supportsInterface(
-                type(IOpenMarketable).interfaceId
-            )
-        );
+        assertTrue(IERC165(_contract).supportsInterface(type(IOpenMarketable).interfaceId));
     }
 }

@@ -10,7 +10,6 @@
 //                     |
 //                OpenERC173
 //
-
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC721.sol";
@@ -25,26 +24,15 @@ abstract contract OpenERC173 is IERC173, OpenERC721 {
         _;
     }
 
-    function transferOwnership(address newOwner)
-        external
-        override(IERC173)
-        onlyOwner
-    {
+    function transferOwnership(address newOwner) external override (IERC173) onlyOwner {
         _setOwner(newOwner);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(OpenERC721)
-        returns (bool)
-    {
-        return
-            interfaceId == 0x7f5828d0 || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC721) returns (bool) {
+        return interfaceId == 0x7f5828d0 || super.supportsInterface(interfaceId);
     }
 
-    function owner() public view override(IERC173) returns (address) {
+    function owner() public view override (IERC173) returns (address) {
         return _owner;
     }
 

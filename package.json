@@ -5,7 +5,10 @@
   "directories": {
     "lib": "lib"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^2.7.1",
+    "prettier-plugin-solidity": "1.0.0-dev.23"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kredeum/OpenNFTs.git"
@@ -16,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/Kredeum/OpenNFTs/issues"
   },
-  "homepage": "https://github.com/Kredeum/OpenNFTs#readme"
+  "homepage": "https://github.com/Kredeum/OpenNFTs#readme",
+  "scripts": {
+    "clean": "forge clean",
+    "build": "forge build",
+    "prettier": "prettier contracts/**/*.sol --write  --plugin prettier-plugin-solidity --loglevel error",
+    "test": "forge test"
+  }
 }

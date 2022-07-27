@@ -11,7 +11,7 @@ import "./OpenNFTsInitializeTest.t.sol";
 import "./OpenNFTsSetupTest.t.sol";
 import "./ERC173Test.t.sol";
 import "./ERC2981Test.t.sol";
-import {ERC721TransferableTest} from "./ERC721TransferableTest.t.sol";
+import { ERC721TransferableTest } from "./ERC721TransferableTest.t.sol";
 import "./OpenPauseableTest.t.sol";
 import "./OpenMarketableTest.t.sol";
 import "OpenNFTs/contracts/interfaces/ITest.sol";
@@ -72,10 +72,7 @@ contract OpenNFTsExTest is
         return (OpenNFTsEx(collection).mint(_TOKEN_URI), _TOKEN_URI);
     }
 
-    function burnTest(address collection, uint256 tokenID)
-        public
-        override(OpenERC721Test, OpenNFTsBurnTest)
-    {
+    function burnTest(address collection, uint256 tokenID) public override(OpenERC721Test, OpenNFTsBurnTest) {
         changePrank(OpenNFTsEx(collection).ownerOf(tokenID));
         OpenNFTsEx(collection).burn(tokenID);
     }
