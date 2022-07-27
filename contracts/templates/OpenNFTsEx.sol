@@ -39,10 +39,10 @@
 
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/components/OpenCloneable.sol";
-import "OpenNFTs/contracts/components/OpenMarketable.sol";
-import "OpenNFTs/contracts/components/OpenERC721Enumerable.sol";
-import "OpenNFTs/contracts/components/OpenERC721Metadata.sol";
+import "OpenNFTs/contracts/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenMarketable.sol";
+import "OpenNFTs/contracts/OpenERC721Enumerable.sol";
+import "OpenNFTs/contracts/OpenERC721Metadata.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC20.sol";

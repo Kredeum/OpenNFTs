@@ -27,8 +27,8 @@
 
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/components/OpenERC2981.sol";
-import "OpenNFTs/contracts/components/OpenPauseable.sol";
+import "OpenNFTs/contracts/OpenERC2981.sol";
+import "OpenNFTs/contracts/OpenPauseable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
 abstract contract OpenMarketable is

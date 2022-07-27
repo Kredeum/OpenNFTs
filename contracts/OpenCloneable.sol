@@ -9,7 +9,7 @@
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
-import "OpenNFTs/contracts/components/OpenERC165.sol";
+import "OpenNFTs/contracts/OpenERC165.sol";
 
 abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
     bool private _once;

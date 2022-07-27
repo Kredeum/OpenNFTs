@@ -15,7 +15,7 @@
 
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/components/OpenERC173.sol";
+import "OpenNFTs/contracts/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
 abstract contract OpenERC2981 is IERC2981, OpenERC173 {

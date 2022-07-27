@@ -24,7 +24,7 @@
 
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/components/OpenERC173.sol";
+import "OpenNFTs/contracts/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IOpenPauseable.sol";
 
 abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {

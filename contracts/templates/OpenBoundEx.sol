@@ -31,8 +31,8 @@
 
 pragma solidity ^0.8.9;
 
-import "OpenNFTs/contracts/components/OpenPauseable.sol";
-import "OpenNFTs/contracts/components/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenPauseable.sol";
+import "OpenNFTs/contracts/OpenCloneable.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenBoundEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
