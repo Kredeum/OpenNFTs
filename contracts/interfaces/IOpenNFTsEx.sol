@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-interface IOpenNFTsV4 {
+interface IOpenNFTsEx {
     function initialize(
         string memory name,
         string memory symbol,
@@ -11,7 +11,9 @@ interface IOpenNFTsV4 {
 
     function mint(string memory jsonURI) external returns (uint256 tokenID);
 
-    function mint(address minter, string memory jsonURI) external returns (uint256 tokenID);
+    function mint(address minter, string memory jsonURI)
+        external
+        returns (uint256 tokenID);
 
     function burn(uint256 tokenID) external;
 

@@ -34,7 +34,7 @@
 //                     |                       |                    |             |
 //                     ———————————————————————————————————————————————————————————|
 //                              |                                                  |
-//                         OpenNFTsV4 --- IOpenNFTsV4
+//                         OpenNFTsEx --- IOpenNFTsEx
 //
 
 pragma solidity 0.8.9;
@@ -44,13 +44,13 @@ import "OpenNFTs/contracts/components/OpenMarketable.sol";
 import "OpenNFTs/contracts/components/OpenERC721Enumerable.sol";
 import "OpenNFTs/contracts/components/OpenERC721Metadata.sol";
 
-import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
+import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC20.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTsEx is
-    IOpenNFTsV4,
+    IOpenNFTsEx,
     OpenCloneable,
     OpenERC721Enumerable,
     OpenERC721Metadata,
@@ -90,7 +90,7 @@ contract OpenNFTsEx is
 
     function mint(string memory jsonURI)
         external
-        override(IOpenNFTsV4)
+        override(IOpenNFTsEx)
         onlyOpenOrOwner
         onlyWhenNotPaused
         returns (uint256)
@@ -100,7 +100,7 @@ contract OpenNFTsEx is
 
     function mint(address to, string memory jsonURI)
         external
-        override(IOpenNFTsV4)
+        override(IOpenNFTsEx)
         onlyOwner
         returns (uint256)
     {
@@ -111,20 +111,20 @@ contract OpenNFTsEx is
     /// @param tokenID tokenID of NFT to burn
     function burn(uint256 tokenID)
         external
-        override(IOpenNFTsV4)
+        override(IOpenNFTsEx)
         onlyTokenOwnerOrApproved(tokenID)
     {
         _burn(tokenID);
     }
 
-    function withdraw(address to) external override(IOpenNFTsV4) onlyOwner {
+    function withdraw(address to) external override(IOpenNFTsEx) onlyOwner {
         require(to != address(0), "Don't throw your money !");
         payable(to).transfer(address(this).balance);
     }
 
     function withdrawErc20(address token)
         external
-        override(IOpenNFTsV4)
+        override(IOpenNFTsEx)
         onlyOwner
     {
         require(
@@ -136,7 +136,7 @@ contract OpenNFTsEx is
         );
     }
 
-    function buy(uint256 tokenID) external payable override(IOpenNFTsV4) {
+    function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
         /// Get token price
         uint256 price = tokenPrice[tokenID];
 
@@ -188,7 +188,7 @@ contract OpenNFTsEx is
         returns (bool)
     {
         return
-            interfaceId == type(IOpenNFTsV4).interfaceId ||
+            interfaceId == type(IOpenNFTsEx).interfaceId ||
             super.supportsInterface(interfaceId);
     }
 

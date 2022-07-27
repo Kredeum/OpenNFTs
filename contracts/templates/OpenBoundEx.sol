@@ -26,7 +26,7 @@
 //                             |                      |
 //                             ————————————————————————
 //                             |
-//                         OpenBound --- IOpenBound --- IERC721Enumerable --- IERC721Metadata
+//                         OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
 //
 
 pragma solidity ^0.8.9;
@@ -34,7 +34,7 @@ pragma solidity ^0.8.9;
 import "OpenNFTs/contracts/components/OpenPauseable.sol";
 import "OpenNFTs/contracts/components/OpenCloneable.sol";
 
-import "OpenNFTs/contracts/interfaces/IOpenBound.sol";
+import "OpenNFTs/contracts/interfaces/IOpenBoundEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
@@ -43,7 +43,7 @@ import "OpenNFTs/contracts/libraries/Bafkrey.sol";
 
 /// @title OpenBound smartcontract
 contract OpenBoundEx is
-    IOpenBound,
+    IOpenBoundEx,
     IERC721Enumerable,
     IERC721Metadata,
     OpenCloneable,
@@ -61,13 +61,13 @@ contract OpenBoundEx is
 
     string private constant _BASE_URI = "ipfs://";
 
-    /// IOpenBound
+    /// IOpenBoundEx
     function initialize(
         string memory name_,
         string memory symbol_,
         address owner_,
         uint256 maxSupply_
-    ) public override(IOpenBound) {
+    ) public override(IOpenBoundEx) {
         OpenCloneable._initialize("OpenBound", 1);
         OpenERC173._initialize(owner_);
 
@@ -78,7 +78,7 @@ contract OpenBoundEx is
 
     function mint(uint256 cid)
         external
-        override(IOpenBound)
+        override(IOpenBoundEx)
         onlyWhenNotPaused
         returns (uint256 tokenID)
     {
@@ -87,14 +87,14 @@ contract OpenBoundEx is
 
     function claim(uint256 tokenID, uint256 cid)
         external
-        override(IOpenBound)
+        override(IOpenBoundEx)
         onlyWhenNotPaused
     {
         require(tokenID == _tokenID(msg.sender, cid), "Not owner");
         _mint(msg.sender, cid);
     }
 
-    function burn(uint256 tokenID) external override(IOpenBound) {
+    function burn(uint256 tokenID) external override(IOpenBoundEx) {
         address from = ownerOf(tokenID);
         require(from == msg.sender, "Not owner");
 
@@ -104,7 +104,7 @@ contract OpenBoundEx is
     function getMyTokenID(uint256 cid)
         external
         view
-        override(IOpenBound)
+        override(IOpenBoundEx)
         returns (uint256 myTokenID)
     {
         myTokenID = _tokenID(msg.sender, cid);
@@ -113,7 +113,7 @@ contract OpenBoundEx is
     function getCID(uint256 tokenID)
         external
         view
-        override(IOpenBound)
+        override(IOpenBoundEx)
         returns (uint256 cid)
     {
         cid = _cidOfToken[tokenID];
@@ -177,7 +177,7 @@ contract OpenBoundEx is
         returns (bool)
     {
         return
-            interfaceId == type(IOpenBound).interfaceId ||
+            interfaceId == type(IOpenBoundEx).interfaceId ||
             interfaceId == type(IERC721Metadata).interfaceId ||
             interfaceId == type(IERC721Enumerable).interfaceId ||
             super.supportsInterface(interfaceId);

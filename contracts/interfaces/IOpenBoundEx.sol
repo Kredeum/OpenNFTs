@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-interface IOpenBound {
+interface IOpenBoundEx {
     function initialize(
         string memory name,
         string memory symbol,

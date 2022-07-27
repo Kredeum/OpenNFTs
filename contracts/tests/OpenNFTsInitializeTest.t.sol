@@ -8,7 +8,7 @@ import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
+import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 import "../templates/OpenNFTsEx.sol";
 
@@ -26,7 +26,7 @@ abstract contract OpenNFTsInitializeTest is Test {
     }
 
     function testInitializeName() public {
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
@@ -36,7 +36,7 @@ abstract contract OpenNFTsInitializeTest is Test {
     }
 
     function testInitializeSymbol() public {
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
@@ -46,7 +46,7 @@ abstract contract OpenNFTsInitializeTest is Test {
     }
 
     function testInitializeOwner() public {
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
@@ -56,34 +56,34 @@ abstract contract OpenNFTsInitializeTest is Test {
     }
 
     function testInitializeOpen() public {
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
             _options
         );
-        assertEq(IOpenNFTsV4(_collection).open(), true);
+        assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 
     function testInitializeNotOpen() public {
         _options[0] = false;
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
             _options
         );
-        assertEq(IOpenNFTsV4(_collection).open(), false);
+        assertEq(IOpenNFTsEx(_collection).open(), false);
     }
 
     function testFailInitializeTwice() public {
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenERC721Test",
             "TEST",
             _owner,
             _options
         );
-        IOpenNFTsV4(_collection).initialize(
+        IOpenNFTsEx(_collection).initialize(
             "OpenNFTsOldTestTwice",
             "OPTEST2",
             _tester,

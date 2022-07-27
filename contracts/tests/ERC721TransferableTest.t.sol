@@ -6,7 +6,7 @@ import "../../lib/forge-std/src/Test.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Events.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
+import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 
 import "OpenNFTs/contracts/components/OpenERC721TokenReceiver.sol";
 

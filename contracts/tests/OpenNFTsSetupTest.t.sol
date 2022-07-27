@@ -8,7 +8,7 @@ import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsV4.sol";
+import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
 // import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
@@ -40,7 +40,7 @@ abstract contract OpenNFTsSetupTest is Test {
         assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
         assertEq(IERC721Metadata(_collection).symbol(), "OPTEST");
         assertEq(IERC173(_collection).owner(), _owner);
-        assertEq(IOpenNFTsV4(_collection).open(), true);
+        assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 
     function testCount() public {
