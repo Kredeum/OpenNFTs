@@ -15,9 +15,6 @@ import "OpenNFTs/contracts/interfaces/IERC1155TokenReceiver.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IERC4973.sol";
 
-import "OpenNFTs/contracts/interfaces/IOpenBoundEx.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
-
 import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";

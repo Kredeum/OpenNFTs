@@ -9,7 +9,7 @@ import "OpenNFTs/contracts/interfaces/IERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract PriceableTest is Test {
+abstract contract OpenMarketableTest is Test {
     address private _contract;
     address private _owner = address(0x1);
     address private _minter = address(0x2);
@@ -31,7 +31,7 @@ abstract contract PriceableTest is Test {
         uint96 fee_
     ) public virtual returns (uint256 tokenID_);
 
-    function setUpPriceable() public {
+    function setUpMarketable() public {
         _contract = constructorTest(_owner);
 
         _tokenID0 = setRoyaltyTest(_contract, _minter, 420);

@@ -30,7 +30,7 @@ contract OpenNFTsExTest is
     OpenNFTsBurnTest,
     OpenNFTsSetupTest,
     OpenPauseableTest,
-    PriceableTest
+    OpenMarketableTest
 {
     function constructorTest(address owner)
         public
@@ -44,7 +44,7 @@ contract OpenNFTsExTest is
             OpenNFTsBurnTest,
             OpenNFTsSetupTest,
             OpenPauseableTest,
-            PriceableTest
+            OpenMarketableTest
         )
         returns (address)
     {
@@ -71,7 +71,7 @@ contract OpenNFTsExTest is
             OpenNFTsSetupTest,
             ERC2981Test,
             OpenPauseableTest,
-            PriceableTest,
+            OpenMarketableTest,
             ERC721TransferableTest
         )
         returns (uint256, string memory)
@@ -97,7 +97,7 @@ contract OpenNFTsExTest is
         address collection,
         address receiver,
         uint96 fee
-    ) public override(ERC2981Test, PriceableTest) returns (uint256 tokenID) {
+    ) public override(ERC2981Test, OpenMarketableTest) returns (uint256 tokenID) {
         (tokenID, ) = mintTest(collection, receiver);
         OpenNFTsEx(collection).setTokenRoyalty(tokenID, receiver, fee);
     }
@@ -106,7 +106,7 @@ contract OpenNFTsExTest is
         setUpERC173();
         setUpERC2981();
         setUpPausable();
-        setUpPriceable();
+        setUpMarketable();
         setUpOpenNFTs("OpenERC721Test", "OPTEST");
         setUpERC721Transferable();
         setUpOpenNFTsBurn();

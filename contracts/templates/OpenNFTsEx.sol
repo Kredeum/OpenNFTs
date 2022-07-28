@@ -45,7 +45,6 @@ import "OpenNFTs/contracts/OpenERC721Metadata.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC20.sol";
-import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTsEx is IOpenNFTsEx, OpenCloneable, OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable {
@@ -73,7 +72,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenCloneable, OpenERC721Enumerable, OpenERC
         string memory symbol_,
         address owner_,
         bool[] memory options
-    ) public {
+    ) external {
         OpenCloneable._initialize("OpenNFTs", 4);
 
         OpenERC721Metadata._initialize(name_, symbol_);
@@ -171,7 +170,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenCloneable, OpenERC721Enumerable, OpenERC
     }
 
     function _burn(uint256 tokenID) internal {
-        _burnPriceable(tokenID);
+        _burnMarketable(tokenID);
         _burnMetadata(tokenID);
         _burnEnumerable(tokenID);
         _burnNft(tokenID);

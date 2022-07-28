@@ -11,10 +11,6 @@ import "OpenNFTs/contracts/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
 
 abstract contract OpenCheckable is OpenERC165, IOpenCheckable {
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
-        return interfaceId == type(IOpenCheckable).interfaceId || super.supportsInterface(interfaceId);
-    }
-
     function checkSupportedInterfaces(bytes4[] memory interfaceIds)
         external
         view
@@ -24,5 +20,9 @@ abstract contract OpenCheckable is OpenERC165, IOpenCheckable {
         for (uint256 i = 0; i < interfaceIds.length; i++) {
             interfaceIdsChecker[i] = supportsInterface(interfaceIds[i]);
         }
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+        return interfaceId == type(IOpenCheckable).interfaceId || super.supportsInterface(interfaceId);
     }
 }

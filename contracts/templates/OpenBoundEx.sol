@@ -62,7 +62,7 @@ contract OpenBoundEx is IOpenBoundEx, IERC721Enumerable, IERC721Metadata, OpenCl
         string memory symbol_,
         address owner_,
         uint256 maxSupply_
-    ) public override(IOpenBoundEx) {
+    ) external override(IOpenBoundEx) {
         OpenCloneable._initialize("OpenBound", 1);
         OpenERC173._initialize(owner_);
 
