@@ -14,6 +14,8 @@
 //
 //                         OpenERC165 (supports)
 //                             |
+//                         OpenCheckable
+//                             |
 //                             ————————————————————————
 //                             |                      |
 //                         OpenERC721 (NFT)     OpenCloneable

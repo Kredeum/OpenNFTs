@@ -3,15 +3,7 @@ pragma solidity 0.8.9;
 
 import "forge-std/Test.sol";
 
-import "OpenNFTs/contracts/interfaces/IERC173.sol";
-import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
-import "OpenNFTs/contracts/interfaces/IERC2981.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
-import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
-
-// import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
+import "OpenNFTs/contracts/interfaces/IAll.sol";
 
 abstract contract OpenNFTsSetupTest is Test {
     address private _collection;

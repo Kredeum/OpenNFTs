@@ -4,18 +4,25 @@ pragma solidity 0.8.9;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/templates/OpenBoundEx.sol";
-import "OpenNFTs/contracts/interfaces/ITest.sol";
-import { OpenERC721Test } from "./OpenERC721Test.t.sol";
-import { ERC173Test } from "./ERC173Test.t.sol";
-import { ERC721NonTransferableTest } from "./ERC721NonTransferableTest.t.sol";
-import { OpenPauseableTest } from "./OpenPauseableTest.t.sol";
+import "OpenNFTs/contracts/tests/OpenBoundEx/OpenBoundExSupportsTest.t.sol";
 
-contract OpenBoundTest is ITest, OpenERC721Test, ERC173Test, ERC721NonTransferableTest, OpenPauseableTest {
+import "OpenNFTs/contracts/tests/sets/OpenNFTsTest.t.sol";
+import "OpenNFTs/contracts/tests/units/ERC173Test.t.sol";
+import "OpenNFTs/contracts/tests/units/ERC721NonTransferableTest.t.sol";
+import "OpenNFTs/contracts/tests/units/OpenPauseableTest.t.sol";
+
+contract OpenBoundExTest is
+    OpenNFTsTest,
+    ERC173Test,
+    ERC721NonTransferableTest,
+    OpenPauseableTest,
+    OpenBoundExSupportsTest
+{
     uint256 private _cid = 777;
 
     function constructorTest(address owner)
         public
-        override(OpenERC721Test, ERC173Test, ERC721NonTransferableTest, OpenPauseableTest)
+        override(OpenNFTsTest, ERC173Test, ERC721NonTransferableTest, OpenPauseableTest, OpenBoundExSupportsTest)
         returns (address)
     {
         changePrank(owner);
@@ -30,7 +37,7 @@ contract OpenBoundTest is ITest, OpenERC721Test, ERC173Test, ERC721NonTransferab
 
     function mintTest(address collection, address minter)
         public
-        override(OpenERC721Test, OpenPauseableTest, ERC721NonTransferableTest)
+        override(OpenNFTsTest, OpenPauseableTest, ERC721NonTransferableTest)
         returns (uint256, string memory)
     {
         changePrank(minter);
@@ -39,15 +46,16 @@ contract OpenBoundTest is ITest, OpenERC721Test, ERC173Test, ERC721NonTransferab
         return (tokenID, tokenURI);
     }
 
-    function burnTest(address collection, uint256 tokenID) public override(OpenERC721Test, ERC721NonTransferableTest) {
+    function burnTest(address collection, uint256 tokenID) public override(OpenNFTsTest, ERC721NonTransferableTest) {
         changePrank(OpenBoundEx(collection).ownerOf(tokenID));
         OpenBoundEx(collection).burn(tokenID);
     }
 
-    function setUp() public override {
+    function setUp() public {
         setUpERC173();
         setUpPausable();
         setUpOpenNFTs("OpenBoundEx", "BOUND");
         setUpERC721NonTransferable();
+        setUpOpenBoundExSupports();
     }
 }
