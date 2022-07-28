@@ -7,6 +7,7 @@ import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
 
 import "OpenNFTs/contracts/tests/OpenNFTsEx/OpenNFTsExInitializeTest.t.sol";
 import "OpenNFTs/contracts/tests/OpenNFTsEx/OpenNFTsExSupportsTest.t.sol";
+import "OpenNFTs/contracts/tests/OpenNFTsEx/OpenNFTsExBuyTest.t.sol";
 
 import "OpenNFTs/contracts/tests/sets/OpenNFTsTest.t.sol";
 
@@ -14,7 +15,6 @@ import "OpenNFTs/contracts/tests/units/ERC721TransferableTest.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC173Test.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC2981Test.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenNFTsBurnTest.t.sol";
-import "OpenNFTs/contracts/tests/units/OpenNFTsBuyTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenNFTsSetupTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenPauseableTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenMarketableTest.t.sol";
@@ -25,9 +25,9 @@ contract OpenNFTsExTest is
     ERC2981Test,
     OpenNFTsExInitializeTest,
     OpenNFTsExSupportsTest,
+    OpenNFTsExBuyTest,
     OpenNFTsTest,
     OpenNFTsBurnTest,
-    OpenNFTsBuyTest,
     OpenNFTsSetupTest,
     OpenPauseableTest,
     PriceableTest
@@ -40,8 +40,8 @@ contract OpenNFTsExTest is
             ERC2981Test,
             OpenNFTsTest,
             OpenNFTsExSupportsTest,
+            OpenNFTsExBuyTest,
             OpenNFTsBurnTest,
-            OpenNFTsBuyTest,
             OpenNFTsSetupTest,
             OpenPauseableTest,
             PriceableTest
@@ -65,9 +65,9 @@ contract OpenNFTsExTest is
     function mintTest(address collection, address minter)
         public
         override(
+            OpenNFTsExBuyTest,
             OpenNFTsTest,
             OpenNFTsBurnTest,
-            OpenNFTsBuyTest,
             OpenNFTsSetupTest,
             ERC2981Test,
             OpenPauseableTest,

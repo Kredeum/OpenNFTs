@@ -5,7 +5,6 @@ import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 
 abstract contract OpenNFTsBurnTest is Test {
     address private _collection;
@@ -66,14 +65,14 @@ abstract contract OpenNFTsBurnTest is Test {
     function testFailBurnSecondOneTokenByIndex() public {
         changePrank(_tester);
         (uint256 tokenID, ) = mintTest(_collection, _tester);
-        IOpenNFTsEx(_collection).burn(tokenID);
+        burnTest(_collection, tokenID);
         IERC721Enumerable(_collection).tokenByIndex(1);
     }
 
     function testFailBurnSecondOneTokennOfOwnerByIndex() public {
         changePrank(_tester);
         (uint256 tokenID, ) = mintTest(_collection, _tester);
-        IOpenNFTsEx(_collection).burn(tokenID);
+        burnTest(_collection, tokenID);
         IERC721Enumerable(_collection).tokenOfOwnerByIndex(_tester, 0);
     }
 

@@ -6,7 +6,6 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Events.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 
 abstract contract ERC721NonTransferableTest is Test, IERC721Events {
     address private _collection;

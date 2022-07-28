@@ -9,7 +9,7 @@ import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenNFTsBuyTest is Test {
+abstract contract OpenNFTsExBuyTest is Test {
     address private _collection;
     address private _owner = address(0x1);
     address private _minter = address(0x12);

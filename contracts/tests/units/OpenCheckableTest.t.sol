@@ -5,7 +5,6 @@ import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
-import "OpenNFTs/contracts/OpenERC165.sol";
 
 abstract contract OpenCheckableTest is Test {
     address private _contract;

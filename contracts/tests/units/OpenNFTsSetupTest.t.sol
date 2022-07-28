@@ -3,7 +3,12 @@ pragma solidity 0.8.9;
 
 import "forge-std/Test.sol";
 
-import "OpenNFTs/contracts/interfaces/IAll.sol";
+import "OpenNFTs/contracts/interfaces/IERC173.sol";
+import "OpenNFTs/contracts/interfaces/IERC2981.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
+import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
+import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
 abstract contract OpenNFTsSetupTest is Test {
     address private _collection;
@@ -29,7 +34,6 @@ abstract contract OpenNFTsSetupTest is Test {
         assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
         assertEq(IERC721Metadata(_collection).symbol(), "OPTEST");
         assertEq(IERC173(_collection).owner(), _owner);
-        assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 
     function testCount() public {
