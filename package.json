@@ -15,7 +15,7 @@
     "url": "git+https://github.com/Kredeum/OpenNFTs.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "zapaz.eth",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Kredeum/OpenNFTs/issues"
@@ -25,7 +25,7 @@
     "clean": "forge clean",
     "build": "forge build",
     "prettier": "prettier contracts/**/*.sol --write  --plugin prettier-plugin-solidity --loglevel error",
-    "solhint": "solhint --fix contracts/**/*.sol",
+    "check": "solhint contracts/**/*.sol",
     "test": "forge test"
   }
 }

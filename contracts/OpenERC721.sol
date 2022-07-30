@@ -8,15 +8,15 @@
 //                     |
 //               OpenCheckable
 //                     |
-//                OpenERC721
+//                OpenERC721 —— IERC721
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenCheckable.sol";
+import "OpenNFTs/contracts/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721TokenReceiver.sol";
 
-abstract contract OpenERC721 is IERC721, OpenCheckable {
+abstract contract OpenERC721 is IERC721, OpenERC165 {
     // Mapping from token ID to owner address
     mapping(uint256 => address) private _owners;
 
@@ -72,7 +72,7 @@ abstract contract OpenERC721 is IERC721, OpenCheckable {
         require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenCheckable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
         return
             interfaceId == 0x80ac58cd || // = type(IERC721).interfaceId
             super.supportsInterface(interfaceId);

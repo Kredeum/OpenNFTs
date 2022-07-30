@@ -4,13 +4,15 @@
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/utils/introspection/ERC165.sol
 //
 //                OpenERC165
+//                     |
+//               OpenCheckable –– IOpenCheckable
 //
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
 
-abstract contract OpenCheckable is OpenERC165, IOpenCheckable {
+abstract contract OpenCheckable is IOpenCheckable, OpenERC165 {
     function checkSupportedInterfaces(bytes4[] memory interfaceIds)
         external
         view

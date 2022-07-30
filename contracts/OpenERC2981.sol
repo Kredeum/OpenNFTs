@@ -8,16 +8,14 @@
 //                     |
 //                OpenERC721
 //                     |
-//                OpenERC173
-//                     |
 //                OpenERC2981
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenERC173.sol";
+import "OpenNFTs/contracts/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
-abstract contract OpenERC2981 is IERC2981, OpenERC173 {
+abstract contract OpenERC2981 is IERC2981, OpenERC721 {
     struct RoyaltyInfo {
         address receiver;
         uint96 fraction;
@@ -28,9 +26,14 @@ abstract contract OpenERC2981 is IERC2981, OpenERC173 {
 
     uint96 internal constant _MAX_FEE = 10000;
 
-    function royaltyInfo(uint256 tokenID, uint256 salePrice) public view override (IERC2981) returns (address receiver, uint256 royaltyAmount) {
+    function royaltyInfo(uint256 tokenID, uint256 salePrice)
+        public
+        view
+        override(IERC2981)
+        returns (address receiver, uint256 royaltyAmount)
+    {
         /// otherwise may overflow
-        require(salePrice < 2 ** 128, "Too expensive");
+        require(salePrice < 2**128, "Too expensive");
 
         RoyaltyInfo memory royalty = _tokenRoyaltyInfo[tokenID];
 
@@ -43,7 +46,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC173 {
         return (royalty.receiver, royaltyAmount);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC173) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC721) returns (bool) {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
     }
 }

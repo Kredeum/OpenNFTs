@@ -27,10 +27,10 @@
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC2981.sol";
-import "OpenNFTs/contracts/OpenPauseable.sol";
+import "OpenNFTs/contracts/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable {
+abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenERC173 {
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
@@ -44,6 +44,11 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable 
         require(fee <= _MAX_FEE, "Royalty fee exceed price");
         _;
     }
+
+    // modifier beforeMinting() {
+    //     require(totalSupply() == 0, "Some tokens already minted");
+    //     _;
+    // }
 
     /// @notice SET default royalty configuration
     /// @param receiver : address of the royalty receiver, or address(0) to reset
@@ -91,7 +96,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenPauseable 
         public
         view
         virtual
-        override(OpenERC2981, OpenPauseable)
+        override(OpenERC2981, OpenERC173)
         returns (bool)
     {
         return interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);

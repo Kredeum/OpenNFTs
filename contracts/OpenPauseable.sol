@@ -15,11 +15,13 @@
 //
 //                OpenERC165
 //                     |
+//               OpenCheckable
+//                     |
 //                OpenERC721
 //                     |
 //                OpenERC173
 //                     |
-//               OpenPauseable
+//               OpenPauseable –– IOpenPauseable
 //
 pragma solidity 0.8.9;
 
@@ -34,15 +36,15 @@ abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
         _;
     }
 
-    function togglePause() external override (IOpenPauseable) onlyOwner {
+    function togglePause() external override(IOpenPauseable) onlyOwner {
         _setPaused(!_paused);
     }
 
-    function paused() external view override (IOpenPauseable) returns (bool) {
+    function paused() external view override(IOpenPauseable) returns (bool) {
         return _paused;
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC173) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
         return interfaceId == type(IOpenPauseable).interfaceId || super.supportsInterface(interfaceId);
     }
 
