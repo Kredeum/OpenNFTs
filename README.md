@@ -2,7 +2,30 @@
 
 OpenNFTs is a library of smarcontract components, enabling the creation of various NFT Collection smartcontracts, mainly clonable templates
 
-These components have been initially created in the [Kredeum NFTs Factory](https://github.com/Kredeum/kredeum) project
+Generic inheritance graph:
+```
+ OpenERC165
+ (supports)
+     |
+     ———————————————————————————————————————————————————————————————————————————————————————
+     |                                                         |             |             |
+ OpenERC721                                               OpenERC173  OpenCheckable  OpenCloneable
+   (NFT)                                                   (ownable)         |             |
+     |                                                         |             |             |
+     —————————————————————————————————————————————      ————————             |             |
+     |                        |                  |      |      |             |             |
+OpenERC721Metadata  OpenERC721Enumerable   OpenERC2981  |      |             |             |
+     |                        |           (RoyaltyInfo) |      |             |             |
+     |                        |                  |      |      |             |             |
+     |                        |                  ————————      |             |             |
+     |                        |                  |             |             |             |
+     |                        |            OpenMarketable OpenPauseable      |             |
+     |                        |                  |             |             |             |
+     ———————————————————————————————————————————————————————————————————————————————————————
+     |
+  OpenNFTs
+```
+*These components have been initially created by the [Kredeum NFTs Factory](https://github.com/Kredeum/kredeum) project*
 
 ### Install
 
@@ -31,6 +54,7 @@ Components are abstracted smartcontracts to be inherited from :
 <!-- -->
 - OpenCloneable.sol : Cloneable extension, to be used with EIP-1167 "Minimal Proxy" (available via [NFTsFactoryV2 smartcontract](https://github.com/Kredeum/kredeum/blob/integ/hardhat/contracts/NFTsFactoryV2.sol))
 - OpenPauseable.sol : Pausable extension, obviously allows to pause smartcontract
+- OpenCheckable.sol : Checkable extension, to check multiple ERC165 extensions in a single static call 
 
 ### Templates
 
