@@ -2,4 +2,5 @@
   "solidity.packageDefaultDependenciesContractsDirectory": "contracts",
   "solidity.packageDefaultDependenciesDirectory": "lib",
   "solidity.compileUsingRemoteVersion": "v0.8.9",
+  "inline-bookmarks.view.showVisibleFilesOnly": true,
 }
