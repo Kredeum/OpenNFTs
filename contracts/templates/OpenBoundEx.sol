@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: MIT
-//    ___           ___         ___           ___                    ___           ___                     ___
+//
+// Derived from Kredeum NFTs
+// https://github.com/Kredeum/kredeum
+//
+//       ___           ___         ___           ___                    ___           ___                     ___
 //      /  /\         /  /\       /  /\         /__/\                  /__/\         /  /\        ___        /  /\
 //     /  /::\       /  /::\     /  /:/_        \  \:\                 \  \:\       /  /:/_      /  /\      /  /:/_
 //    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\                 \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
@@ -12,23 +16,19 @@
 //      \__\/         \__\/       \__\/         \__\/                  \__\/         \__\/                   \__\/
 //
 //
-//                         OpenERC165 (supports)
-//                             |
-//                         OpenCheckable
-//                             |
-//                             ————————————————————————
-//                             |                      |
-//                         OpenERC721 (NFT)     OpenCloneable
-//                             |                      |
-//                             |                      |
-//                        OpenERC173                  |
-//                         (Ownable)                  |
-//                             |                      |
-//                       OpenPauseable                |
-//                             |                      |
-//                             ————————————————————————
-//                             |
-//                         OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
+//  OpenERC165 (supports)
+//      |
+//      ———————————————————————————————————————————————
+//      |                 |             |             |
+//  OpenERC721 (NFT)  OpenERC173  OpenCheckable  OpenCloneable
+//      |             (ownable)         |             |
+//      |                 |             |             |
+//      |                 |             |             |
+//      |            OpenPauseable      |             |
+//      |                 |             |             |
+//      ———————————————————————————————————————————————
+//      |
+//  OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
 //
 pragma solidity ^0.8.9;
 
@@ -44,6 +44,7 @@ import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
 import "OpenNFTs/contracts/libraries/Bafkrey.sol";
 
 /// @title OpenBound smartcontract
+/// limited to one nft per address
 contract OpenBoundEx is
     IOpenBoundEx,
     IERC721Enumerable,

@@ -2,13 +2,24 @@
 //
 // Derived from OpenZeppelin Contracts (token/ERC721/ERC721.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/ERC721/ERC721.sol
-
 //
-//                OpenERC165
-//                     |
-//                OpenERC721
-//                     |
-//            OpenERC721Metadata
+//       ___           ___         ___           ___              ___           ___                     ___
+//      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
+//     /  /::\       /  /::\     /  /:/_        \  \:\           \  \:\       /  /:/_      /  /\      /  /:/_
+//    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\           \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
+//   /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\      _____\__\:\   /  /:/ /:/   /  /:/     /  /:/ /::\
+//  /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\    /__/::::::::\ /__/:/ /:/   /  /::\    /__/:/ /:/\:\
+//  \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/    \  \:\~~\~~\/ \  \:\/:/   /__/:/\:\   \  \:\/:/~/:/
+//   \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~      \  \:\  ~~~   \  \::/    \__\/  \:\   \  \::/ /:/
+//    \  \:\/:/     \  \:\      \  \:\/:/     \  \:\           \  \:\        \  \:\         \  \:\   \__\/ /:/
+//     \  \::/       \  \:\      \  \::/       \  \:\           \  \:\        \  \:\         \__\/     /__/:/
+//      \__\/         \__\/       \__\/         \__\/            \__\/         \__\/                   \__\/
+//
+//     OpenERC165
+//          |
+//     OpenERC721
+//          |
+//  OpenERC721Metadata —— IERC721Metadata
 //
 pragma solidity 0.8.9;
 
@@ -21,19 +32,19 @@ abstract contract OpenERC721Metadata is IERC721Metadata, OpenERC721 {
     string private _symbol;
     mapping(uint256 => string) private _tokenURIs;
 
-    function name() external view virtual override (IERC721Metadata) returns (string memory) {
+    function name() external view virtual override(IERC721Metadata) returns (string memory) {
         return _name;
     }
 
-    function symbol() external view virtual override (IERC721Metadata) returns (string memory) {
+    function symbol() external view virtual override(IERC721Metadata) returns (string memory) {
         return _symbol;
     }
 
-    function tokenURI(uint256 tokenID) external view virtual override (IERC721Metadata) returns (string memory) {
+    function tokenURI(uint256 tokenID) external view virtual override(IERC721Metadata) returns (string memory) {
         return _tokenURIs[tokenID];
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC721) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC721) returns (bool) {
         return interfaceId == 0x5b5e139f || super.supportsInterface(interfaceId);
     }
 

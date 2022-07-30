@@ -1,11 +1,23 @@
 // SPDX-License-Identifier: MIT
 //
-// Derived from OpenZeppelin Contracts (utils/introspection/ERC165.sol)
-// https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/utils/introspection/ERC165.sol
+// Derived from Kredeum NFTs
+// https://github.com/Kredeum/kredeum
 //
-//                OpenERC165
-//                     |
-//               OpenCloneable –– IOpenCloneable
+//       ___           ___         ___           ___              ___           ___                     ___
+//      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
+//     /  /::\       /  /::\     /  /:/_        \  \:\           \  \:\       /  /:/_      /  /\      /  /:/_
+//    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\           \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
+//   /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\      _____\__\:\   /  /:/ /:/   /  /:/     /  /:/ /::\
+//  /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\    /__/::::::::\ /__/:/ /:/   /  /::\    /__/:/ /:/\:\
+//  \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/    \  \:\~~\~~\/ \  \:\/:/   /__/:/\:\   \  \:\/:/~/:/
+//   \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~      \  \:\  ~~~   \  \::/    \__\/  \:\   \  \::/ /:/
+//    \  \:\/:/     \  \:\      \  \:\/:/     \  \:\           \  \:\        \  \:\         \  \:\   \__\/ /:/
+//     \  \::/       \  \:\      \  \::/       \  \:\           \  \:\        \  \:\         \__\/     /__/:/
+//      \__\/         \__\/       \__\/         \__\/            \__\/         \__\/                   \__\/
+//
+//   OpenERC165
+//        |
+//  OpenCloneable —— IOpenCloneable
 //
 pragma solidity 0.8.9;
 

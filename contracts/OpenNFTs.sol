@@ -1,38 +1,44 @@
 // SPDX-License-Identifier: MIT
-//     ___           ___         ___           ___                    ___           ___                     ___
-//      /  /\         /  /\       /  /\         /__/\                  /__/\         /  /\        ___        /  /\
-//     /  /::\       /  /::\     /  /:/_        \  \:\                 \  \:\       /  /:/_      /  /\      /  /:/_
-//    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\                 \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
-//   /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\            _____\__\:\   /  /:/ /:/   /  /:/     /  /:/ /::\
-//  /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\          /__/::::::::\ /__/:/ /:/   /  /::\    /__/:/ /:/\:\
-//  \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/          \  \:\~~\~~\/ \  \:\/:/   /__/:/\:\   \  \:\/:/~/:/
-//   \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~            \  \:\  ~~~   \  \::/    \__\/  \:\   \  \::/ /:/
-//    \  \:\/:/     \  \:\      \  \:\/:/     \  \:\                 \  \:\        \  \:\         \  \:\   \__\/ /:/
-//     \  \::/       \  \:\      \  \::/       \  \:\                 \  \:\        \  \:\         \__\/     /__/:/
-//      \__\/         \__\/       \__\/         \__\/                  \__\/         \__\/                   \__\/
 //
+// Derived from Kredeum NFTs
+// https://github.com/Kredeum/kredeum
 //
-//  OpenERC165 (supports)
-//      |
-//      ——————————————————————————————————————————————————————————————————————————————————————
-//      |                                                        |             |             |
-//  OpenERC721 (NFT)                                         OpenERC173  OpenCheckable  OpenCloneable
-//      |                                                    (ownable)         |             |
-//      ————————————————————————————————————————————             |             |             |
-//      |                        |                 |             |             |             |
-// OpenERC721Metadata  OpenERC721Enumerable  OpenERC2981         |             |             |
-//      |                        |           (RoyaltyInfo)       |             |             |
-//      |                        |                 |             |             |             |
-//      |                        |                 ———————————————             |             |
-//      |                        |                 |             |             |             |
-//      |                        |           OpenMarketable OpenPauseable      |             |
-//      |                        |                 |             |             |             |
-//      ——————————————————————————————————————————————————————————————————————————————————————
-//      |
-//   OpenNFTs —— IOpenNFTs
+//       ___           ___         ___           ___              ___           ___                     ___
+//      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
+//     /  /::\       /  /::\     /  /:/_        \  \:\           \  \:\       /  /:/_      /  /\      /  /:/_
+//    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\           \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
+//   /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\      _____\__\:\   /  /:/ /:/   /  /:/     /  /:/ /::\
+//  /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\    /__/::::::::\ /__/:/ /:/   /  /::\    /__/:/ /:/\:\
+//  \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/    \  \:\~~\~~\/ \  \:\/:/   /__/:/\:\   \  \:\/:/~/:/
+//   \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~      \  \:\  ~~~   \  \::/    \__\/  \:\   \  \::/ /:/
+//    \  \:\/:/     \  \:\      \  \:\/:/     \  \:\           \  \:\        \  \:\         \  \:\   \__\/ /:/
+//     \  \::/       \  \:\      \  \::/       \  \:\           \  \:\        \  \:\         \__\/     /__/:/
+//      \__\/         \__\/       \__\/         \__\/            \__\/         \__\/                   \__\/
+//
+//   OpenERC165
+//   (supports)
+//       |
+//       ———————————————————————————————————————————————————————————————————————————————————————
+//       |                                                         |             |             |
+//   OpenERC721                                               OpenERC173  OpenCheckable  OpenCloneable
+//     (NFT)                                                   (ownable)         |             |
+//       |                                                         |             |             |
+//       —————————————————————————————————————————————      ————————             |             |
+//       |                        |                  |      |      |             |             |
+//  OpenERC721Metadata  OpenERC721Enumerable   OpenERC2981  |      |             |             |
+//       |                        |           (RoyaltyInfo) |      |             |             |
+//       |                        |                  |      |      |             |             |
+//       |                        |                  ————————      |             |             |
+//       |                        |                  |             |             |             |
+//       |                        |            OpenMarketable OpenPauseable      |             |
+//       |                        |                  |             |             |             |
+//       ———————————————————————————————————————————————————————————————————————————————————————
+//       |
+//    OpenNFTs —— IOpenNFTs
 //
 pragma solidity 0.8.9;
 
+import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC20.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 
@@ -62,12 +68,12 @@ contract OpenNFTs is
         _burn(tokenID);
     }
 
-    /// @notice withdraw token or eth
+    /// @notice withdraw token otherwise eth
     function withdraw(address token) external override(IOpenNFTs) onlyOwner {
-        if (token.code.length == 0) {
-            payable(msg.sender).transfer(address(this).balance);
-        } else {
+        if ((token.code.length != 0) && (IERC165(token).supportsInterface(type(IERC20).interfaceId))) {
             require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
+        } else {
+            payable(msg.sender).transfer(address(this).balance);
         }
     }
 
