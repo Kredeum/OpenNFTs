@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-2981: NFT Royalty Standard
+// https://eips.ethereum.org/EIPS/eip-2981
+//
 // Derived from OpenZeppelin Contracts (token/common/ERC2981.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/common/ERC2981.sol
 //
@@ -17,8 +20,6 @@
 //
 //  OpenERC165
 //       |
-//  OpenERC721
-//       |
 //  OpenERC2981 —— IERC2981
 //
 pragma solidity 0.8.9;
@@ -26,7 +27,7 @@ pragma solidity 0.8.9;
 import "OpenNFTs/contracts/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
-abstract contract OpenERC2981 is IERC2981, OpenERC721 {
+abstract contract OpenERC2981 is IERC2981, OpenERC165 {
     struct RoyaltyInfo {
         address receiver;
         uint96 fraction;
@@ -57,7 +58,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC721 {
         return (royalty.receiver, royaltyAmount);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC721) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
     }
 }

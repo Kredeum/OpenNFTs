@@ -18,25 +18,23 @@
 //   OpenERC165
 //   (supports)
 //        |
-//        ——————————————
-//        |            |
-//   OpenERC721    OpenERC173
-//      (NFT)      (Ownable)
-//        |            |
-//   OpenERC2981       |
-//  (RoyaltyInfo)      |
-//        |            |
-//        ——————————————
+//        ————————————————————————————
+//        |            |             |
+//   OpenERC721    OpenERC173   OpenERC2981
+//      (NFT)      (Ownable)   (RoyaltyInfo)
+//        |            |             |
+//        ————————————————————————————
 //        |
-//  OpenMarketable
+//  OpenMarketable —— IOpenMarketable
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenERC2981.sol";
+import "OpenNFTs/contracts/OpenERC721.sol";
 import "OpenNFTs/contracts/OpenERC173.sol";
+import "OpenNFTs/contracts/OpenERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenERC173 {
+abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, OpenERC2981 {
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
@@ -102,10 +100,64 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenERC173 {
         public
         view
         virtual
-        override(OpenERC2981, OpenERC173)
+        override(OpenERC721, OpenERC173, OpenERC2981)
         returns (bool)
     {
         return interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function _transferFromBefore(
+        address from,
+        address to,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
+        if (from == address(0)) {
+            // Mint
+            _pay(tokenID, defaultPrice, to, owner());
+        } else if (to == address(0)) {
+            // Burn
+            delete tokenPrice[tokenID];
+        } else {
+            // Transfer
+            _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
+            delete tokenPrice[tokenID];
+        }
+        super._transferFromBefore(from, to, tokenID);
+    }
+
+    function _pay(
+        uint256 tokenID,
+        uint256 price,
+        address payer,
+        address payee
+    ) internal {
+        uint256 unspent = msg.value;
+
+        assert(payer != address(0));
+        if (payee != address(0) && (price > 0)) {
+            /// Require enough value sent
+            require(unspent >= price, "Not enough funds");
+
+            (address receiver, uint256 royalties) = royaltyInfo(tokenID, price);
+
+            require(royalties <= price, "Invalid royalties");
+            uint256 paid = price - royalties;
+
+            /// Transfer amount to previous payee
+            if (paid > 0) {
+                payable(payee).transfer(paid);
+                unspent = unspent - paid;
+            }
+
+            /// Transfer royalties to receiver
+            if (royalties > 0) {
+                payable(receiver).transfer(royalties);
+                unspent = unspent - royalties;
+            }
+        }
+
+        /// Transfer back unspent funds to payer
+        if (unspent > 0) payable(payer).transfer(unspent);
     }
 
     function _setTokenRoyalty(
@@ -121,18 +173,10 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC2981, OpenERC173 {
         tokenPrice[tokenID] = price;
     }
 
-    function _mintMarketable(
-        uint256 tokenID,
-        address receiver,
-        uint96 fee,
-        uint256 price
-    ) internal {
-        _setTokenRoyalty(tokenID, receiver, fee);
-        _setTokenPrice(tokenID, price);
-    }
-
-    function _burnMarketable(uint256 tokenID) internal {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         delete _tokenRoyaltyInfo[tokenID];
         delete tokenPrice[tokenID];
+
+        super._burn(tokenID);
     }
 }

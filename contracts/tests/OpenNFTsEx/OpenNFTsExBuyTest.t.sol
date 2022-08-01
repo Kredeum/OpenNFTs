@@ -40,7 +40,7 @@ abstract contract OpenNFTsExBuyTest is Test {
         uint256 balMinter = _minter.balance;
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTs(_collection).buy{ value: 1.5 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1.5 ether }(_tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
@@ -56,8 +56,8 @@ abstract contract OpenNFTsExBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTs(_collection).buy{ value: 1 ether }(_tokenID0);
-        IOpenNFTs(_collection).buy{ value: 1 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 
     function testFailBuyNotEnoughFunds() public {
@@ -67,7 +67,7 @@ abstract contract OpenNFTsExBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTs(_collection).buy{ value: 0.5 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 0.5 ether }(_tokenID0);
     }
 
     function testFailBuyNotToSell() public {
@@ -77,6 +77,6 @@ abstract contract OpenNFTsExBuyTest is Test {
         deal(_buyer, 10 ether);
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTs(_collection).buy{ value: 1 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 }

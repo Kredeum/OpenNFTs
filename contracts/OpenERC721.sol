@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-721: Non-Fungible Token Standard
+// https://eips.ethereum.org/EIPS/eip-721
+//
 // Derived from OpenZeppelin Contracts (token/ERC721/ERC721.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/ERC721/ERC721.sol
 //
@@ -43,7 +46,9 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         _;
     }
 
-    function approve(address spender, uint256 tokenID) external override(IERC721) {
+    receive() external payable {}
+
+    function approve(address spender, uint256 tokenID) external payable override(IERC721) {
         require(_isOwnerOrOperator(msg.sender, tokenID), "Not token owner nor operator");
 
         _tokenApprovals[tokenID] = spender;
@@ -59,7 +64,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address from,
         address to,
         uint256 tokenID
-    ) external override(IERC721) {
+    ) external payable override(IERC721) {
         _transferFrom(from, to, tokenID);
     }
 
@@ -67,8 +72,8 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address from,
         address to,
         uint256 tokenID
-    ) external override(IERC721) {
-        safeTransferFrom(from, to, tokenID, "");
+    ) external payable override(IERC721) {
+        _safeTransferFrom(from, to, tokenID, "");
     }
 
     function safeTransferFrom(
@@ -76,7 +81,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address to,
         uint256 tokenID,
         bytes memory data
-    ) public override(IERC721) {
+    ) public payable override(IERC721) {
         _transferFrom(from, to, tokenID);
         require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
     }
@@ -106,7 +111,11 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         return _operatorApprovals[owner][operator];
     }
 
-    function _mintNft(address to, uint256 tokenID) internal {
+    function _mint(
+        address to,
+        string memory,
+        uint256 tokenID
+    ) internal virtual {
         require(to != address(0), "Mint to zero address");
         require(!_exists(tokenID), "Token already minted");
 
@@ -117,7 +126,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         require(_isERC721Receiver(address(0), to, tokenID, ""), "Not ERC721Received");
     }
 
-    function _burnNft(uint256 tokenID) internal {
+    function _burn(uint256 tokenID) internal virtual {
         address owner = ownerOf(tokenID);
         assert(_balances[owner] > 0);
 
@@ -126,6 +135,16 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         delete _owners[tokenID];
 
         emit Transfer(owner, address(0), tokenID);
+    }
+
+    function _safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenID,
+        bytes memory data
+    ) internal {
+        _transferFrom(from, to, tokenID);
+        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
     }
 
     function _transferFrom(
@@ -154,19 +173,19 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address from,
         address to,
         uint256 tokenID
-    ) internal virtual;
+    ) internal virtual {}
 
-    function _exists(uint256 tokenID) internal view returns (bool) {
-        return _owners[tokenID] != address(0);
+    function _exists(uint256 tokenID) internal view returns (bool exists) {
+        exists = _owners[tokenID] != address(0);
     }
 
-    function _isOwnerOrOperator(address spender, uint256 tokenID) internal view virtual returns (bool) {
-        address owner = ownerOf(tokenID);
-        return (owner == spender || isApprovedForAll(owner, spender));
+    function _isOwnerOrOperator(address spender, uint256 tokenID) internal view virtual returns (bool ownerOrOperator) {
+        address tokenOwner = ownerOf(tokenID);
+        ownerOrOperator = (tokenOwner == spender || isApprovedForAll(tokenOwner, spender));
     }
 
-    function _isOwnerOrApproved(address spender, uint256 tokenID) internal view returns (bool) {
-        return (_isOwnerOrOperator(spender, tokenID) || getApproved(tokenID) == spender);
+    function _isOwnerOrApproved(address spender, uint256 tokenID) internal view returns (bool ownerOrApproved) {
+        ownerOrApproved = (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
     }
 
     function _isERC721Receiver(

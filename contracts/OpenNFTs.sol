@@ -18,21 +18,18 @@
 //   OpenERC165
 //   (supports)
 //       |
-//       ———————————————————————————————————————————————————————————————————————————————————————
-//       |                                                         |             |             |
-//   OpenERC721                                               OpenERC173  OpenCheckable  OpenCloneable
-//     (NFT)                                                   (ownable)         |             |
-//       |                                                         |             |             |
-//       —————————————————————————————————————————————      ————————             |             |
-//       |                        |                  |      |      |             |             |
-//  OpenERC721Metadata  OpenERC721Enumerable   OpenERC2981  |      |             |             |
-//       |                        |           (RoyaltyInfo) |      |             |             |
-//       |                        |                  |      |      |             |             |
-//       |                        |                  ————————      |             |             |
-//       |                        |                  |             |             |             |
-//       |                        |            OpenMarketable OpenPauseable      |             |
-//       |                        |                  |             |             |             |
-//       ———————————————————————————————————————————————————————————————————————————————————————
+//       ———————————————————————————————————————————————————————————————————————————————————
+//       |                                       |             |             |             |
+//   OpenERC721                            OpenERC2981    OpenERC173  OpenCheckable  OpenCloneable
+//     (NFT)                              (RoyaltyInfo)    (ownable)         |             |
+//       |                                        |            |             |             |
+//       ——————————————————————————————————————   |     ————————             |             |
+//       |                        |           |   |     |      |             |             |
+//  OpenERC721Metadata  OpenERC721Enumerable  |   ———————      |             |             |
+//       |                        |           |   |            |             |             |
+//       |                        |      OpenMarketable   OpenPauseable      |             |
+//       |                        |             |              |             |             |
+//       ———————————————————————————————————————————————————————————————————————————————————
 //       |
 //    OpenNFTs —— IOpenNFTs
 //
@@ -77,42 +74,9 @@ contract OpenNFTs is
         }
     }
 
-    function buy(uint256 tokenID) external payable override(IOpenNFTs) {
-        /// Get token price
-        uint256 price = tokenPrice[tokenID];
-
-        /// Require price defined
-        require(price > 0, "Not to sell");
-
-        /// Require enough value sent
-        require(msg.value >= price, "Not enough funds");
-
-        /// Get previous token owner
-        address from = ownerOf(tokenID);
-        assert(from != address(0));
-        require(from != msg.sender, "Already token owner!");
-
-        /// Reset token price (to be eventualy defined by new owner)
-        delete tokenPrice[tokenID];
-
-        /// Transfer token
-        this.safeTransferFrom(from, msg.sender, tokenID);
-
-        (address receiver, uint256 royalties) = royaltyInfo(tokenID, price);
-
-        assert(price >= royalties);
-        uint256 paid = price - royalties;
-        uint256 unspent = msg.value - price;
-        assert(paid + royalties + unspent == msg.value);
-
-        /// Transfer amount to previous owner
-        payable(from).transfer(paid);
-
-        /// Transfer royalties to receiver
-        if (royalties > 0) payable(receiver).transfer(royalties);
-
-        /// Transfer back unspent funds to sender
-        if (unspent > 0) payable(msg.sender).transfer(unspent);
+    function mint(address minter, string memory tokenURI) public returns (uint256 tokenID) {
+        tokenID = tokenIdNext++;
+        _mint(minter, tokenURI, tokenID);
     }
 
     /// @notice initialize
@@ -144,28 +108,24 @@ contract OpenNFTs is
 
     /// @notice _mint
     /// @param minter address of minter
-    /// @param jsonURI json URI of NFT metadata
-    function _mint(address minter, string memory jsonURI) internal returns (uint256 tokenID) {
-        tokenID = tokenIdNext++;
-
-        // _mintMarketable(tokenID);
-        _mintMetadata(tokenID, jsonURI);
-        _mintEnumerable(minter, tokenID);
-        _mintNft(minter, tokenID);
+    /// @param tokenURI json URI of NFT metadata
+    function _mint(
+        address minter,
+        string memory tokenURI,
+        uint256 tokenID
+    ) internal override(OpenERC721, OpenERC721Enumerable, OpenERC721Metadata) {
+        super._mint(minter, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal {
-        _burnMarketable(tokenID);
-        _burnMetadata(tokenID);
-        _burnEnumerable(tokenID);
-        _burnNft(tokenID);
+    function _burn(uint256 tokenID) internal override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
+        super._burn(tokenID);
     }
 
     function _transferFromBefore(
         address from,
         address to,
         uint256 tokenID
-    ) internal override(OpenERC721, OpenERC721Enumerable) {
-        OpenERC721Enumerable._transferFromBefore(from, to, tokenID);
+    ) internal override(OpenERC721, OpenMarketable, OpenERC721Enumerable) {
+        super._transferFromBefore(from, to, tokenID);
     }
 }

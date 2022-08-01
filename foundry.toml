@@ -5,5 +5,5 @@ out = 'out'
 solc_version='0.8.9'
 
 [fmt]
-line_length = 620
+line_length = 120
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

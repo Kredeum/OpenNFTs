@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-173: Contract Ownership Standard
+// https://eips.ethereum.org/EIPS/eip-173
+//
 // Derived from OpenZeppelin Contracts (access/Ownable.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/access/Ownable.sol
 //

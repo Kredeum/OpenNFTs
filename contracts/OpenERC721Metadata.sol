@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-721: Non-Fungible Token Standard
+// https://eips.ethereum.org/EIPS/eip-721
+//
 // Derived from OpenZeppelin Contracts (token/ERC721/ERC721.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/ERC721/ERC721.sol
 //
@@ -56,11 +59,19 @@ abstract contract OpenERC721Metadata is IERC721Metadata, OpenERC721 {
         _symbol = symbol_;
     }
 
-    function _mintMetadata(uint256 tokenID, string memory newTokenURI) internal {
+    function _mint(
+        address to,
+        string memory newTokenURI,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
         _tokenURIs[tokenID] = newTokenURI;
+
+        super._mint(to, newTokenURI, tokenID);
     }
 
-    function _burnMetadata(uint256 tokenID) internal {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         delete _tokenURIs[tokenID];
+
+        super._burn(tokenID);
     }
 }

@@ -56,6 +56,30 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         _;
     }
 
+    function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
+        require(_exists(tokenID), "NFT doesn't exists");
+
+        /// Get token price
+        uint256 price = tokenPrice[tokenID];
+
+        /// Require price defined
+        require(price > 0, "Not to sell");
+
+        /// Require enough value sent
+        require(msg.value >= price, "Not enough funds");
+
+        /// Get previous token owner
+        address from = ownerOf(tokenID);
+        assert(from != address(0));
+        require(from != msg.sender, "Already token owner!");
+
+        /// Transfer token
+        this.safeTransferFrom{ value: msg.value }(from, msg.sender, tokenID, "");
+
+        /// Reset token price (to be eventualy defined by new owner)
+        delete tokenPrice[tokenID];
+    }
+
     function initialize(
         string memory name_,
         string memory symbol_,
@@ -66,14 +90,14 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         open = options[0];
     }
 
-    function mint(string memory jsonURI)
+    function mint(string memory tokenURI)
         external
         override(IOpenNFTsEx)
         onlyOpenOrOwner
         onlyWhenNotPaused
         returns (uint256)
     {
-        return _mint(msg.sender, jsonURI);
+        return mint(msg.sender, tokenURI);
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenNFTs) returns (bool) {

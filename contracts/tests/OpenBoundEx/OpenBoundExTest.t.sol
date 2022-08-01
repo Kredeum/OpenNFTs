@@ -41,14 +41,14 @@ contract OpenBoundExTest is
         returns (uint256, string memory)
     {
         changePrank(minter);
-        uint256 tokenID = OpenBoundEx(collection).mint(_cid++);
-        string memory tokenURI = OpenBoundEx(collection).tokenURI(tokenID);
+        uint256 tokenID = OpenBoundEx(payable(collection)).mint(_cid++);
+        string memory tokenURI = OpenBoundEx(payable(collection)).tokenURI(tokenID);
         return (tokenID, tokenURI);
     }
 
     function burnTest(address collection, uint256 tokenID) public override(OpenNFTsTest, ERC721NonTransferableTest) {
-        changePrank(OpenBoundEx(collection).ownerOf(tokenID));
-        OpenBoundEx(collection).burn(tokenID);
+        changePrank(OpenBoundEx(payable(collection)).ownerOf(tokenID));
+        OpenBoundEx(payable(collection)).burn(tokenID);
     }
 
     function setUp() public {

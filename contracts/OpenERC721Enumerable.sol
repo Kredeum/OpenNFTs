@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-721: Non-Fungible Token Standard
+// https://eips.ethereum.org/EIPS/eip-721
+//
 // Derived from OpenZeppelin Contracts (token/ERC721/extensions/ERC721Enumerable.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/...
 // ...contracts/token/ERC721/extensions/ERC721Enumerable.sol
@@ -64,14 +67,20 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         return interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
     }
 
-    function _mintEnumerable(address to, uint256 tokenID) internal {
+    function _mint(
+        address to,
+        string memory tokenURI,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
         _addOwnedToken(to, tokenID);
 
         _allTokensIndex[tokenID] = _allTokens.length;
         _allTokens.push(tokenID);
+
+        super._mint(to, tokenURI, tokenID);
     }
 
-    function _burnEnumerable(uint256 tokenID) internal {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         address from = ownerOf(tokenID);
 
         _removeOwnedToken(from, tokenID);
@@ -85,6 +94,8 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
 
         _allTokens[allBurnIndex] = allLastTokenId;
         _allTokens.pop();
+
+        super._burn(tokenID);
     }
 
     function _transferFromBefore(
@@ -94,6 +105,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     ) internal virtual override(OpenERC721) {
         _removeOwnedToken(from, tokenID);
         _addOwnedToken(to, tokenID);
+        super._transferFromBefore(from, to, tokenID);
     }
 
     function _addOwnedToken(address owner, uint256 tokenID) private {

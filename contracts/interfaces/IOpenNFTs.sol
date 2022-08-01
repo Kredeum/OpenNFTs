@@ -10,7 +10,5 @@ interface IOpenNFTs {
 
     function burn(uint256 tokenID) external;
 
-    function buy(uint256 tokenID) external payable;
-
     function withdraw(address token) external;
 }

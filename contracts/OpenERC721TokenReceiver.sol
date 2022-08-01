@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-721: Non-Fungible Token Standard
+// https://eips.ethereum.org/EIPS/eip-721
+//
 // Derived from OpenZeppelin Contracts (token/ERC721/ERC721.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/ERC721/ERC721.sol
 //

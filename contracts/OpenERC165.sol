@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
 //
+// EIP-165: Standard Interface Detection
+// https://eips.ethereum.org/EIPS/eip-165
+//
 // Derived from OpenZeppelin Contracts (utils/introspection/ERC165.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/utils/introspection/ERC165.sol
 //

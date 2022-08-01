@@ -131,7 +131,7 @@ contract OpenBoundEx is
     function tokenURI(uint256 tokenID) external view override(IERC721Metadata) returns (string memory) {
         require(_exists(tokenID), "NFT doesn't exists");
 
-        return string(abi.encodePacked(_BASE_URI, Bafkrey.uint256ToCid(_cidOfToken[tokenID])));
+        return _tokenURI(_cidOfToken[tokenID]);
     }
 
     /// IERC165
@@ -148,29 +148,29 @@ contract OpenBoundEx is
             super.supportsInterface(interfaceId);
     }
 
-    /// internal
-    function _mintEnumerable(
-        address to,
-        uint256 tokenID,
-        uint256 cid
-    ) internal {
-        _tokens.push(tokenID);
-        _tokenOfOwner[to] = tokenID;
-        _tokenIndexOfOwner[to] = _tokens.length - 1;
-        _cidOfToken[tokenID] = cid;
-    }
-
     function _mint(address to, uint256 cid) internal returns (uint256 tokenID) {
         require((maxSupply == 0) || _tokens.length < maxSupply, "Max supply reached");
         require(balanceOf(to) == 0, "Already minted or claimed");
 
         tokenID = _tokenID(to, cid);
 
-        _mintEnumerable(to, tokenID, cid);
-        _mintNft(to, tokenID);
+        _tokens.push(tokenID);
+        _tokenOfOwner[to] = tokenID;
+        _tokenIndexOfOwner[to] = _tokens.length - 1;
+        _cidOfToken[tokenID] = cid;
+
+        _mint(to, _tokenURI(cid), tokenID);
     }
 
-    function _burnEnumerable(uint256 tokenID) internal {
+    function _mint(
+        address to,
+        string memory newTokenURI,
+        uint256 tokenID
+    ) internal override(OpenERC721) {
+        super._mint(to, newTokenURI, tokenID);
+    }
+
+    function _burn(uint256 tokenID) internal override(OpenERC721) {
         address from = ownerOf(tokenID);
         uint256 index = _tokenIndexOfOwner[from];
         uint256 lastIndex = _tokens.length - 1;
@@ -184,15 +184,16 @@ contract OpenBoundEx is
         delete _cidOfToken[tokenID];
         delete _tokenIndexOfOwner[from];
         delete _tokenOfOwner[from];
-    }
 
-    function _burn(uint256 tokenID) internal {
-        _burnEnumerable(tokenID);
-        _burnNft(tokenID);
+        super._burn(tokenID);
     }
 
     function _tokenID(address addr, uint256 cid) internal pure returns (uint256 tokenID) {
         tokenID = uint256(keccak256(abi.encodePacked(cid, addr)));
+    }
+
+    function _tokenURI(uint256 cid) internal pure returns (string memory) {
+        return string(abi.encodePacked(_BASE_URI, Bafkrey.uint256ToCid(cid)));
     }
 
     function _transferFromBefore(
