@@ -47,7 +47,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         changePrank(_minter);
 
         vm.expectEmit(true, true, true, false);
-        emit Transfer(_minter, _tester, 1);
+        emit Transfer(_minter, _tester, _tokenID0);
         IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
     }
 
@@ -55,7 +55,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         changePrank(_minter);
 
         vm.expectEmit(true, true, true, false);
-        emit Transfer(_minter, _tester, 1);
+        emit Transfer(_minter, _tester, _tokenID0);
         IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
     }
 
@@ -69,7 +69,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         (uint256 tokenID, ) = mintTest(_collection, from);
 
         vm.expectEmit(true, true, true, false);
-        emit Transfer(from, to, 2);
+        emit Transfer(from, to, tokenID);
         IERC721(_collection).safeTransferFrom(from, to, tokenID);
         assertEq(IERC721(_collection).ownerOf(tokenID), to);
     }
@@ -85,7 +85,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         changePrank(_minter);
 
         IERC721(_collection).transferFrom(_minter, _tester, _tokenID0);
-        assertEq(IERC721(_collection).ownerOf(1), _tester);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
     }
 
     function testERC721TransferFromEOAFuzzy(address from, address to) public {
@@ -97,7 +97,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         (uint256 tokenID, ) = mintTest(_collection, from);
 
         vm.expectEmit(true, true, true, false);
-        emit Transfer(from, to, 2);
+        emit Transfer(from, to, tokenID);
         IERC721(_collection).transferFrom(from, to, tokenID);
         assertEq(IERC721(_collection).ownerOf(tokenID), to);
     }

@@ -18,4 +18,6 @@ interface IOpenBoundEx {
     function getMyTokenID(uint256 cid) external view returns (uint256);
 
     function getCID(uint256 tokenID) external view returns (uint256);
+
+    function getTokenID(address addr, uint256 cid) external pure returns (uint256 tokenID);
 }

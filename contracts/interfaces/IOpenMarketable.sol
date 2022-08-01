@@ -3,8 +3,9 @@ pragma solidity 0.8.9;
 
 interface IOpenMarketable {
     event SetDefaultRoyalty(address receiver, uint96 fee);
-
     event SetTokenRoyalty(uint256 tokenID, address receiver, uint96 fee);
+
+    receive() external payable;
 
     function tokenPrice(uint256 tokenID) external returns (uint256 price);
 

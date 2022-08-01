@@ -74,7 +74,7 @@ contract OpenNFTs is
         }
     }
 
-    function mint(address minter, string memory tokenURI) public returns (uint256 tokenID) {
+    function mint(address minter, string memory tokenURI) public override(IOpenNFTs) returns (uint256 tokenID) {
         tokenID = tokenIdNext++;
         _mint(minter, tokenURI, tokenID);
     }

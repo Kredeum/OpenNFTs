@@ -38,21 +38,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
-    modifier notTooExpensive(uint256 price) {
-        /// otherwise may overflow
-        require(price < 2**128, "Too expensive");
-        _;
-    }
-
-    modifier lessThanMaxFee(uint256 fee) {
-        require(fee <= _MAX_FEE, "Royalty fee exceed price");
-        _;
-    }
-
-    // modifier beforeMinting() {
-    //     require(totalSupply() == 0, "Some tokens already minted");
-    //     _;
-    // }
+    receive() external payable override(IOpenMarketable) {}
 
     /// @notice SET default royalty configuration
     /// @param receiver : address of the royalty receiver, or address(0) to reset
@@ -112,13 +98,13 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint256 tokenID
     ) internal virtual override(OpenERC721) {
         if (from == address(0)) {
-            // Mint
+            /// Mint: pay defaultPrice to collection owner
             _pay(tokenID, defaultPrice, to, owner());
         } else if (to == address(0)) {
-            // Burn
+            /// Burn: nothing to pay
             delete tokenPrice[tokenID];
         } else {
-            // Transfer
+            /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
             _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
             delete tokenPrice[tokenID];
         }
@@ -133,8 +119,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     ) internal {
         uint256 unspent = msg.value;
 
-        assert(payer != address(0));
-        if (payee != address(0) && (price > 0)) {
+        if (price > 0) {
             /// Require enough value sent
             require(unspent >= price, "Not enough funds");
 

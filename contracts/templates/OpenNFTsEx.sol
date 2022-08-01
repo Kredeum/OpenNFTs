@@ -57,27 +57,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
     }
 
     function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
-        require(_exists(tokenID), "NFT doesn't exists");
-
-        /// Get token price
-        uint256 price = tokenPrice[tokenID];
-
-        /// Require price defined
-        require(price > 0, "Not to sell");
-
-        /// Require enough value sent
-        require(msg.value >= price, "Not enough funds");
-
-        /// Get previous token owner
-        address from = ownerOf(tokenID);
-        assert(from != address(0));
-        require(from != msg.sender, "Already token owner!");
-
-        /// Transfer token
-        this.safeTransferFrom{ value: msg.value }(from, msg.sender, tokenID, "");
-
-        /// Reset token price (to be eventualy defined by new owner)
-        delete tokenPrice[tokenID];
+        this.safeTransferFrom{ value: msg.value }(ownerOf(tokenID), msg.sender, tokenID);
     }
 
     function initialize(

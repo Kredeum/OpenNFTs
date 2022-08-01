@@ -134,6 +134,10 @@ contract OpenBoundEx is
         return _tokenURI(_cidOfToken[tokenID]);
     }
 
+    function getTokenID(address addr, uint256 cid) external pure override(IOpenBoundEx) returns (uint256 tokenID) {
+        tokenID = _tokenID(addr, cid);
+    }
+
     /// IERC165
     function supportsInterface(bytes4 interfaceId)
         public

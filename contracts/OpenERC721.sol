@@ -46,8 +46,6 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         _;
     }
 
-    receive() external payable {}
-
     function approve(address spender, uint256 tokenID) external payable override(IERC721) {
         require(_isOwnerOrOperator(msg.sender, tokenID), "Not token owner nor operator");
 
@@ -71,19 +69,19 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function safeTransferFrom(
         address from,
         address to,
-        uint256 tokenID
+        uint256 tokenID,
+        bytes memory data
     ) external payable override(IERC721) {
-        _safeTransferFrom(from, to, tokenID, "");
+        _transferFrom(from, to, tokenID);
+        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
     }
 
     function safeTransferFrom(
         address from,
         address to,
-        uint256 tokenID,
-        bytes memory data
+        uint256 tokenID
     ) public payable override(IERC721) {
-        _transferFrom(from, to, tokenID);
-        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
+        _safeTransferFrom(from, to, tokenID, "");
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
@@ -93,7 +91,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     }
 
     function balanceOf(address owner) public view override(IERC721) returns (uint256) {
-        require(owner != address(0), "Zero address not valid owner");
+        require(owner != address(0), "Invalid zero address");
         return _balances[owner];
     }
 

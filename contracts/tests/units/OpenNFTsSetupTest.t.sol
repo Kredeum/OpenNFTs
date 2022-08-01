@@ -49,7 +49,7 @@ abstract contract OpenNFTsSetupTest is Test {
     }
 
     function testPrice() public {
-        assertEq(IOpenMarketable(_collection).tokenPrice(1), 0);
+        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(1), 0);
     }
 
     function testRoyalties() public {

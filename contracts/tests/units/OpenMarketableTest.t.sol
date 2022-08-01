@@ -44,7 +44,7 @@ abstract contract OpenMarketableTest is Test {
         (uint256 tokenID, ) = mintTest(_contract, _owner);
 
         changePrank(_owner);
-        IOpenMarketable(_contract).setDefaultRoyalty(_minter, fee);
+        IOpenMarketable(payable(_contract)).setDefaultRoyalty(_minter, fee);
 
         (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(tokenID, price);
         assertEq(receiver, _minter);
@@ -58,7 +58,7 @@ abstract contract OpenMarketableTest is Test {
 
         assertEq(IERC721(_contract).ownerOf(_tokenID0), _minter);
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenRoyalty(_tokenID0, _tester, fee);
+        IOpenMarketable(payable(_contract)).setTokenRoyalty(_tokenID0, _tester, fee);
 
         (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(_tokenID0, price);
         assertEq(receiver, _tester);
@@ -66,49 +66,49 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testFailSetTokenRoyaltyNoToken() public {
-        IOpenMarketable(_contract).setTokenRoyalty(_notTokenID, _tester, 100);
+        IOpenMarketable(payable(_contract)).setTokenRoyalty(_notTokenID, _tester, 100);
     }
 
     function testSetTokenPrice(uint256 price) public {
         vm.assume(price < 2**128);
 
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0, price);
-        assertEq(IOpenMarketable(_contract).tokenPrice(_tokenID0), price);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0, price);
+        assertEq(IOpenMarketable(payable(_contract)).tokenPrice(_tokenID0), price);
     }
 
     function testSetTokenPriceFromDefault(uint256 price) public {
         vm.assume(price < 2**128);
 
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0);
-        assertEq(IOpenMarketable(_contract).tokenPrice(_tokenID0), 0);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0);
+        assertEq(IOpenMarketable(payable(_contract)).tokenPrice(_tokenID0), 0);
 
         changePrank(_owner);
-        IOpenMarketable(_contract).setDefaultPrice(price);
+        IOpenMarketable(payable(_contract)).setDefaultPrice(price);
 
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0);
-        assertEq(IOpenMarketable(_contract).tokenPrice(_tokenID0), price);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0);
+        assertEq(IOpenMarketable(payable(_contract)).tokenPrice(_tokenID0), price);
     }
 
     function testFailSetDefaultPriceTooExpensive(uint256 price) public {
         vm.assume(price > 2**128);
 
         changePrank(_owner);
-        IOpenMarketable(_contract).setDefaultPrice(price);
+        IOpenMarketable(payable(_contract)).setDefaultPrice(price);
     }
 
     function testFailSetTokenPriceTooExpensive(uint256 price) public {
         vm.assume(price > 2**128);
 
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0, price);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0, price);
     }
 
     function testFailSetTokenPriceNoToken() public {
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenPrice(_notTokenID, 1 ether);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_notTokenID, 1 ether);
     }
 
     function testRoyaltyInfoCalculation(uint256 price, uint96 fee) public {
@@ -118,7 +118,7 @@ abstract contract OpenMarketableTest is Test {
         (uint256 tokenID, ) = mintTest(_contract, _owner);
 
         changePrank(_owner);
-        IOpenMarketable(_contract).setDefaultRoyalty(_minter, fee);
+        IOpenMarketable(payable(_contract)).setDefaultRoyalty(_minter, fee);
 
         (address receiver, uint256 royalties) = IERC2981(_contract).royaltyInfo(tokenID, price);
         assertEq(receiver, _minter);
@@ -128,18 +128,18 @@ abstract contract OpenMarketableTest is Test {
 
     function testTokenOwner() public {
         changePrank(_minter);
-        IOpenMarketable(_contract).setTokenRoyalty(_tokenID0, _tester, 100);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0, 1 ether);
+        IOpenMarketable(payable(_contract)).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0, 1 ether);
     }
 
     function testFailSetTokenRoyaltyNotOwner() public {
         changePrank(_tester);
-        IOpenMarketable(_contract).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_contract)).setTokenRoyalty(_tokenID0, _tester, 100);
     }
 
     function testFailSetTokenPriceNotOwner() public {
         changePrank(_tester);
-        IOpenMarketable(_contract).setTokenPrice(_tokenID0, 1 ether);
+        IOpenMarketable(payable(_contract)).setTokenPrice(_tokenID0, 1 ether);
     }
 
     function testSupportsInterface() public {

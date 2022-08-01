@@ -32,8 +32,8 @@ abstract contract OpenNFTsExBuyTest is Test {
         changePrank(_minter);
         IERC721(_collection).setApprovalForAll(_collection, true);
 
-        IOpenMarketable(_collection).setTokenRoyalty(_tokenID0, _tester, 100);
-        IOpenMarketable(_collection).setTokenPrice(_tokenID0, 1 ether);
+        IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
@@ -50,8 +50,8 @@ abstract contract OpenNFTsExBuyTest is Test {
     }
 
     function testFailBuyTwice() public {
-        IOpenMarketable(_collection).setTokenRoyalty(_tokenID0, _tester, 100);
-        IOpenMarketable(_collection).setTokenPrice(_tokenID0, 1 ether);
+        IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
@@ -61,8 +61,8 @@ abstract contract OpenNFTsExBuyTest is Test {
     }
 
     function testFailBuyNotEnoughFunds() public {
-        IOpenMarketable(_collection).setTokenRoyalty(_tokenID0, _tester, 100);
-        IOpenMarketable(_collection).setTokenPrice(_tokenID0, 1 ether);
+        IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
@@ -71,7 +71,7 @@ abstract contract OpenNFTsExBuyTest is Test {
     }
 
     function testFailBuyNotToSell() public {
-        IOpenMarketable(_collection).setTokenPrice(_tokenID0, 0);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 0);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);

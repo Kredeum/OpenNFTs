@@ -38,22 +38,31 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
 
     uint96 internal constant _MAX_FEE = 10000;
 
-    function royaltyInfo(uint256 tokenID, uint256 salePrice)
+    modifier notTooExpensive(uint256 price) {
+        /// otherwise may overflow
+        require(price < 2**128, "Too expensive");
+        _;
+    }
+
+    modifier lessThanMaxFee(uint256 fee) {
+        require(fee <= _MAX_FEE, "Royalty fee exceed price");
+        _;
+    }
+
+    function royaltyInfo(uint256 tokenID, uint256 price)
         public
         view
         override(IERC2981)
+        notTooExpensive(price)
         returns (address receiver, uint256 royaltyAmount)
     {
-        /// otherwise may overflow
-        require(salePrice < 2**128, "Too expensive");
-
         RoyaltyInfo memory royalty = _tokenRoyaltyInfo[tokenID];
 
         if (royalty.receiver == address(0)) {
             royalty = _royaltyInfo;
         }
 
-        royaltyAmount = (salePrice * royalty.fraction) / _MAX_FEE;
+        royaltyAmount = (price * royalty.fraction) / _MAX_FEE;
 
         return (royalty.receiver, royaltyAmount);
     }

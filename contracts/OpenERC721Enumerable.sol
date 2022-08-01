@@ -105,6 +105,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     ) internal virtual override(OpenERC721) {
         _removeOwnedToken(from, tokenID);
         _addOwnedToken(to, tokenID);
+
         super._transferFromBefore(from, to, tokenID);
     }
 
