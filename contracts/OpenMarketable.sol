@@ -92,22 +92,32 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         return interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);
     }
 
+    function _mint(
+        address to,
+        string memory tokenURI,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
+        super._mint(to, tokenURI, tokenID);
+
+        _pay(tokenID, defaultPrice, to, owner());
+    }
+
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
+        delete _tokenRoyaltyInfo[tokenID];
+        delete tokenPrice[tokenID];
+
+        super._burn(tokenID);
+    }
+
     function _transferFromBefore(
         address from,
         address to,
         uint256 tokenID
     ) internal virtual override(OpenERC721) {
-        if (from == address(0)) {
-            /// Mint: pay defaultPrice to collection owner
-            _pay(tokenID, defaultPrice, to, owner());
-        } else if (to == address(0)) {
-            /// Burn: nothing to pay
-            delete tokenPrice[tokenID];
-        } else {
-            /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
-            _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
-            delete tokenPrice[tokenID];
-        }
+        /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
+        _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
+        delete tokenPrice[tokenID];
+
         super._transferFromBefore(from, to, tokenID);
     }
 
@@ -156,12 +166,5 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
 
     function _setTokenPrice(uint256 tokenID, uint256 price) internal {
         tokenPrice[tokenID] = price;
-    }
-
-    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
-        delete _tokenRoyaltyInfo[tokenID];
-        delete tokenPrice[tokenID];
-
-        super._burn(tokenID);
     }
 }

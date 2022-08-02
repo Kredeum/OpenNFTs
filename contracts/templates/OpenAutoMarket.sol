@@ -20,7 +20,7 @@ import "OpenNFTs/contracts/interfaces/IOpenAutoMarket.sol";
 contract OpenAutoMarket is IOpenAutoMarket, OpenMarketable {
     uint256 internal _tokenID;
 
-    function mint(string memory tokenURI) external override(IOpenAutoMarket) returns (uint256 tokenID) {
+    function mint(string memory tokenURI) external payable override(IOpenAutoMarket) returns (uint256 tokenID) {
         tokenID = _tokenID++;
         _mint(msg.sender, tokenURI, tokenID);
     }
@@ -28,7 +28,7 @@ contract OpenAutoMarket is IOpenAutoMarket, OpenMarketable {
     function burn(uint256 tokenID) external override(IOpenAutoMarket) {
         super._burn(tokenID);
     }
-    
+
     function buy(uint256 tokenID) external payable override(IOpenAutoMarket) {
         this.safeTransferFrom{ value: msg.value }(ownerOf(tokenID), msg.sender, tokenID);
     }

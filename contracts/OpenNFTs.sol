@@ -113,7 +113,7 @@ contract OpenNFTs is
         address minter,
         string memory tokenURI,
         uint256 tokenID
-    ) internal override(OpenERC721, OpenERC721Enumerable, OpenERC721Metadata) {
+    ) internal override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
         super._mint(minter, tokenURI, tokenID);
     }
 
