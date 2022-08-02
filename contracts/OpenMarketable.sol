@@ -67,6 +67,8 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
 
     function setDefaultPrice(uint256 price) external override(IOpenMarketable) onlyOwner notTooExpensive(price) {
         defaultPrice = price;
+
+        emit SetDefaultPrice(price);
     }
 
     function setTokenPrice(uint256 tokenID) external override(IOpenMarketable) {
@@ -149,6 +151,8 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
                 payable(receiver).transfer(royalties);
                 unspent = unspent - royalties;
             }
+
+            emit Pay(tokenID, price, payer, payee);
         }
 
         /// Transfer back unspent funds to payer
@@ -161,10 +165,13 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint96 fee
     ) internal {
         _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
+
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }
 
     function _setTokenPrice(uint256 tokenID, uint256 price) internal {
         tokenPrice[tokenID] = price;
+
+        emit SetTokenPrice(tokenID, price);
     }
 }

@@ -142,7 +142,8 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         bytes memory data
     ) internal {
         _transferFrom(from, to, tokenID);
-        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
+
+        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Receiver");
     }
 
     function _transferFrom(

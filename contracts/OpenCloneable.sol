@@ -25,7 +25,7 @@ import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/OpenERC165.sol";
 
 abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
-    bool private _once;
+    bool private _openCloneableInitialized;
     string private _template;
     uint256 private _version;
 
@@ -42,8 +42,8 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
     }
 
     function _initialize(string memory template_, uint256 version_) internal {
-        require(_once == false, "Only once!");
-        _once = true;
+        require(_openCloneableInitialized == false, "Only once!");
+        _openCloneableInitialized = true;
 
         _template = template_;
         _version = version_;
