@@ -79,21 +79,6 @@ contract OpenNFTs is
         _mint(minter, tokenURI, tokenID);
     }
 
-    /// @notice initialize
-    /// @param name_ name of the NFT Collection
-    /// @param symbol_ symbol of the NFT Collection
-    /// @param owner_ owner of the NFT Collection
-    // solhint-disable-next-line comprehensive-interface
-    function initialize(
-        string memory name_,
-        string memory symbol_,
-        address owner_
-    ) public {
-        OpenCloneable._initialize("OpenNFTs", 4);
-        OpenERC721Metadata._initialize(name_, symbol_);
-        OpenERC173._initialize(owner_);
-    }
-
     /// @notice test if this interface is supported
     /// @param interfaceId interfaceId to test
     function supportsInterface(bytes4 interfaceId)
@@ -104,6 +89,21 @@ contract OpenNFTs is
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    /// @notice _initialize
+    /// @param name_ name of the NFT Collection
+    /// @param symbol_ symbol of the NFT Collection
+    /// @param owner_ owner of the NFT Collection
+    // solhint-disable-next-line comprehensive-interface
+    function _initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_
+    ) internal {
+        OpenCloneable._initialize("OpenNFTs", 4);
+        OpenERC721Metadata._initialize(name_, symbol_);
+        OpenERC173._initialize(owner_);
     }
 
     /// @notice _mint

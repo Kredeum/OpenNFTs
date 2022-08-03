@@ -66,7 +66,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         address owner_,
         bool[] memory options
     ) external override(IOpenNFTsEx) {
-        OpenNFTs.initialize(name_, symbol_, owner_);
+        OpenNFTs._initialize(name_, symbol_, owner_);
         open = options[0];
     }
 
