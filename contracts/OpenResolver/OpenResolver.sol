@@ -34,10 +34,8 @@ import "OpenNFTs/contracts/OpenResolver/OpenGetter.sol";
 import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
-    function openResolver(address account) external view returns (CollectionInfos[] memory collectionInfos) {
-        for (uint256 i = 0; i < addresses.length; i++) {
-            collectionInfos = collectionsInfosGet(addresses, account);
-        }
+    function openResolver(address account) external view returns (CollectionInfos[] memory) {
+        return getCollectionsInfos(addresses, account);
     }
 
     function supportsInterface(bytes4 interfaceId)
