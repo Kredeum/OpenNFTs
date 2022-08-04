@@ -7,7 +7,7 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
 
 abstract contract OpenCheckableTest is Test {
-    address private _contract;
+    address private _collection;
     address private _owner = address(0x1);
 
     bytes4 idIERC165 = type(IERC165).interfaceId;
@@ -17,13 +17,13 @@ abstract contract OpenCheckableTest is Test {
     function constructorTest(address owner_) public virtual returns (address);
 
     function setUpOpenCheckable() public {
-        _contract = constructorTest(_owner);
+        _collection = constructorTest(_owner);
     }
 
     function testOpenCheckableSupportsInterface() public {
-        assertTrue(IERC165(_contract).supportsInterface(idIERC165));
-        assertTrue(IERC165(_contract).supportsInterface(idOpenCheckable));
-        assertFalse(IERC165(_contract).supportsInterface(idNull));
+        assertTrue(IERC165(_collection).supportsInterface(idIERC165));
+        assertTrue(IERC165(_collection).supportsInterface(idOpenCheckable));
+        assertFalse(IERC165(_collection).supportsInterface(idNull));
     }
 
     function testOpenCheckableCheckSupportedInterfaces() public {
@@ -35,7 +35,7 @@ abstract contract OpenCheckableTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenCheckable(_contract).checkSupportedInterfaces(interfaceIds);
+        bool[] memory checks = IOpenCheckable(_collection).checkSupportedInterfaces(_collection, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             assertEq(checks[i], expected[i]);

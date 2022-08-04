@@ -7,7 +7,7 @@ import "OpenNFTs/contracts/interfaces/IERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 
 abstract contract ERC173Test is Test {
-    address private _contract;
+    address private _collection;
     string private _tokenURI;
     address private _owner = address(0x1);
     address private _minter = address(0x12);
@@ -19,42 +19,42 @@ abstract contract ERC173Test is Test {
     function constructorTest(address owner_) public virtual returns (address);
 
     function setUpERC173() public {
-        _contract = constructorTest(_owner);
+        _collection = constructorTest(_owner);
     }
 
     function testERC173Owner() public {
-        assertEq(IERC173(_contract).owner(), _owner);
+        assertEq(IERC173(_collection).owner(), _owner);
     }
 
     function testERC173OnlyOwner() public {
         changePrank(_owner);
-        IERC173(_contract).transferOwnership(_tester);
+        IERC173(_collection).transferOwnership(_tester);
     }
 
     function testFailERC173NotOnlyOwner() public {
         changePrank(_tester);
-        IERC173(_contract).transferOwnership(_minter);
+        IERC173(_collection).transferOwnership(_minter);
     }
 
     function testERC173TransferOwnership() public {
         changePrank(_owner);
-        IERC173(_contract).transferOwnership(_tester);
-        assertEq(IERC173(_contract).owner(), _tester);
+        IERC173(_collection).transferOwnership(_tester);
+        assertEq(IERC173(_collection).owner(), _tester);
     }
 
     function testERC173EmitTransferOwnership() public {
         changePrank(_owner);
         vm.expectEmit(true, true, false, false);
         emit OwnershipTransferred(_owner, _tester);
-        IERC173(_contract).transferOwnership(_tester);
+        IERC173(_collection).transferOwnership(_tester);
     }
 
     function testFailERC173NotTransferOwnership() public {
         changePrank(_tester);
-        IERC173(_contract).transferOwnership(_minter);
+        IERC173(_collection).transferOwnership(_minter);
     }
 
     function testERC173SupportsInterface() public {
-        assertTrue(IERC165(address(_contract)).supportsInterface(type(IERC173).interfaceId));
+        assertTrue(IERC165(address(_collection)).supportsInterface(type(IERC173).interfaceId));
     }
 }
