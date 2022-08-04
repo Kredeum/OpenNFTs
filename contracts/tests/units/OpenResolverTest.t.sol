@@ -38,7 +38,8 @@ abstract contract OpenResolverTest is Test {
     }
 
     function testOpenResolver() public {
-        address[] memory addrs = new address[](1);
+        address[] memory addrs = new address[](2);
+
         bytes4[] memory ids = new bytes4[](1);
         ids[0] = bytes4(0x80ac58cd);
 
@@ -51,14 +52,19 @@ abstract contract OpenResolverTest is Test {
         openNFTsEx.initialize("OpenBoundEx", "BOUND", _owner, options);
         addrs[0] = address(openNFTsEx);
 
-        IOpenRegistry(_collection).addAddress(addrs[0]);
-        assertEq(IOpenRegistry(_collection).countAddresses(), 1);
+        OpenNFTsEx openNFTsEx2 = new OpenNFTsEx();
+        openNFTsEx2.initialize("OpenBoundEx2", "BOUND2", _owner, options);
+        addrs[1] = address(openNFTsEx2);
+
+        IOpenRegistry(_collection).addAddresses(addrs);
+        assertEq(IOpenRegistry(_collection).countAddresses(), 2);
         assertEq(IOpenRegistry(_collection).addresses(0), addrs[0]);
+        assertEq(IOpenRegistry(_collection).addresses(1), addrs[1]);
 
         IOpenGetter(_collection).getCollectionsInfos(addrs, _owner);
-        // IOpenGetter(_collection).getCollectionsInfos(addrs, address(0));
+        IOpenGetter(_collection).getCollectionsInfos(addrs, address(0));
 
-        // IOpenResolver(_collection).openResolver(_owner);
-        // IOpenResolver(_collection).openResolver(address(0));
+        IOpenResolver(_collection).openResolver(_owner);
+        IOpenResolver(_collection).openResolver(address(0));
     }
 }

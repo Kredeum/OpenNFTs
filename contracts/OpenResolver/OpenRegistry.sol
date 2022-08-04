@@ -27,8 +27,10 @@ import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
 abstract contract OpenRegistry is IOpenRegistry, OpenERC165 {
     address[] public addresses;
 
-    function addAddress(address addr) external override(IOpenRegistry) {
-        addresses.push(addr);
+    function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
+        for (uint256 i = 0; i < addrs.length; i++) {
+            addresses.push(addrs[i]);
+        }
     }
 
     function countAddresses() external view override(IOpenRegistry) returns (uint256) {
