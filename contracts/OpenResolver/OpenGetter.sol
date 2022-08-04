@@ -89,7 +89,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         }
 
         // IF ERC173 supported
-        if (supported[7]) {
+        if (supported[2]) {
             collectionInfo.owner = IERC173(collection).owner();
         }
     }
