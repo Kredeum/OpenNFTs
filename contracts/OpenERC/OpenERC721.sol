@@ -24,7 +24,7 @@
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenERC165.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721TokenReceiver.sol";
 

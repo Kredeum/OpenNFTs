@@ -16,7 +16,7 @@ import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IERC4973.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
-import "OpenNFTs/contracts/interfaces/IOpenCheckable.sol";
+import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenPauseable.sol";

@@ -20,7 +20,7 @@
 //       |
 //       ———————————————————————————————————————————————————————————————————————————————————
 //       |                                       |             |             |             |
-//   OpenERC721                            OpenERC2981    OpenERC173  OpenCheckable  OpenCloneable
+//   OpenERC721                            OpenERC2981    OpenERC173  OpenChecker  OpenCloneable
 //     (NFT)                              (RoyaltyInfo)    (ownable)         |             |
 //       |                                        |            |             |             |
 //       ——————————————————————————————————————   |     ————————             |             |
@@ -39,12 +39,12 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC20.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 
-import "OpenNFTs/contracts/OpenERC721Metadata.sol";
-import "OpenNFTs/contracts/OpenERC721Enumerable.sol";
-import "OpenNFTs/contracts/OpenMarketable.sol";
-import "OpenNFTs/contracts/OpenPauseable.sol";
-import "OpenNFTs/contracts/OpenCheckable.sol";
-import "OpenNFTs/contracts/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721Metadata.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721Enumerable.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTs is
@@ -53,7 +53,7 @@ contract OpenNFTs is
     OpenERC721Enumerable,
     OpenMarketable,
     OpenPauseable,
-    OpenCheckable,
+    OpenChecker,
     OpenCloneable
 {
     /// @notice tokenID of next minted NFT
@@ -85,7 +85,7 @@ contract OpenNFTs is
         public
         view
         virtual
-        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable, OpenCheckable)
+        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable, OpenChecker)
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);

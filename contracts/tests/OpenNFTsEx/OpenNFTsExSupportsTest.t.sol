@@ -29,7 +29,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             type(IERC721).interfaceId,
             type(IERC721Enumerable).interfaceId,
             type(IERC721Metadata).interfaceId,
-            type(IOpenCheckable).interfaceId,
+            type(IOpenChecker).interfaceId,
             type(IOpenCloneable).interfaceId,
             type(IOpenMarketable).interfaceId,
             type(IOpenNFTs).interfaceId,
@@ -60,7 +60,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenCheckable(_collection).checkSupportedInterfaces(_collection, interfaceIds);
+        bool[] memory checks = IOpenChecker(_collection).checkSupportedInterfaces(_collection, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             assertEq(checks[i], expected[i]);

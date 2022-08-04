@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 //
-// Derived from Kredeum NFTs
-// https://github.com/Kredeum/kredeum
+// Derived from OpenZeppelin Contracts (utils/introspection/ERC165Ckecker.sol)
+// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/introspection/ERC165Checker.sol
 //
 //       ___           ___         ___           ___              ___           ___                     ___
 //      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
@@ -17,35 +17,26 @@
 //
 //   OpenERC165
 //        |
-//  OpenCloneable —— IOpenCloneable
+//  OpenChecker —— IOpenChecker
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
-import "OpenNFTs/contracts/OpenERC165.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
+import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
-abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
-    bool private _openCloneableInitialized;
-    string private _template;
-    uint256 private _version;
-
-    function getTemplate() external view override(IOpenCloneable) returns (string memory) {
-        return _template;
-    }
-
-    function getVersion() external view override(IOpenCloneable) returns (uint256) {
-        return _version;
+abstract contract OpenChecker is IOpenChecker, OpenERC165 {
+    function checkSupportedInterfaces(address account, bytes4[] memory interfaceIds)
+        public
+        view
+        returns (bool[] memory interfaceIdsChecker)
+    {
+        interfaceIdsChecker = new bool[](interfaceIds.length);
+        for (uint256 i = 0; i < interfaceIds.length; i++) {
+            interfaceIdsChecker[i] = IERC165(account).supportsInterface(interfaceIds[i]);
+        }
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
-        return interfaceId == type(IOpenCloneable).interfaceId || super.supportsInterface(interfaceId);
-    }
-
-    function _initialize(string memory template_, uint256 version_) internal {
-        require(_openCloneableInitialized == false, "Only once!");
-        _openCloneableInitialized = true;
-
-        _template = template_;
-        _version = version_;
+        return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
     }
 }

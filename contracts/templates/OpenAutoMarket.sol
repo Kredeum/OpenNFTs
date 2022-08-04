@@ -14,7 +14,7 @@
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenMarketable.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenAutoMarket.sol";
 
 contract OpenAutoMarket is IOpenAutoMarket, OpenMarketable {

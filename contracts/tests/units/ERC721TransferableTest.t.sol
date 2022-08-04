@@ -7,7 +7,7 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Events.sol";
 
-import "OpenNFTs/contracts/OpenERC721TokenReceiver.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721TokenReceiver.sol";
 
 abstract contract ERC721TransferableTest is Test, IERC721Events {
     address private _collection;

@@ -26,7 +26,7 @@
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenERC721.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
 
 abstract contract OpenERC721Metadata is IERC721Metadata, OpenERC721 {

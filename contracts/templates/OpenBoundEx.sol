@@ -20,7 +20,7 @@
 //      |
 //      ———————————————————————————————————————————————
 //      |                 |             |             |
-//  OpenERC721 (NFT)  OpenERC173  OpenCheckable  OpenCloneable
+//  OpenERC721 (NFT)  OpenERC173  OpenChecker  OpenCloneable
 //      |             (ownable)         |             |
 //      |                 |             |             |
 //      |                 |             |             |
@@ -32,10 +32,10 @@
 //
 pragma solidity ^0.8.9;
 
-import "OpenNFTs/contracts/OpenCheckable.sol";
-import "OpenNFTs/contracts/OpenPauseable.sol";
-import "OpenNFTs/contracts/OpenCloneable.sol";
-import "OpenNFTs/contracts/OpenERC721.sol";
+import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenBoundEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
@@ -50,7 +50,7 @@ contract OpenBoundEx is
     IERC721Enumerable,
     IERC721Metadata,
     OpenCloneable,
-    OpenCheckable,
+    OpenChecker,
     OpenPauseable,
     OpenERC721
 {
@@ -142,7 +142,7 @@ contract OpenBoundEx is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(OpenPauseable, OpenCloneable, OpenERC721, OpenCheckable)
+        override(OpenPauseable, OpenCloneable, OpenERC721, OpenChecker)
         returns (bool)
     {
         return

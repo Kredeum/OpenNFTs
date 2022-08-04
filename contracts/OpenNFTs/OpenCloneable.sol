@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 //
-// Derived from OpenZeppelin Contracts (token/common/ERC2981.sol)
-// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/Pausable.sol
+// Derived from Kredeum NFTs
+// https://github.com/Kredeum/kredeum
 //
 //       ___           ___         ___           ___              ___           ___                     ___
 //      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
@@ -17,37 +17,35 @@
 //
 //   OpenERC165
 //        |
-//   OpenERC173
-//        |
-//  OpenPauseable –– IOpenPauseable
+//  OpenCloneable —— IOpenCloneable
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/OpenERC173.sol";
-import "OpenNFTs/contracts/interfaces/IOpenPauseable.sol";
+import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 
-abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
-    bool private _paused;
+abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
+    bool private _openCloneableInitialized;
+    string private _template;
+    uint256 private _version;
 
-    modifier onlyWhenNotPaused() {
-        require(!_paused, "Paused!");
-        _;
+    function getTemplate() external view override(IOpenCloneable) returns (string memory) {
+        return _template;
     }
 
-    function togglePause() external override(IOpenPauseable) onlyOwner {
-        _setPaused(!_paused);
+    function getVersion() external view override(IOpenCloneable) returns (uint256) {
+        return _version;
     }
 
-    function paused() external view override(IOpenPauseable) returns (bool) {
-        return _paused;
+    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+        return interfaceId == type(IOpenCloneable).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
-        return interfaceId == type(IOpenPauseable).interfaceId || super.supportsInterface(interfaceId);
-    }
+    function _initialize(string memory template_, uint256 version_) internal {
+        require(_openCloneableInitialized == false, "Only once!");
+        _openCloneableInitialized = true;
 
-    function _setPaused(bool paused_) private {
-        _paused = paused_;
-        emit SetPaused(_paused, msg.sender);
+        _template = template_;
+        _version = version_;
     }
 }
