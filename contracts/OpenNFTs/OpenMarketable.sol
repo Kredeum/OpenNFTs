@@ -128,7 +128,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint256 price,
         address payer,
         address payee
-    ) internal {
+    ) private {
         uint256 unspent = msg.value;
 
         if (price > 0) {
@@ -163,13 +163,13 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint256 tokenID,
         address receiver,
         uint96 fee
-    ) internal {
+    ) private {
         _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function _setTokenPrice(uint256 tokenID, uint256 price) internal {
+    function _setTokenPrice(uint256 tokenID, uint256 price) private {
         tokenPrice[tokenID] = price;
 
         emit SetTokenPrice(tokenID, price);

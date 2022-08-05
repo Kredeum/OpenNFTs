@@ -59,10 +59,10 @@ contract OpenBoundEx is
     string public name;
     string public symbol;
 
-    mapping(address => uint256) internal _tokenOfOwner;
-    mapping(address => uint256) internal _tokenIndexOfOwner;
-    mapping(uint256 => uint256) internal _cidOfToken;
-    uint256[] internal _tokens;
+    mapping(address => uint256) private _tokenOfOwner;
+    mapping(address => uint256) private _tokenIndexOfOwner;
+    mapping(uint256 => uint256) private _cidOfToken;
+    uint256[] private _tokens;
 
     string private constant _BASE_URI = "ipfs://";
 
@@ -152,7 +152,7 @@ contract OpenBoundEx is
             super.supportsInterface(interfaceId);
     }
 
-    function _mint(address to, uint256 cid) internal returns (uint256 tokenID) {
+    function _mint(address to, uint256 cid) private returns (uint256 tokenID) {
         require((maxSupply == 0) || _tokens.length < maxSupply, "Max supply reached");
         require(balanceOf(to) == 0, "Already minted or claimed");
 
@@ -192,11 +192,11 @@ contract OpenBoundEx is
         super._burn(tokenID);
     }
 
-    function _tokenID(address addr, uint256 cid) internal pure returns (uint256 tokenID) {
+    function _tokenID(address addr, uint256 cid) private pure returns (uint256 tokenID) {
         tokenID = uint256(keccak256(abi.encodePacked(cid, addr)));
     }
 
-    function _tokenURI(uint256 cid) internal pure returns (string memory) {
+    function _tokenURI(uint256 cid) private pure returns (string memory) {
         return string(abi.encodePacked(_BASE_URI, Bafkrey.uint256ToCid(cid)));
     }
 
@@ -204,7 +204,7 @@ contract OpenBoundEx is
         address from,
         address to,
         uint256 // tokenId
-    ) internal pure override {
+    ) internal pure override(OpenERC721) {
         require(from == address(0) || to == address(0), "Non transferable NFT");
     }
 }

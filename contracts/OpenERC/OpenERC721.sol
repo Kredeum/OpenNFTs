@@ -140,7 +140,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address to,
         uint256 tokenID,
         bytes memory data
-    ) internal {
+    ) private {
         _transferFrom(from, to, tokenID);
 
         require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Receiver");
@@ -150,7 +150,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         address from,
         address to,
         uint256 tokenID
-    ) internal onlyTokenOwnerOrApproved(tokenID) {
+    ) private onlyTokenOwnerOrApproved(tokenID) {
         require(from == ownerOf(tokenID), "From not owner");
         require(from != address(0), "Transfer from zero address");
         require(to != address(0), "Transfer to zero address");
@@ -183,7 +183,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         ownerOrOperator = (tokenOwner == spender || isApprovedForAll(tokenOwner, spender));
     }
 
-    function _isOwnerOrApproved(address spender, uint256 tokenID) internal view returns (bool ownerOrApproved) {
+    function _isOwnerOrApproved(address spender, uint256 tokenID) private view returns (bool ownerOrApproved) {
         ownerOrApproved = (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
     }
 

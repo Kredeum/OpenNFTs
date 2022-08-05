@@ -27,7 +27,7 @@ import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 
 abstract contract OpenGetter is IOpenGetter, OpenChecker {
-    bytes4[] internal _ids = [
+    bytes4[] private _ids = [
         bytes4(0x01ffc9a7), // ERC165
         bytes4(0xffffffff), // Invalid
         bytes4(0x7f5828d0), // ERC173
@@ -54,7 +54,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     }
 
     function _getCollectionInfos(address collection, address account)
-        internal
+        private
         view
         returns (CollectionInfos memory collectionInfo)
     {

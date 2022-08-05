@@ -38,7 +38,7 @@ contract OpenAutoMarketTest is
     OpenMarketableTest,
     OpenAutoMarketMintTest
 {
-    string internal constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
+    string private constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
 
     function constructorTest(address owner)
         public

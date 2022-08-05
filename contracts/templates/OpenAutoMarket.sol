@@ -18,7 +18,7 @@ import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
 import "OpenNFTs/contracts/interfaces/IOpenAutoMarket.sol";
 
 contract OpenAutoMarket is IOpenAutoMarket, OpenMarketable {
-    uint256 internal _tokenID;
+    uint256 private _tokenID;
 
     function mint(string memory tokenURI) external payable override(IOpenAutoMarket) returns (uint256 tokenID) {
         tokenID = _tokenID++;
