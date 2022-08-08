@@ -49,9 +49,10 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
     /// @notice Mint NFT allowed to everyone or only collection owner
     bool public open;
 
-    /// @notice onlyOpenOrOwner, either everybody in open collection,
+    /// @notice override onlyMinter:
+    /// @notice either everybody in open collection,
     /// @notice either only owner in specific collection
-    modifier onlyOpenOrOwner() {
+    modifier onlyMinter() override(OpenNFTs) {
         require(open || (owner() == msg.sender), "Not minter");
         _;
     }
@@ -73,14 +74,14 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
     function mint(string memory tokenURI)
         external
         override(IOpenNFTsEx)
-        onlyOpenOrOwner
+        onlyMinter
         onlyWhenNotPaused
         returns (uint256)
     {
-        return mint(msg.sender, tokenURI);
+        return mint(msg.sender, tokenURI); 
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenNFTs) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override(OpenNFTs) returns (bool) {
         return interfaceId == type(IOpenNFTsEx).interfaceId || super.supportsInterface(interfaceId);
     }
 }

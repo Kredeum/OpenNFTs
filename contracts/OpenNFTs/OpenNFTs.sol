@@ -59,6 +59,12 @@ contract OpenNFTs is
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext = 1;
 
+    /// @notice onlyMinter, by default only owner can mint, can be overriden
+    modifier onlyMinter() virtual {
+        require(msg.sender == owner(), "Not minter");
+        _;
+    }
+
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
     function burn(uint256 tokenID) external override(IOpenNFTs) onlyTokenOwnerOrApproved(tokenID) {
@@ -74,7 +80,12 @@ contract OpenNFTs is
         }
     }
 
-    function mint(address minter, string memory tokenURI) public override(IOpenNFTs) returns (uint256 tokenID) {
+    function mint(address minter, string memory tokenURI)
+        public
+        override(IOpenNFTs)
+        onlyMinter
+        returns (uint256 tokenID)
+    {
         tokenID = tokenIdNext++;
         _mint(minter, tokenURI, tokenID);
     }
@@ -107,8 +118,9 @@ contract OpenNFTs is
     }
 
     /// @notice _mint
-    /// @param minter address of minter
-    /// @param tokenURI json URI of NFT metadata
+    /// @param minter minter address
+    /// @param tokenURI token metdata URI
+    /// @param tokenID token ID
     function _mint(
         address minter,
         string memory tokenURI,
