@@ -135,6 +135,21 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         emit Transfer(owner, address(0), tokenID);
     }
 
+    function _transferFromBefore(
+        address from,
+        address to,
+        uint256 tokenID
+    ) internal virtual {}
+
+    function _exists(uint256 tokenID) internal view returns (bool exists) {
+        exists = _owners[tokenID] != address(0);
+    }
+
+    function _isOwnerOrOperator(address spender, uint256 tokenID) internal view virtual returns (bool ownerOrOperator) {
+        address tokenOwner = ownerOf(tokenID);
+        ownerOrOperator = (tokenOwner == spender || isApprovedForAll(tokenOwner, spender));
+    }
+
     function _safeTransferFrom(
         address from,
         address to,
@@ -168,25 +183,6 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         emit Transfer(from, to, tokenID);
     }
 
-    function _transferFromBefore(
-        address from,
-        address to,
-        uint256 tokenID
-    ) internal virtual {}
-
-    function _exists(uint256 tokenID) internal view returns (bool exists) {
-        exists = _owners[tokenID] != address(0);
-    }
-
-    function _isOwnerOrOperator(address spender, uint256 tokenID) internal view virtual returns (bool ownerOrOperator) {
-        address tokenOwner = ownerOf(tokenID);
-        ownerOrOperator = (tokenOwner == spender || isApprovedForAll(tokenOwner, spender));
-    }
-
-    function _isOwnerOrApproved(address spender, uint256 tokenID) private view returns (bool ownerOrApproved) {
-        ownerOrApproved = (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
-    }
-
     function _isERC721Receiver(
         address from,
         address to,
@@ -197,5 +193,9 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
             to.code.length == 0 ||
             IERC721TokenReceiver(to).onERC721Received(msg.sender, from, tokenID, data) ==
             IERC721TokenReceiver.onERC721Received.selector;
+    }
+
+    function _isOwnerOrApproved(address spender, uint256 tokenID) private view returns (bool ownerOrApproved) {
+        ownerOrApproved = (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
     }
 }

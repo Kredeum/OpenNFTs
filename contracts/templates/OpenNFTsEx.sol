@@ -78,7 +78,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         onlyWhenNotPaused
         returns (uint256)
     {
-        return mint(msg.sender, tokenURI); 
+        return OpenNFTs.mint(msg.sender, tokenURI);
     }
 
     function supportsInterface(bytes4 interfaceId) public view override(OpenNFTs) returns (bool) {

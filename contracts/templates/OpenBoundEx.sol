@@ -82,12 +82,12 @@ contract OpenBoundEx is
     }
 
     function mint(uint256 cid) external override(IOpenBoundEx) onlyWhenNotPaused returns (uint256 tokenID) {
-        tokenID = _mint(msg.sender, cid);
+        tokenID = OpenBoundEx._mint(msg.sender, cid);
     }
 
     function claim(uint256 tokenID, uint256 cid) external override(IOpenBoundEx) onlyWhenNotPaused {
         require(tokenID == _tokenID(msg.sender, cid), "Not owner");
-        _mint(msg.sender, cid);
+        OpenBoundEx._mint(msg.sender, cid);
     }
 
     function burn(uint256 tokenID) external override(IOpenBoundEx) {
@@ -152,7 +152,7 @@ contract OpenBoundEx is
             super.supportsInterface(interfaceId);
     }
 
-    function _mint(address to, uint256 cid) private returns (uint256 tokenID) {
+    function _mint(address to, uint256 cid) internal returns (uint256 tokenID) {
         require((maxSupply == 0) || _tokens.length < maxSupply, "Max supply reached");
         require(balanceOf(to) == 0, "Already minted or claimed");
 
@@ -163,7 +163,7 @@ contract OpenBoundEx is
         _tokenIndexOfOwner[to] = _tokens.length - 1;
         _cidOfToken[tokenID] = cid;
 
-        _mint(to, _tokenURI(cid), tokenID);
+        OpenBoundEx._mint(to, _tokenURI(cid), tokenID);
     }
 
     function _mint(
@@ -192,19 +192,19 @@ contract OpenBoundEx is
         super._burn(tokenID);
     }
 
-    function _tokenID(address addr, uint256 cid) private pure returns (uint256 tokenID) {
-        tokenID = uint256(keccak256(abi.encodePacked(cid, addr)));
-    }
-
-    function _tokenURI(uint256 cid) private pure returns (string memory) {
-        return string(abi.encodePacked(_BASE_URI, Bafkrey.uint256ToCid(cid)));
-    }
-
     function _transferFromBefore(
         address from,
         address to,
         uint256 // tokenId
     ) internal pure override(OpenERC721) {
         require(from == address(0) || to == address(0), "Non transferable NFT");
+    }
+
+    function _tokenID(address addr, uint256 cid) private pure returns (uint256 tokenID) {
+        tokenID = uint256(keccak256(abi.encodePacked(cid, addr)));
+    }
+
+    function _tokenURI(uint256 cid) private pure returns (string memory) {
+        return string(abi.encodePacked(_BASE_URI, Bafkrey.uint256ToCid(cid)));
     }
 }

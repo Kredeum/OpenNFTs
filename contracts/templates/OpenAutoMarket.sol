@@ -10,7 +10,9 @@
 //        |            |             |
 //        ————————————————————————————
 //        |
-//  OpenMarketable —— IOpenMarketable
+//  OpenMarketable
+//        |
+//  OpenAutoMarket —— IOpenAutoMarket
 //
 pragma solidity 0.8.9;
 
@@ -22,7 +24,7 @@ contract OpenAutoMarket is IOpenAutoMarket, OpenMarketable {
 
     function mint(string memory tokenURI) external payable override(IOpenAutoMarket) returns (uint256 tokenID) {
         tokenID = _tokenID++;
-        _mint(msg.sender, tokenURI, tokenID);
+        OpenMarketable._mint(msg.sender, tokenURI, tokenID);
     }
 
     function burn(uint256 tokenID) external override(IOpenAutoMarket) {
