@@ -19,9 +19,9 @@
 //        |
 //        ————————————————
 //        |              |
-//   OpenChecker     OpenRegistry
+//   OpenChecker     OpenERC173
 //        |              |
-//    OpenGetter         |
+//    OpenGetter    OpenRegistry
 //        |              |
 //        ————————————————
 //        |

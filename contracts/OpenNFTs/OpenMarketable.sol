@@ -40,17 +40,27 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
 
     receive() external payable override(IOpenMarketable) {}
 
+    function setTokenPrice(uint256 tokenID) external override(IOpenMarketable) {
+        setTokenPrice(tokenID, defaultPrice);
+    }
+
     /// @notice SET default royalty configuration
     /// @param receiver : address of the royalty receiver, or address(0) to reset
     /// @param fee : fee Numerator, less than 10000
     function setDefaultRoyalty(address receiver, uint96 fee)
-        external
+        public
         override(IOpenMarketable)
         onlyOwner
         lessThanMaxFee(fee)
     {
         _royaltyInfo = RoyaltyInfo(receiver, fee);
         emit SetDefaultRoyalty(receiver, fee);
+    }
+
+    function setDefaultPrice(uint256 price) public override(IOpenMarketable) onlyOwner notTooExpensive(price) {
+        defaultPrice = price;
+
+        emit SetDefaultPrice(price);
     }
 
     /// @notice SET token royalty configuration
@@ -61,18 +71,8 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint256 tokenID,
         address receiver,
         uint96 fee
-    ) external override(IOpenMarketable) onlyTokenOwnerOrApproved(tokenID) lessThanMaxFee(fee) {
+    ) public override(IOpenMarketable) onlyTokenOwnerOrApproved(tokenID) lessThanMaxFee(fee) {
         _setTokenRoyalty(tokenID, receiver, fee);
-    }
-
-    function setDefaultPrice(uint256 price) external override(IOpenMarketable) onlyOwner notTooExpensive(price) {
-        defaultPrice = price;
-
-        emit SetDefaultPrice(price);
-    }
-
-    function setTokenPrice(uint256 tokenID) external override(IOpenMarketable) {
-        setTokenPrice(tokenID, defaultPrice);
     }
 
     function setTokenPrice(uint256 tokenID, uint256 price)

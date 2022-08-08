@@ -13,9 +13,10 @@ import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
 abstract contract OpenResolverTest is Test {
     address private _collection;
-    address private _owner = address(0x1);
+    address private _owner = address(0x5);
 
     bytes4 public idIERC165 = type(IERC165).interfaceId;
+    bytes4 public idIERC173 = type(IERC173).interfaceId;
     bytes4 public idOpenResolver = type(IOpenResolver).interfaceId;
     bytes4 public idOpenRegistry = type(IOpenRegistry).interfaceId;
     bytes4 public idOpenGetter = type(IOpenGetter).interfaceId;
@@ -30,6 +31,7 @@ abstract contract OpenResolverTest is Test {
 
     function testOpenResolverSupportsInterface() public {
         assertTrue(IERC165(_collection).supportsInterface(idIERC165));
+        assertTrue(IERC165(_collection).supportsInterface(idIERC173));
         assertTrue(IERC165(_collection).supportsInterface(idOpenResolver));
         assertTrue(IERC165(_collection).supportsInterface(idOpenRegistry));
         assertTrue(IERC165(_collection).supportsInterface(idOpenGetter));
@@ -49,14 +51,18 @@ abstract contract OpenResolverTest is Test {
         changePrank(_owner);
 
         OpenNFTsEx openNFTsEx = new OpenNFTsEx();
-        openNFTsEx.initialize("OpenBoundEx", "BOUND", _owner, options);
+        openNFTsEx.initialize("OpenNFTsEx", "NFT", _owner, options);
         addrs[0] = address(openNFTsEx);
 
         OpenNFTsEx openNFTsEx2 = new OpenNFTsEx();
-        openNFTsEx2.initialize("OpenBoundEx2", "BOUND2", _owner, options);
+        openNFTsEx2.initialize("OpenNFTsEx2", "NFT2", _owner, options);
         addrs[1] = address(openNFTsEx2);
 
+        console.log("msg.sender", msg.sender);
+        console.log("_owner", _owner);
+        changePrank(_owner);
         IOpenRegistry(_collection).addAddresses(addrs);
+
         assertEq(IOpenRegistry(_collection).countAddresses(), 2);
         assertEq(IOpenRegistry(_collection).addresses(0), addrs[0]);
         assertEq(IOpenRegistry(_collection).addresses(1), addrs[1]);
@@ -66,5 +72,8 @@ abstract contract OpenResolverTest is Test {
 
         IOpenResolver(_collection).openResolver(_owner);
         IOpenResolver(_collection).openResolver(address(0));
+
+        IOpenRegistry(_collection).addAddress(addrs[0]);
+        assertEq(IOpenRegistry(_collection).countAddresses(), 3);
     }
 }

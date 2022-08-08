@@ -14,6 +14,8 @@ contract OpenResolverExTest is ITest, OpenResolverTest {
         changePrank(owner);
 
         OpenResolverEx collection = new OpenResolverEx();
+        collection.initialize(owner);
+        
         return address(collection);
     }
 
