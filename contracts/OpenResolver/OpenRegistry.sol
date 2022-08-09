@@ -28,26 +28,35 @@ import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
 import "forge-std/console.sol";
 
 abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
-    address[] public addresses;
+    address[] private _addresses;
 
-    /// @notice onlyRegisterer, by default only registerer can add addresses, can be overriden
+    /// @notice onlyRegisterer, by default owner is registerer and can add addresses, can be overriden
     modifier onlyRegisterer() virtual {
         require(msg.sender == owner(), "Not registerer");
         _;
     }
 
-    function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
+    function addAddress(address addr) external override(IOpenRegistry) onlyRegisterer {
+        _addresses.push(addr);
+    }
+
+    function addAddresses(address[] memory addrs) external override(IOpenRegistry) onlyRegisterer {
         for (uint256 i = 0; i < addrs.length; i++) {
-            addAddress(addrs[i]);
+            _addresses.push(addrs[i]);
         }
     }
 
     function countAddresses() external view override(IOpenRegistry) returns (uint256) {
-        return addresses.length;
+        return _addresses.length;
     }
 
-    function addAddress(address addr) public override(IOpenRegistry) onlyRegisterer {
-        addresses.push(addr);
+    function getAddress(uint256 index) external view override(IOpenRegistry) returns (address addr) {
+        require(index < _addresses.length, "Invalid index");
+        return _addresses[index];
+    }
+
+    function getAddresses() public view override(IOpenRegistry) returns (address[] memory) {
+        return _addresses;
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
