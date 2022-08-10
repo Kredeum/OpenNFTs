@@ -18,18 +18,18 @@
 //   OpenERC165
 //   (supports)
 //       |
-//       ———————————————————————————————————————————————————————————————————————————————————
-//       |                                       |             |             |             |
-//   OpenERC721                            OpenERC2981    OpenERC173  OpenChecker  OpenCloneable
-//     (NFT)                              (RoyaltyInfo)    (ownable)         |             |
-//       |                                        |            |             |             |
-//       ——————————————————————————————————————   |     ————————             |             |
-//       |                        |           |   |     |      |             |             |
-//  OpenERC721Metadata  OpenERC721Enumerable  |   ———————      |             |             |
-//       |                        |           |   |            |             |             |
-//       |                        |      OpenMarketable   OpenPauseable      |             |
-//       |                        |             |              |             |             |
-//       ———————————————————————————————————————————————————————————————————————————————————
+//       ——————————————————————————————————————————————————————————————————————
+//       |                                       |             |              |
+//   OpenERC721                            OpenERC2981    OpenERC173    OpenCloneable
+//     (NFT)                              (RoyaltyInfo)    (ownable)          |
+//       |                                        |            |              |
+//       ——————————————————————————————————————   |     ————————              |
+//       |                        |           |   |     |      |              |
+//  OpenERC721Metadata  OpenERC721Enumerable  |   ———————      |              |
+//       |                        |           |   |            |              |
+//       |                        |      OpenMarketable   OpenPauseable       |
+//       |                        |             |              |              |
+//       ——————————————————————————————————————————————————————————————————————
 //       |
 //    OpenNFTs —— IOpenNFTs
 //
@@ -44,7 +44,6 @@ import "OpenNFTs/contracts/OpenERC/OpenERC721Enumerable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
-import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTs is
@@ -53,7 +52,6 @@ contract OpenNFTs is
     OpenERC721Enumerable,
     OpenMarketable,
     OpenPauseable,
-    OpenChecker,
     OpenCloneable
 {
     /// @notice tokenID of next minted NFT
@@ -96,7 +94,7 @@ contract OpenNFTs is
         public
         view
         virtual
-        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable, OpenChecker)
+        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable)
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);

@@ -6,6 +6,7 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/interfaces/IAll.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
+import "OpenNFTs/contracts/templates/OpenResolverEx.sol";
 
 abstract contract OpenNFTsExSupportsTest is Test {
     address private _collection;
@@ -29,12 +30,12 @@ abstract contract OpenNFTsExSupportsTest is Test {
             type(IERC721).interfaceId,
             type(IERC721Enumerable).interfaceId,
             type(IERC721Metadata).interfaceId,
-            type(IOpenChecker).interfaceId,
             type(IOpenCloneable).interfaceId,
             type(IOpenMarketable).interfaceId,
             type(IOpenNFTs).interfaceId,
             type(IOpenNFTsEx).interfaceId,
             type(IOpenPauseable).interfaceId,
+            type(IOpenChecker).interfaceId,
             type(IERC721TokenReceiver).interfaceId,
             0xffffffff
         ];
@@ -50,7 +51,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             true,
             true,
             true,
-            true,
+            false,
             false,
             false
         ];
@@ -60,7 +61,9 @@ abstract contract OpenNFTsExSupportsTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenChecker(_collection).checkSupportedInterfaces(_collection, interfaceIds);
+        OpenResolverEx resolver;
+        resolver = new OpenResolverEx();
+        bool[] memory checks = IOpenChecker(resolver).checkSupportedInterfaces(_collection, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             assertEq(checks[i], expected[i]);
