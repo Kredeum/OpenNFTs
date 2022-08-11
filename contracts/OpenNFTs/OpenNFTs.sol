@@ -46,14 +46,7 @@ import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
 
 /// @title OpenNFTs smartcontract
-contract OpenNFTs is
-    IOpenNFTs,
-    OpenERC721Metadata,
-    OpenERC721Enumerable,
-    OpenMarketable,
-    OpenPauseable,
-    OpenCloneable
-{
+contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMarketable, OpenPauseable, OpenCloneable {
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext = 1;
 

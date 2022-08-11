@@ -61,8 +61,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        OpenResolverEx resolver;
-        resolver = new OpenResolverEx();
+        OpenResolverEx resolver = new OpenResolverEx();
         bool[] memory checks = IOpenChecker(resolver).checkSupportedInterfaces(_collection, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {

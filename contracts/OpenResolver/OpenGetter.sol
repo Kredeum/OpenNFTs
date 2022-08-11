@@ -27,7 +27,6 @@ import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 
 abstract contract OpenGetter is IOpenGetter, OpenChecker {
-
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenChecker) returns (bool) {
         return interfaceId == type(IOpenGetter).interfaceId || super.supportsInterface(interfaceId);
     }

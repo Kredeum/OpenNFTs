@@ -25,19 +25,7 @@ import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
 abstract contract OpenChecker is IOpenChecker, OpenERC165 {
-    /// ercInterfaceIds : ERC interfacesIds
-    /// 0xffffffff :  O Invalid
-    /// 0x01ffc9a7 :  1 ERC165
-    /// 0x80ac58cd :  2 ERC721
-    /// 0x5b5e139f :  3 ERC721Metadata
-    /// 0x780e9d63 :  4 ERC721Enumerable
-    /// 0x150b7a02 :  5 ERC721TokenReceiver
-    /// 0xd9b67a26 :  6 ERC1155
-    /// 0x0e89341c :  7 ERC1155MetadataURI
-    /// 0x4e2312e0 :  8 ERC1155TokenReceiver
-    /// 0x7f5828d0 :  9 ERC173
-    /// 0x2a55205a : 10 ERC2981
-    bytes4[] public ercInterfaceIds = [
+    bytes4[] private _ercInterfaceIds = [
         bytes4(0xffffffff),
         bytes4(0x01ffc9a7),
         bytes4(0x80ac58cd),
@@ -51,8 +39,22 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         bytes4(0x2a55205a)
     ];
 
+    /// @notice checkSupportedInterfaces
+    /// @param account account to check
+    /// _ercInterfaceIds : ERC interfacesIds
+    /// 0xffffffff :  O Invalid
+    /// 0x01ffc9a7 :  1 ERC165
+    /// 0x80ac58cd :  2 ERC721
+    /// 0x5b5e139f :  3 ERC721Metadata
+    /// 0x780e9d63 :  4 ERC721Enumerable
+    /// 0x150b7a02 :  5 ERC721TokenReceiver
+    /// 0xd9b67a26 :  6 ERC1155
+    /// 0x0e89341c :  7 ERC1155MetadataURI
+    /// 0x4e2312e0 :  8 ERC1155TokenReceiver
+    /// 0x7f5828d0 :  9 ERC173
+    /// 0x2a55205a : 10 ERC2981
     function checkSupportedInterfaces(address account) public view returns (bool[] memory interfaceIdsChecker) {
-        return checkSupportedInterfaces(account, ercInterfaceIds);
+        return checkSupportedInterfaces(account, _ercInterfaceIds);
     }
 
     function checkSupportedInterfaces(address account, bytes4[] memory interfaceIds)
