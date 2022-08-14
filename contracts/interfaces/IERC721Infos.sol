@@ -9,5 +9,6 @@ interface IERC721Infos {
         string symbol;
         uint256 totalSupply;
         uint256 balanceOf;
+        bool[] supported;
     }
 }

@@ -53,7 +53,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     /// 0x4e2312e0 :  8 ERC1155TokenReceiver
     /// 0x7f5828d0 :  9 ERC173
     /// 0x2a55205a : 10 ERC2981
-    function checkSupportedInterfaces(address account) public view returns (bool[] memory interfaceIdsChecker) {
+    function checkErcInterfaces(address account) public view returns (bool[] memory interfaceIdsChecker) {
         return checkSupportedInterfaces(account, _ercInterfaceIds);
     }
 
