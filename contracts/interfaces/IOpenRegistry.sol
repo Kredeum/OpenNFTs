@@ -2,9 +2,7 @@
 pragma solidity ^0.8.9;
 
 interface IOpenRegistry {
-    function getAddresses() external returns (address[] memory addresses);
-
-    function addAddress(address addr) external;
+    function burnAddress(uint256 index) external;
 
     function addAddresses(address[] memory addrs) external;
 

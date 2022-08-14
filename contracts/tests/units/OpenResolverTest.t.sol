@@ -72,8 +72,5 @@ abstract contract OpenResolverTest is Test {
 
         IOpenResolver(_collection).openResolver(_owner);
         IOpenResolver(_collection).openResolver(address(0));
-
-        IOpenRegistry(_collection).addAddress(addrs[0]);
-        assertEq(IOpenRegistry(_collection).countAddresses(), 3);
     }
 }
