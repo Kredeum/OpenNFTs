@@ -68,13 +68,15 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         // ERC721 or ERC1155 must be supported
         require(supported[2] || supported[6], "Not NFT smartcontract");
 
-        if (account == address(0)) account = msg.sender;
         collectionInfo.collection = collection;
+
+        // IF ERC173 supported
+        if (supported[9]) {
+            collectionInfo.owner = IERC173(collection).owner();
+        }
 
         // IF ERC721 supported
         if (supported[2]) {
-            collectionInfo.balanceOf = IERC721(collection).balanceOf(account);
-
             // IF ERC721Metadata supported
             if (supported[3]) {
                 collectionInfo.name = IERC721Metadata(collection).name();
@@ -85,11 +87,10 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
             if (supported[4]) {
                 collectionInfo.totalSupply = IERC721Enumerable(collection).totalSupply();
             }
-        }
 
-        // IF ERC173 supported
-        if (supported[9]) {
-            collectionInfo.owner = IERC173(collection).owner();
+            if (account != address(0)) {
+                collectionInfo.balanceOf = IERC721(collection).balanceOf(account);
+            }
         }
     }
 }

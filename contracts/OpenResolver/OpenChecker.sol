@@ -40,7 +40,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     ];
 
     /// @notice checkSupportedInterfaces
-    /// @param account account to check
+    /// @param smartcontract smartcontract to check
     /// _ercInterfaceIds : ERC interfacesIds
     /// 0xffffffff :  O Invalid
     /// 0x01ffc9a7 :  1 ERC165
@@ -53,18 +53,18 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     /// 0x4e2312e0 :  8 ERC1155TokenReceiver
     /// 0x7f5828d0 :  9 ERC173
     /// 0x2a55205a : 10 ERC2981
-    function checkErcInterfaces(address account) public view returns (bool[] memory interfaceIdsChecker) {
-        return checkSupportedInterfaces(account, _ercInterfaceIds);
+    function checkErcInterfaces(address smartcontract) public view returns (bool[] memory interfaceIdsChecker) {
+        return checkSupportedInterfaces(smartcontract, _ercInterfaceIds);
     }
 
-    function checkSupportedInterfaces(address account, bytes4[] memory interfaceIds)
+    function checkSupportedInterfaces(address smartcontract, bytes4[] memory interfaceIds)
         public
         view
         returns (bool[] memory interfaceIdsChecker)
     {
         interfaceIdsChecker = new bool[](interfaceIds.length);
         for (uint256 i = 0; i < interfaceIds.length; i++) {
-            interfaceIdsChecker[i] = IERC165(account).supportsInterface(interfaceIds[i]);
+            interfaceIdsChecker[i] = IERC165(smartcontract).supportsInterface(interfaceIds[i]);
         }
     }
 
