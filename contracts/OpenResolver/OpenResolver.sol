@@ -44,7 +44,7 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         uint256 j;
 
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
-            if (collectionsInfosAll[i].balanceOf > 0) collectionsInfos[j++] = collectionsInfos[i];
+            if (collectionsInfosAll[i].balanceOf > 0) collectionsInfos[j++] = collectionsInfosAll[i];
         }
     }
 
