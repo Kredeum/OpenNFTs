@@ -6,7 +6,7 @@ interface IOpenRegistry {
 
     function addAddresses(address[] memory addrs) external;
 
-    function getAddress(uint256 index) external view returns (address addr);
+    function getAddresses() external view returns (address[] memory);
 
     function countAddresses() external view returns (uint256);
 }
