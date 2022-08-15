@@ -35,7 +35,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         public
         view
         override(IOpenGetter)
-        returns (CollectionInfos memory collectionsInfo)
+        returns (CollectionInfos memory collectionInfos)
     {
         return _getCollectionInfos(collection, msg.sender);
     }
@@ -44,23 +44,23 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         public
         view
         override(IOpenGetter)
-        returns (CollectionInfos[] memory collectionsInfo)
+        returns (CollectionInfos[] memory collectionsInfos)
     {
-        collectionsInfo = new CollectionInfos[](collections.length);
+        collectionsInfos = new CollectionInfos[](collections.length);
         for (uint256 i = 0; i < collections.length; i++) {
-            collectionsInfo[i] = _getCollectionInfos(collections[i], account);
+            collectionsInfos[i] = _getCollectionInfos(collections[i], account);
         }
     }
 
     function _getCollectionInfos(address collection, address account)
         private
         view
-        returns (CollectionInfos memory collectionInfo)
+        returns (CollectionInfos memory collectionInfos)
     {
         require(collection.code.length != 0, "Not smartcontract");
 
         bool[] memory supported = checkErcInterfaces(collection);
-        collectionInfo.supported = supported;
+        collectionInfos.supported = supported;
 
         // ERC165 must be supported
         require(!supported[0] && supported[1], "Not ERC165");
@@ -68,28 +68,28 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         // ERC721 or ERC1155 must be supported
         require(supported[2] || supported[6], "Not NFT smartcontract");
 
-        collectionInfo.collection = collection;
+        collectionInfos.collection = collection;
 
         // IF ERC173 supported
         if (supported[9]) {
-            collectionInfo.owner = IERC173(collection).owner();
+            collectionInfos.owner = IERC173(collection).owner();
         }
 
         // IF ERC721 supported
         if (supported[2]) {
             // IF ERC721Metadata supported
             if (supported[3]) {
-                collectionInfo.name = IERC721Metadata(collection).name();
-                collectionInfo.symbol = IERC721Metadata(collection).symbol();
+                collectionInfos.name = IERC721Metadata(collection).name();
+                collectionInfos.symbol = IERC721Metadata(collection).symbol();
             }
 
             // IF ERC721Enumerable supported
             if (supported[4]) {
-                collectionInfo.totalSupply = IERC721Enumerable(collection).totalSupply();
+                collectionInfos.totalSupply = IERC721Enumerable(collection).totalSupply();
             }
 
             if (account != address(0)) {
-                collectionInfo.balanceOf = IERC721(collection).balanceOf(account);
+                collectionInfos.balanceOf = IERC721(collection).balanceOf(account);
             }
         }
     }

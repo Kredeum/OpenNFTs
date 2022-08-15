@@ -42,7 +42,7 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         }
     }
 
-    function burnAddress(uint256 index) external override(IOpenRegistry) onlyRegisterer { 
+    function burnAddress(uint256 index) external override(IOpenRegistry) onlyRegisterer {
         _addresses[index] = _addresses[_addresses.length - 1];
     }
 
