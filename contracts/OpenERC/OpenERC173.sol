@@ -37,7 +37,7 @@ abstract contract OpenERC173 is IERC173, OpenERC165 {
     }
 
     function transferOwnership(address newOwner) external override(IERC173) onlyOwner {
-        _setOwner(newOwner);
+        _transferOwnership(newOwner);
     }
 
     function owner() public view override(IERC173) returns (address) {
@@ -52,10 +52,10 @@ abstract contract OpenERC173 is IERC173, OpenERC165 {
         require(_openERC173Initialized == false, "Init already call");
         _openERC173Initialized = true;
 
-        _setOwner(owner_);
+        _transferOwnership(owner_);
     }
 
-    function _setOwner(address newOwner) private {
+    function _transferOwnership(address newOwner) internal {
         address oldOwner = _owner;
         _owner = newOwner;
         emit OwnershipTransferred(oldOwner, newOwner);

@@ -34,7 +34,7 @@ import "OpenNFTs/contracts/OpenResolver/OpenGetter.sol";
 import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
-    function openResolver(address account)
+    function getCollectionsInfos(address account)
         external
         view
         override(IOpenResolver)
@@ -44,14 +44,15 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
 
         uint256 len;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
-            if (collectionsInfosAll[i].balanceOf > 0) len++;
+            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) len++;
         }
 
         collectionsInfos = new CollectionInfos[](len);
-        uint256 j;
 
+        uint256 j;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
-            if (collectionsInfosAll[i].balanceOf > 0) collectionsInfos[j++] = collectionsInfosAll[i];
+            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account)
+                collectionsInfos[j++] = collectionsInfosAll[i];
         }
     }
 

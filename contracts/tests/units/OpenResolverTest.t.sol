@@ -69,7 +69,7 @@ abstract contract OpenResolverTest is Test {
         IOpenGetter(_collection).getCollectionsInfos(addrs, _owner);
         IOpenGetter(_collection).getCollectionsInfos(addrs, address(0));
 
-        IOpenResolver(_collection).openResolver(_owner);
-        IOpenResolver(_collection).openResolver(address(0));
+        IOpenResolver(_collection).getCollectionsInfos(_owner);
+        IOpenResolver(_collection).getCollectionsInfos(address(0));
     }
 }
