@@ -25,7 +25,7 @@ interface IERC721 {
         uint256 tokenId
     ) external payable;
 
-    function approve(address to, uint256 tokenId) external payable;
+    function approve(address to, uint256 tokenId) external;
 
     function setApprovalForAll(address operator, bool approved) external;
 

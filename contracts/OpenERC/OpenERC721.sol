@@ -46,7 +46,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         _;
     }
 
-    function approve(address spender, uint256 tokenID) external payable override(IERC721) {
+    function approve(address spender, uint256 tokenID) external override(IERC721) {
         require(_isOwnerOrOperator(msg.sender, tokenID), "Not token owner nor operator");
 
         _tokenApprovals[tokenID] = spender;
