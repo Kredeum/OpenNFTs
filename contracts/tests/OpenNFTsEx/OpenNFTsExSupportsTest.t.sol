@@ -9,6 +9,7 @@ import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/templates/OpenResolverEx.sol";
 
 abstract contract OpenNFTsExSupportsTest is Test {
+    OpenResolverEx private _resolver;
     address private _collection;
     address private _owner = address(0x1);
     address private _minter = address(0x12);
@@ -20,16 +21,22 @@ abstract contract OpenNFTsExSupportsTest is Test {
 
     function setUpOpenNFTsExSupports() public {
         _collection = constructorTest(_owner);
+
+        _resolver = new OpenResolverEx();
+    }
+
+    function testOpenNFTsExCheckErcInterfaces() public {
+        bool[11] memory expected = [false, true, true, true, true, false, false, false, false, true, true];
+
+        bool[] memory checks = IOpenChecker(_resolver).checkErcInterfaces(_collection);
+
+        for (uint256 i = 0; i < expected.length; i++) {
+            assertEq(checks[i], expected[i]);
+        }
     }
 
     function testOpenNFTsExCheckSupportedInterfaces() public {
-        bytes4[14] memory ids = [
-            type(IERC165).interfaceId,
-            type(IERC173).interfaceId,
-            type(IERC2981).interfaceId,
-            type(IERC721).interfaceId,
-            type(IERC721Enumerable).interfaceId,
-            type(IERC721Metadata).interfaceId,
+        bytes4[8] memory ids = [
             type(IOpenCloneable).interfaceId,
             type(IOpenMarketable).interfaceId,
             type(IOpenNFTs).interfaceId,
@@ -39,13 +46,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             type(IERC721TokenReceiver).interfaceId,
             0xffffffff
         ];
-        bool[14] memory expected = [
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
+        bool[8] memory expected = [
             true,
             true,
             true,
@@ -56,15 +57,15 @@ abstract contract OpenNFTsExSupportsTest is Test {
             false
         ];
 
-        bytes4[] memory interfaceIds = new bytes4[](14);
+        bytes4[] memory interfaceIds = new bytes4[](8);
         for (uint256 i = 0; i < ids.length; i++) {
             interfaceIds[i] = ids[i];
         }
 
-        OpenResolverEx resolver = new OpenResolverEx();
-        bool[] memory checks = IOpenChecker(resolver).checkSupportedInterfaces(_collection, interfaceIds);
+        bool[] memory checks = IOpenChecker(_resolver).checkSupportedInterfaces(_collection, false, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
+            console.log("testOpenNFTsExCheckErcInterfaces ~ i", i);
             assertEq(checks[i], expected[i]);
         }
     }

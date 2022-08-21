@@ -31,20 +31,6 @@ abstract contract OpenGetterTest is Test {
         IOpenGetter(_resolver).getCollectionInfos(address(_collection));
     }
 
-    function testOpenGettergetCollectionsInfos() public view {
-        address[] memory addrs = new address[](1);
-        addrs[0] = address(_collection);
-
-        IOpenGetter(_resolver).getCollectionsInfos(addrs, msg.sender);
-    }
-
-    function testOpenGettergetCollectionsInfosAddressZero() public view {
-        address[] memory addrs = new address[](1);
-        addrs[0] = address(_collection);
-
-        IOpenGetter(_resolver).getCollectionsInfos(addrs, address(0));
-    }
-
     function testOpenGetterSupportsInterface() public {
         assertFalse(IERC165(_resolver).supportsInterface(_idNull));
         assertTrue(IERC165(_resolver).supportsInterface(_idIERC165));

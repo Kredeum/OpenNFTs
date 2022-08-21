@@ -25,6 +25,18 @@ import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
 abstract contract OpenChecker is IOpenChecker, OpenERC165 {
+    /// _ercInterfaceIds : ERC interfacesIds
+    /// 0xffffffff :  O Invalid
+    /// 0x01ffc9a7 :  1 ERC165
+    /// 0x80ac58cd :  2 ERC721
+    /// 0x5b5e139f :  3 ERC721Metadata
+    /// 0x780e9d63 :  4 ERC721Enumerable
+    /// 0x150b7a02 :  5 ERC721TokenReceiver
+    /// 0xd9b67a26 :  6 ERC1155
+    /// 0x0e89341c :  7 ERC1155MetadataURI
+    /// 0x4e2312e0 :  8 ERC1155TokenReceiver
+    /// 0x7f5828d0 :  9 ERC173
+    /// 0x2a55205a : 10 ERC2981
     bytes4[] private _ercInterfaceIds = [
         bytes4(0xffffffff),
         bytes4(0x01ffc9a7),
@@ -39,36 +51,36 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         bytes4(0x2a55205a)
     ];
 
-    /// @notice checkSupportedInterfaces
-    /// @param smartcontract smartcontract to check
-    /// _ercInterfaceIds : ERC interfacesIds
-    /// 0xffffffff :  O Invalid
-    /// 0x01ffc9a7 :  1 ERC165
-    /// 0x80ac58cd :  2 ERC721
-    /// 0x5b5e139f :  3 ERC721Metadata
-    /// 0x780e9d63 :  4 ERC721Enumerable
-    /// 0x150b7a02 :  5 ERC721TokenReceiver
-    /// 0xd9b67a26 :  6 ERC1155
-    /// 0x0e89341c :  7 ERC1155MetadataURI
-    /// 0x4e2312e0 :  8 ERC1155TokenReceiver
-    /// 0x7f5828d0 :  9 ERC173
-    /// 0x2a55205a : 10 ERC2981
-    function checkErcInterfaces(address smartcontract) public view returns (bool[] memory interfaceIdsChecker) {
-        return checkSupportedInterfaces(smartcontract, _ercInterfaceIds);
-    }
-
-    function checkSupportedInterfaces(address smartcontract, bytes4[] memory interfaceIds)
-        public
-        view
-        returns (bool[] memory interfaceIdsChecker)
-    {
-        interfaceIdsChecker = new bool[](interfaceIds.length);
-        for (uint256 i = 0; i < interfaceIds.length; i++) {
-            interfaceIdsChecker[i] = IERC165(smartcontract).supportsInterface(interfaceIds[i]);
-        }
-    }
-
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
         return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function checkErcInterfaces(address smartcontract)
+        public
+        view
+        override(IOpenChecker)
+        returns (bool[] memory ercInterfacesChecks)
+    {
+        ercInterfacesChecks = checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
+    }
+
+    function checkSupportedInterfaces( 
+        address smartcontract,
+        bool erc,
+        bytes4[] memory interfaceIds
+    ) public view override(IOpenChecker) returns (bool[] memory interfaceIdsChecks) {
+        uint256 i;
+        uint256 len = (erc ? _ercInterfaceIds.length : 0) + interfaceIds.length;
+
+        interfaceIdsChecks = new bool[](len);
+
+        if (erc) {
+            for (uint256 j = 0; j < _ercInterfaceIds.length; j++) {
+                interfaceIdsChecks[i++] = IERC165(smartcontract).supportsInterface(_ercInterfaceIds[j]);
+            }
+        }
+        for (uint256 k = 0; k < interfaceIds.length; k++) {
+            interfaceIdsChecks[i++] = IERC165(smartcontract).supportsInterface(interfaceIds[k]);
+        }
     }
 }

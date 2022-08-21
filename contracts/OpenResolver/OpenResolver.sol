@@ -34,13 +34,33 @@ import "OpenNFTs/contracts/OpenResolver/OpenGetter.sol";
 import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
-    function getCollectionsInfos(address account)
-        external
+    function supportsInterface(bytes4 interfaceId)
+        public
         view
-        override(IOpenResolver)
+        virtual
+        override(OpenRegistry, OpenGetter)
+        returns (bool)
+    {
+        return interfaceId == type(IOpenResolver).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function getCollectionsInfos(
+        address[] memory collections,
+        address account,
+        bytes4[] memory interfaceIds
+    ) public view override(IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
+        collectionsInfos = new CollectionInfos[](collections.length);
+        for (uint256 i = 0; i < collections.length; i++) {
+            collectionsInfos[i] = _getCollectionInfos(collections[i], account, interfaceIds);
+        }
+    }
+
+    function _getCollectionsInfos(address account, bytes4[] memory interfaceIds)
+        internal
+        view
         returns (CollectionInfos[] memory collectionsInfos)
     {
-        CollectionInfos[] memory collectionsInfosAll = getCollectionsInfos(_addresses, account);
+        CollectionInfos[] memory collectionsInfosAll = getCollectionsInfos(_addresses, account, interfaceIds);
 
         uint256 len;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
@@ -54,15 +74,5 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
             if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account)
                 collectionsInfos[j++] = collectionsInfosAll[i];
         }
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(OpenRegistry, OpenGetter)
-        returns (bool)
-    {
-        return interfaceId == type(IOpenResolver).interfaceId || super.supportsInterface(interfaceId);
     }
 }

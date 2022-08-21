@@ -37,29 +37,17 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         override(IOpenGetter)
         returns (CollectionInfos memory collectionInfos)
     {
-        return _getCollectionInfos(collection, msg.sender);
+        collectionInfos = _getCollectionInfos(collection, msg.sender, new bytes4[](0));
     }
 
-    function getCollectionsInfos(address[] memory collections, address account)
-        public
-        view
-        override(IOpenGetter)
-        returns (CollectionInfos[] memory collectionsInfos)
-    {
-        collectionsInfos = new CollectionInfos[](collections.length);
-        for (uint256 i = 0; i < collections.length; i++) {
-            collectionsInfos[i] = _getCollectionInfos(collections[i], account);
-        }
-    }
-
-    function _getCollectionInfos(address collection, address account)
-        private
-        view
-        returns (CollectionInfos memory collectionInfos)
-    {
+    function _getCollectionInfos(
+        address collection,
+        address account,
+        bytes4[] memory interfaceIds
+    ) internal view returns (CollectionInfos memory collectionInfos) {
         require(collection.code.length != 0, "Not smartcontract");
 
-        bool[] memory supported = checkErcInterfaces(collection);
+        bool[] memory supported = checkSupportedInterfaces(collection, true, interfaceIds);
         collectionInfos.supported = supported;
 
         // ERC165 must be supported
