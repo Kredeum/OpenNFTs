@@ -38,21 +38,24 @@ abstract contract OpenRegistryTest is Test {
     }
 
     function testOpenRegistryBurnAddress() public {
-        address[] memory addrs = new address[](1);
-        addrs[0] = _collection;
+        address[] memory addrs = new address[](3);
+        addrs[0] = address(new OpenNFTsEx());
+        addrs[1] = address(new OpenNFTsEx());
+        addrs[2] = address(new OpenNFTsEx());
+        address addr = address(new OpenNFTsEx());
 
         assertEq(IOpenRegistry(_resolver).countAddresses(), 0);
         IOpenRegistry(_resolver).addAddresses(addrs);
-        assertEq(IOpenRegistry(_resolver).countAddresses(), 1);
-        IOpenRegistry(_resolver).addAddresses(addrs);
-        assertEq(IOpenRegistry(_resolver).countAddresses(), 2);
-        IOpenRegistry(_resolver).addAddresses(addrs);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 3);
-        IOpenRegistry(_resolver).burnAddress(1);
+        IOpenRegistry(_resolver).addAddress(addr);
+        assertEq(IOpenRegistry(_resolver).countAddresses(), 4);
+        IOpenRegistry(_resolver).removeAddress(3);
+        assertEq(IOpenRegistry(_resolver).countAddresses(), 3);
+        IOpenRegistry(_resolver).removeAddress(1);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 2);
-        IOpenRegistry(_resolver).burnAddress(1);
+        IOpenRegistry(_resolver).removeAddress(1);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 1);
-        IOpenRegistry(_resolver).burnAddress(0);
+        IOpenRegistry(_resolver).removeAddress(0);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 0);
     }
 

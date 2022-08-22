@@ -45,7 +45,7 @@ import "OpenNFTs/contracts/libraries/Bafkrey.sol";
 
 /// @title OpenBound smartcontract
 /// limited to one nft per address
-contract OpenBoundEx is 
+contract OpenBoundEx is
     IOpenBoundEx,
     IERC721Enumerable,
     IERC721Metadata,

@@ -60,7 +60,7 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         view
         returns (CollectionInfos[] memory collectionsInfos)
     {
-        CollectionInfos[] memory collectionsInfosAll = getCollectionsInfos(_addresses, account, interfaceIds);
+        CollectionInfos[] memory collectionsInfosAll = getCollectionsInfos(getAddresses(), account, interfaceIds);
 
         uint256 len;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {

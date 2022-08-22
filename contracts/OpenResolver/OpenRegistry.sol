@@ -28,7 +28,8 @@ import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
 import "forge-std/console.sol";
 
 abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
-    address[] internal _addresses;
+    mapping(address => bool) public isRegistered;
+    address[] private _addresses;
 
     /// @notice onlyRegisterer, by default owner is registerer and can add addresses, can be overriden
     modifier onlyRegisterer() virtual {
@@ -38,30 +39,43 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
 
     function addAddresses(address[] memory addrs) external override(IOpenRegistry) onlyRegisterer {
         for (uint256 i = 0; i < addrs.length; i++) {
-            _addresses.push(addrs[i]);
+            _addAddress(addrs[i]);
         }
     }
 
     function addAddress(address addr) external override(IOpenRegistry) onlyRegisterer {
-        _addresses.push(addr);
+        _addAddress(addr);
     }
 
-    function burnAddress(uint256 index) external override(IOpenRegistry) onlyRegisterer {
-        require(index < _addresses.length, "Invalid index");
-
-        if (index != _addresses.length - 1) _addresses[index] = _addresses[_addresses.length - 1];
-        _addresses.pop();
+    function removeAddress(uint256 index) external override(IOpenRegistry) onlyRegisterer {
+        _removeAddress(index);
     }
 
     function countAddresses() external view override(IOpenRegistry) returns (uint256) {
         return _addresses.length;
     }
 
-    function getAddresses() external view override(IOpenRegistry) returns (address[] memory) {
+    function getAddresses() public view override(IOpenRegistry) returns (address[] memory) {
         return _addresses;
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
         return interfaceId == type(IOpenRegistry).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function _addAddress(address addr) private {
+        require(!isRegistered[addr], "Already registered");
+
+        _addresses.push(addr);
+        isRegistered[addr] = true;
+    }
+
+    function _removeAddress(uint256 index) private {
+        require(index < _addresses.length, "Invalid index");
+        require(isRegistered[_addresses[index]], "Not registered");
+
+        delete (isRegistered[_addresses[index]]);
+        if (index != _addresses.length - 1) _addresses[index] = _addresses[_addresses.length - 1];
+        _addresses.pop();
     }
 }

@@ -64,7 +64,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         ercInterfacesChecks = checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
     }
 
-    function checkSupportedInterfaces( 
+    function checkSupportedInterfaces(
         address smartcontract,
         bool erc,
         bytes4[] memory interfaceIds
