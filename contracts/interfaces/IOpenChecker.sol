@@ -9,4 +9,6 @@ interface IOpenChecker {
         bool erc,
         bytes4[] memory interfaceIds
     ) external view returns (bool[] memory interfaceIdsChecks);
+
+    function isCollection(address collection) external view returns (bool);
 }

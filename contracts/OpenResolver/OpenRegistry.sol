@@ -37,17 +37,22 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         _;
     }
 
-    function addAddresses(address[] memory addrs) external override(IOpenRegistry) onlyRegisterer {
+    /// @notice isValid, by default all addresses valid
+    modifier onlyValid(address) virtual {
+        _;
+    }
+
+    function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
         for (uint256 i = 0; i < addrs.length; i++) {
             _addAddress(addrs[i]);
         }
     }
 
-    function addAddress(address addr) external override(IOpenRegistry) onlyRegisterer {
+    function addAddress(address addr) external override(IOpenRegistry) {
         _addAddress(addr);
     }
 
-    function removeAddress(uint256 index) external override(IOpenRegistry) onlyRegisterer {
+    function removeAddress(uint256 index) external override(IOpenRegistry) {
         _removeAddress(index);
     }
 
@@ -63,14 +68,14 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         return interfaceId == type(IOpenRegistry).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function _addAddress(address addr) private {
+    function _addAddress(address addr) private onlyRegisterer onlyValid(addr) {
         require(!isRegistered[addr], "Already registered");
 
         _addresses.push(addr);
         isRegistered[addr] = true;
     }
 
-    function _removeAddress(uint256 index) private {
+    function _removeAddress(uint256 index) private onlyRegisterer {
         require(index < _addresses.length, "Invalid index");
         require(isRegistered[_addresses[index]], "Not registered");
 

@@ -34,6 +34,12 @@ import "OpenNFTs/contracts/OpenResolver/OpenGetter.sol";
 import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
+    /// @notice isValid, by default all addresses valid
+    modifier onlyValid(address addr) override(OpenRegistry) {
+        require(isCollection(addr), "Not Collection");
+        _;
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view

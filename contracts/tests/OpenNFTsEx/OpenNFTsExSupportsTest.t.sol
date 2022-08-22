@@ -46,16 +46,7 @@ abstract contract OpenNFTsExSupportsTest is Test {
             type(IERC721TokenReceiver).interfaceId,
             0xffffffff
         ];
-        bool[8] memory expected = [
-            true,
-            true,
-            true,
-            true,
-            true,
-            false,
-            false,
-            false
-        ];
+        bool[8] memory expected = [true, true, true, true, true, false, false, false];
 
         bytes4[] memory interfaceIds = new bytes4[](8);
         for (uint256 i = 0; i < ids.length; i++) {

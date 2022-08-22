@@ -2,7 +2,9 @@
 pragma solidity ^0.8.9;
 
 interface IOpenCloneable {
-    function getTemplate() external view returns (string memory);
+    function initialized() external view returns (bool);
 
-    function getVersion() external view returns (uint256);
+    function template() external view returns (string memory);
+
+    function version() external view returns (uint256);
 }

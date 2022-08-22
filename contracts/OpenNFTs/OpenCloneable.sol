@@ -25,27 +25,19 @@ import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 
 abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
-    bool private _openCloneableInitialized;
-    string private _template;
-    uint256 private _version;
-
-    function getTemplate() external view override(IOpenCloneable) returns (string memory) {
-        return _template;
-    }
-
-    function getVersion() external view override(IOpenCloneable) returns (uint256) {
-        return _version;
-    }
+    bool public initialized;
+    string public template;
+    uint256 public version;
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
         return interfaceId == type(IOpenCloneable).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function _initialize(string memory template_, uint256 version_) internal {
-        require(_openCloneableInitialized == false, "Only once!");
-        _openCloneableInitialized = true;
+        require(initialized == false, "Only once!");
+        initialized = true;
 
-        _template = template_;
-        _version = version_;
+        template = template_;
+        version = version_;
     }
 }

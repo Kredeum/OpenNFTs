@@ -6,7 +6,6 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/templates/OpenResolverEx.sol";
 
 import "OpenNFTs/contracts/interfaces/ITest.sol";
-import "OpenNFTs/contracts/templates/OpenTester.sol";
 import "OpenNFTs/contracts/tests/units/OpenResolverTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenCheckerTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenGetterTest.t.sol";
