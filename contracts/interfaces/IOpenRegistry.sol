@@ -12,6 +12,8 @@ interface IOpenRegistry {
 
     function getAddresses() external view returns (address[] memory);
 
+    function registerer() external view returns (address);
+
     function countAddresses() external view returns (uint256);
 
     function isRegistered(address addr) external view returns (bool registered);

@@ -47,20 +47,12 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     /// @notice SET default royalty configuration
     /// @param receiver : address of the royalty receiver, or address(0) to reset
     /// @param fee : fee Numerator, less than 10000
-    function setDefaultRoyalty(address receiver, uint96 fee)
-        public
-        override(IOpenMarketable)
-        onlyOwner
-        lessThanMaxFee(fee)
-    {
-        _royaltyInfo = RoyaltyInfo(receiver, fee);
-        emit SetDefaultRoyalty(receiver, fee);
+    function setDefaultRoyalty(address receiver, uint96 fee) public override(IOpenMarketable) onlyOwner {
+        _setDefaultRoyalty(receiver, fee);
     }
 
-    function setDefaultPrice(uint256 price) public override(IOpenMarketable) onlyOwner notTooExpensive(price) {
-        defaultPrice = price;
-
-        emit SetDefaultPrice(price);
+    function setDefaultPrice(uint256 price) public override(IOpenMarketable) onlyOwner {
+        _setDefaultPrice(price);
     }
 
     /// @notice SET token royalty configuration
@@ -71,7 +63,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         uint256 tokenID,
         address receiver,
         uint96 fee
-    ) public override(IOpenMarketable) onlyTokenOwnerOrApproved(tokenID) lessThanMaxFee(fee) {
+    ) public override(IOpenMarketable) onlyTokenOwnerOrApproved(tokenID) {
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
@@ -79,7 +71,6 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         public
         override(IOpenMarketable)
         onlyTokenOwnerOrApproved(tokenID)
-        notTooExpensive(price)
     {
         _setTokenPrice(tokenID, price);
     }
@@ -123,6 +114,34 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         super._transferFromBefore(from, to, tokenID);
     }
 
+    function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
+        _royaltyInfo = RoyaltyInfo(receiver, fee);
+
+        emit SetDefaultRoyalty(receiver, fee);
+    }
+
+    function _setTokenRoyalty(
+        uint256 tokenID,
+        address receiver,
+        uint96 fee
+    ) internal lessThanMaxFee(fee) {
+        _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
+
+        emit SetTokenRoyalty(tokenID, receiver, fee);
+    }
+
+    function _setTokenPrice(uint256 tokenID, uint256 price) internal notTooExpensive(price) {
+        tokenPrice[tokenID] = price;
+
+        emit SetTokenPrice(tokenID, price);
+    }
+
+    function _setDefaultPrice(uint256 price) internal notTooExpensive(price) {
+        defaultPrice = price;
+
+        emit SetDefaultPrice(price);
+    }
+
     function _pay(
         uint256 tokenID,
         uint256 price,
@@ -157,21 +176,5 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
 
         /// Transfer back unspent funds to payer
         if (unspent > 0) payable(payer).transfer(unspent);
-    }
-
-    function _setTokenRoyalty(
-        uint256 tokenID,
-        address receiver,
-        uint96 fee
-    ) private {
-        _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
-
-        emit SetTokenRoyalty(tokenID, receiver, fee);
-    }
-
-    function _setTokenPrice(uint256 tokenID, uint256 price) private {
-        tokenPrice[tokenID] = price;
-
-        emit SetTokenPrice(tokenID, price);
     }
 }
