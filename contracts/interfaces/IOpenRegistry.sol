@@ -2,7 +2,9 @@
 pragma solidity ^0.8.9;
 
 interface IOpenRegistry {
-    function removeAddress(uint256 index) external;
+    function setRegisterer(address registerer) external;
+
+    function removeAddress(address addr) external;
 
     function addAddress(address addr) external;
 
@@ -13,6 +15,4 @@ interface IOpenRegistry {
     function countAddresses() external view returns (uint256);
 
     function isRegistered(address addr) external view returns (bool registered);
-
-    function setRegisterer(address registerer) external;
 }

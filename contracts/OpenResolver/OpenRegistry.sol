@@ -28,7 +28,7 @@ import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
 import "forge-std/console.sol";
 
 abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
-    mapping(address => bool) public isRegistered;
+    mapping(address => uint256) private _numAddress;
     address[] private _addresses;
     address private _registerer;
 
@@ -57,12 +57,16 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         _addAddress(addr);
     }
 
-    function removeAddress(uint256 index) external override(IOpenRegistry) {
-        _removeAddress(index);
+    function removeAddress(address addr) external override(IOpenRegistry) {
+        _removeAddress(addr);
     }
 
     function countAddresses() external view override(IOpenRegistry) returns (uint256) {
         return _addresses.length;
+    }
+
+    function isRegistered(address addr) public view returns (bool) {
+        return _numAddress[addr] >= 1;
     }
 
     function getAddresses() public view override(IOpenRegistry) returns (address[] memory) {
@@ -74,18 +78,23 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
     }
 
     function _addAddress(address addr) private onlyRegisterer onlyValid(addr) {
-        require(!isRegistered[addr], "Already registered");
-
-        _addresses.push(addr);
-        isRegistered[addr] = true;
+        if (!isRegistered(addr)) {
+            _addresses.push(addr);
+            _numAddress[addr] = _addresses.length;
+        }
     }
 
-    function _removeAddress(uint256 index) private onlyRegisterer {
-        require(index < _addresses.length, "Invalid index");
-        require(isRegistered[_addresses[index]], "Not registered");
+    function _removeAddress(address addr) private onlyRegisterer {
+        require(isRegistered(addr), "Not registered");
 
-        delete (isRegistered[_addresses[index]]);
-        if (index != _addresses.length - 1) _addresses[index] = _addresses[_addresses.length - 1];
+        uint256 num = _numAddress[addr];
+        if (num != _addresses.length) {
+            address addrLast = _addresses[_addresses.length - 1];
+            _addresses[num - 1] = addrLast;
+            _numAddress[addrLast] = num;
+        }
+
+        delete (_numAddress[addr]);
         _addresses.pop();
     }
 }

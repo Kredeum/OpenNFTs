@@ -49,13 +49,14 @@ abstract contract OpenRegistryTest is Test {
         assertEq(IOpenRegistry(_resolver).countAddresses(), 3);
         IOpenRegistry(_resolver).addAddress(addr);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 4);
-        IOpenRegistry(_resolver).removeAddress(3);
+
+        IOpenRegistry(_resolver).removeAddress(addrs[2]);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 3);
-        IOpenRegistry(_resolver).removeAddress(1);
+        IOpenRegistry(_resolver).removeAddress(addr);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 2);
-        IOpenRegistry(_resolver).removeAddress(1);
+        IOpenRegistry(_resolver).removeAddress(addrs[0]);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 1);
-        IOpenRegistry(_resolver).removeAddress(0);
+        IOpenRegistry(_resolver).removeAddress(addrs[1]);
         assertEq(IOpenRegistry(_resolver).countAddresses(), 0);
     }
 
