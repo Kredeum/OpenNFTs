@@ -30,16 +30,21 @@ import "forge-std/console.sol";
 abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
     mapping(address => bool) public isRegistered;
     address[] private _addresses;
+    address private _registerer;
 
     /// @notice onlyRegisterer, by default owner is registerer and can add addresses, can be overriden
     modifier onlyRegisterer() virtual {
-        require(msg.sender == owner(), "Not registerer");
+        require(msg.sender == owner() || msg.sender == _registerer, "Not registerer");
         _;
     }
 
     /// @notice isValid, by default all addresses valid
     modifier onlyValid(address) virtual {
         _;
+    }
+
+    function setRegisterer(address registerer_) external override(IOpenRegistry) onlyOwner {
+        _registerer = registerer_;
     }
 
     function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
