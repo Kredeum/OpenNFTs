@@ -44,7 +44,7 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
     }
 
     function setRegisterer(address registerer_) external override(IOpenRegistry) onlyOwner {
-        registerer = registerer_;
+        _setRegisterer(registerer_);
     }
 
     function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
@@ -75,6 +75,10 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
 
     function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
         return interfaceId == type(IOpenRegistry).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    function _setRegisterer(address registerer_) internal {
+        registerer = registerer_;
     }
 
     function _addAddress(address addr) private onlyRegisterer onlyValid(addr) {

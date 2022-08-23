@@ -16,8 +16,9 @@ import "OpenNFTs/contracts/interfaces/IOpenResolverEx.sol";
 contract OpenResolverEx is IOpenResolverEx, OpenResolver {
     bytes4[] private _interfaceIds = new bytes4[](5);
 
-    function initialize(address owner_) external override(IOpenResolverEx) {
+    function initialize(address owner_, address registerer_) external override(IOpenResolverEx) {
         OpenERC173._initialize(owner_);
+        _setRegisterer(registerer_);
 
         _interfaceIds[0] = type(IOpenChecker).interfaceId;
         _interfaceIds[1] = type(IOpenGetter).interfaceId;

@@ -20,7 +20,7 @@ contract OpenResolverExTest is ITest, OpenResolverTest, OpenCheckerTest, OpenGet
         changePrank(owner);
 
         OpenResolverEx collection = new OpenResolverEx();
-        collection.initialize(owner);
+        collection.initialize(owner, owner);
 
         return address(collection);
     }
