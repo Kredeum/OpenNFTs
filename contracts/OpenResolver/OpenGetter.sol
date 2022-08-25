@@ -40,6 +40,63 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         collectionInfos = _getCollectionInfos(collection, msg.sender, new bytes4[](0));
     }
 
+    function getNftsInfos(
+        address collection,
+        address account,
+        uint256 start,
+        uint256 end
+    ) public view returns (NftInfos[] memory nftsInfos) {
+        bool[] memory supported = checkErcInterfaces(collection);
+
+        // IF ERC721 & ERC721Enumerable supported
+        if (supported[2] && supported[4]) {
+            if (account == address(0)) {
+                uint256 len = IERC721Enumerable(collection).totalSupply();
+
+                if (end > len) end = len;
+                require(start <= end, "Invalid start/end");
+
+                uint256 j;
+                for (uint256 i = start; i < end; i++) {
+                    nftsInfos[j++] = getNftInfos(
+                        collection,
+                        IERC721Enumerable(collection).tokenByIndex(i),
+                        supported[3]
+                    );
+                }
+            } else {
+                uint256 len = IERC721(collection).balanceOf(account);
+
+                if (end > len) end = len;
+                require(start <= end, "Invalid start/end");
+
+                uint256 j;
+                for (uint256 i = start; i < end; i++) {
+                    nftsInfos[j++] = getNftInfos(
+                        collection,
+                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, i),
+                        supported[3]
+                    );
+                }
+            }
+        }
+    }
+
+    function getNftInfos(
+        address collection,
+        uint256 tokenID,
+        bool erc721Metadata
+    ) public view returns (NftInfos memory nftInfos) {
+        nftInfos.tokenID = tokenID;
+        nftInfos.approved = IERC721(collection).getApproved(tokenID);
+        nftInfos.owner = IERC721(collection).ownerOf(tokenID);
+
+        // IF ERC721Metadata supported
+        if (erc721Metadata) {
+            nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
+        }
+    }
+
     function _getCollectionInfos(
         address collection,
         address account,

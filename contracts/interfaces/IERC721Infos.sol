@@ -11,4 +11,11 @@ interface IERC721Infos {
         uint256 balanceOf;
         bool[] supported;
     }
+
+    struct NftInfos {
+        uint256 tokenID;
+        string tokenURI;
+        address owner;
+        address approved;
+    }
 }
