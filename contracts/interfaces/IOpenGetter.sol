@@ -15,7 +15,14 @@ interface IOpenGetter is IERC721Infos {
     function getNftsInfos(
         address collection,
         address account,
-        uint256 start,
-        uint256 end
-    ) external view returns (NftInfos[] memory nftsInfos);
+        uint256 limit,
+        uint256 offset
+    )
+        external
+        view
+        returns (
+            NftInfos[] memory nftsInfos,
+            uint256 count,
+            uint256 total
+        );
 }

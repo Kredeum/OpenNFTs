@@ -43,38 +43,46 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function getNftsInfos(
         address collection,
         address account,
-        uint256 start,
-        uint256 end
-    ) public view returns (NftInfos[] memory nftsInfos) {
+        uint256 limit,
+        uint256 offset
+    )
+        public
+        view
+        returns (
+            NftInfos[] memory nftsInfos,
+            uint256 count,
+            uint256 total
+        )
+    {
         bool[] memory supported = checkErcInterfaces(collection);
 
         // IF ERC721 & ERC721Enumerable supported
         if (supported[2] && supported[4]) {
             if (account == address(0)) {
-                uint256 len = IERC721Enumerable(collection).totalSupply();
+                total = IERC721Enumerable(collection).totalSupply();
 
-                if (end > len) end = len;
-                require(start <= end, "Invalid start/end");
+                require(offset <= total, "Invalid offset");
+                count = (offset + limit <= total) ? limit : total - offset;
 
-                uint256 j;
-                for (uint256 i = start; i < end; i++) {
-                    nftsInfos[j++] = getNftInfos(
+                nftsInfos = new NftInfos[](count);
+                for (uint256 i; i < count; i++) {
+                    nftsInfos[i] = getNftInfos(
                         collection,
-                        IERC721Enumerable(collection).tokenByIndex(i),
+                        IERC721Enumerable(collection).tokenByIndex(offset + i),
                         supported[3]
                     );
                 }
             } else {
-                uint256 len = IERC721(collection).balanceOf(account);
+                total = IERC721(collection).balanceOf(account);
 
-                if (end > len) end = len;
-                require(start <= end, "Invalid start/end");
+                require(offset <= total, "Invalid offset");
+                count = (offset + limit <= total) ? limit : total - offset;
 
-                uint256 j;
-                for (uint256 i = start; i < end; i++) {
-                    nftsInfos[j++] = getNftInfos(
+                nftsInfos = new NftInfos[](count);
+                for (uint256 i; i < count; i++) {
+                    nftsInfos[i] = getNftInfos(
                         collection,
-                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, i),
+                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, offset + i),
                         supported[3]
                     );
                 }
