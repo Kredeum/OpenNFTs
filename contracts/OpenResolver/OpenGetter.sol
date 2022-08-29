@@ -24,6 +24,7 @@ import "OpenNFTs/contracts/interfaces/IOpenGetter.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 
 abstract contract OpenGetter is IOpenGetter, OpenChecker {
@@ -35,9 +36,26 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         public
         view
         override(IOpenGetter)
-        returns (CollectionInfos memory collectionInfos)
+        returns (
+            // override(IOpenGetter)
+            CollectionInfos memory collectionInfos
+        )
     {
         collectionInfos = _getCollectionInfos(collection, msg.sender, new bytes4[](0));
+    }
+
+    function getNftsInfos(address collection, uint256[] memory tokenIDs)
+        public
+        view
+        override(IOpenGetter)
+        returns (NftInfos[] memory nftsInfos)
+    {
+        bool supported = IERC165(collection).supportsInterface(0x5b5e139f); // check ERC721Metadata
+
+        nftsInfos = new NftInfos[](tokenIDs.length);
+        for (uint256 i; i < tokenIDs.length; i++) {
+            nftsInfos[i] = getNftInfos(collection, tokenIDs[i], supported);
+        }
     }
 
     function getNftsInfos(
@@ -48,6 +66,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     )
         public
         view
+        override(IOpenGetter)
         returns (
             NftInfos[] memory nftsInfos,
             uint256 count,
@@ -94,7 +113,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         address collection,
         uint256 tokenID,
         bool erc721Metadata
-    ) public view returns (NftInfos memory nftInfos) {
+    ) public view override(IOpenGetter) returns (NftInfos memory nftInfos) {
         nftInfos.tokenID = tokenID;
         nftInfos.approved = IERC721(collection).getApproved(tokenID);
         nftInfos.owner = IERC721(collection).ownerOf(tokenID);
