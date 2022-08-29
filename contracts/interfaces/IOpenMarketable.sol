@@ -14,9 +14,9 @@ interface IOpenMarketable {
 
     receive() external payable;
 
-    function defaultPrice() external returns (uint256 defPrice);
+    function defaultPrice() external view returns (uint256 defPrice);
 
-    function tokenPrice(uint256 tokenID) external returns (uint256 price);
+    function tokenPrice(uint256 tokenID) external view returns (uint256 price);
 
     function setDefaultRoyalty(address receiver, uint96 fee) external;
 
