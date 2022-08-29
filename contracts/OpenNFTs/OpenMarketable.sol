@@ -75,6 +75,21 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         _setTokenPrice(tokenID, price);
     }
 
+    function getDefaultRoyaltyInfo() public view override(IOpenMarketable) returns (address receiver, uint96 fraction) {
+        receiver = _defaultRoyaltyInfo.receiver;
+        fraction = _defaultRoyaltyInfo.fraction;
+    }
+
+    function getTokenRoyaltyInfo(uint256 tokenID)
+        public
+        view
+        override(IOpenMarketable)
+        returns (address receiver, uint96 fraction)
+    {
+        receiver = _tokenRoyaltyInfo[tokenID].receiver;
+        fraction = _tokenRoyaltyInfo[tokenID].fraction;
+    }
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -115,7 +130,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     }
 
     function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
-        _royaltyInfo = RoyaltyInfo(receiver, fee);
+        _defaultRoyaltyInfo = RoyaltyInfo(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);
     }

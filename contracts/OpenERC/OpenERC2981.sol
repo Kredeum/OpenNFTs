@@ -33,7 +33,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         uint96 fraction;
     }
 
-    RoyaltyInfo internal _royaltyInfo;
+    RoyaltyInfo internal _defaultRoyaltyInfo;
     mapping(uint256 => RoyaltyInfo) internal _tokenRoyaltyInfo;
 
     uint96 private constant _MAX_FEE = 10000;
@@ -59,7 +59,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         RoyaltyInfo memory royalty = _tokenRoyaltyInfo[tokenID];
 
         if (royalty.receiver == address(0)) {
-            royalty = _royaltyInfo;
+            royalty = _defaultRoyaltyInfo;
         }
 
         royaltyAmount = (price * royalty.fraction) / _MAX_FEE;
