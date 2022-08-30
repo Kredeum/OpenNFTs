@@ -6,11 +6,7 @@ import "OpenNFTs/contracts/interfaces/IERC721Infos.sol";
 interface IOpenGetter is IERC721Infos {
     function getCollectionInfos(address collection) external view returns (CollectionInfos memory collectionInfos);
 
-    function getNftInfos(
-        address collection,
-        uint256 tokenID,
-        bool erc721Metadata
-    ) external view returns (NftInfos memory nftInfos);
+    function getNftInfos(address collection, uint256 tokenID) external view returns (NftInfos memory nftInfos);
 
     function getNftsInfos(
         address collection,

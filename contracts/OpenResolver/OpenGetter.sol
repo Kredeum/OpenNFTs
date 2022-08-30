@@ -50,11 +50,9 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         override(IOpenGetter)
         returns (NftInfos[] memory nftsInfos)
     {
-        bool supported = IERC165(collection).supportsInterface(0x5b5e139f); // check ERC721Metadata
-
         nftsInfos = new NftInfos[](tokenIDs.length);
         for (uint256 i; i < tokenIDs.length; i++) {
-            nftsInfos[i] = getNftInfos(collection, tokenIDs[i], supported);
+            nftsInfos[i] = getNftInfos(collection, tokenIDs[i]);
         }
     }
 
@@ -87,8 +85,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
                 for (uint256 i; i < count; i++) {
                     nftsInfos[i] = getNftInfos(
                         collection,
-                        IERC721Enumerable(collection).tokenByIndex(offset + i),
-                        supported[3]
+                        IERC721Enumerable(collection).tokenByIndex(offset + i)
                     );
                 }
             } else {
@@ -101,25 +98,25 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
                 for (uint256 i; i < count; i++) {
                     nftsInfos[i] = getNftInfos(
                         collection,
-                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, offset + i),
-                        supported[3]
+                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, offset + i)
                     );
                 }
             }
         }
     }
 
-    function getNftInfos(
-        address collection,
-        uint256 tokenID,
-        bool erc721Metadata
-    ) public view override(IOpenGetter) returns (NftInfos memory nftInfos) {
+    function getNftInfos(address collection, uint256 tokenID)
+        public
+        view
+        override(IOpenGetter)
+        returns (NftInfos memory nftInfos)
+    {
         nftInfos.tokenID = tokenID;
         nftInfos.approved = IERC721(collection).getApproved(tokenID);
         nftInfos.owner = IERC721(collection).ownerOf(tokenID);
 
-        // IF ERC721Metadata supported
-        if (erc721Metadata) {
+        if (IERC165(collection).supportsInterface(0x5b5e139f)) {
+            // ERC721Metadata
             nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
         }
     }

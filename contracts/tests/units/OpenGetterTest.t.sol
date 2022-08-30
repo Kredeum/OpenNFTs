@@ -43,7 +43,7 @@ abstract contract OpenGetterTest is Test, IERC721Infos {
     }
 
     function testOpenGetterGetNftInfos() public {
-        NftInfos memory nftInfos = IOpenGetter(_resolver).getNftInfos(address(_collection), _tokenID0, true);
+        NftInfos memory nftInfos = IOpenGetter(_resolver).getNftInfos(address(_collection), _tokenID0);
         assertEq(nftInfos.tokenID, _tokenID0);
         assertEq(nftInfos.tokenURI, _TOKEN_URI);
         assertEq(nftInfos.owner, _owner);
