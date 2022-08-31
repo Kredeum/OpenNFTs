@@ -51,10 +51,23 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         bytes4(0x2a55205a)
     ];
 
-    function isCollection(address collection) public view override (IOpenChecker) returns (bool) {
+    function isCollections(address[] memory collections)
+        public
+        view
+        override (IOpenChecker)
+        returns (bool[] memory checks)
+    {
+        checks = new bool[](collections.length);
+
+        for (uint256 i = 0; i < collections.length; i++) {
+            checks[i] = isCollection(collections[i]);
+        }
+    }
+
+    function isCollection(address collection) public view override (IOpenChecker) returns (bool check) {
         bool[] memory checks = checkErcInterfaces(collection);
 
-        return !checks[0] && checks[1] && (checks[2] || checks[6]);
+        check = !checks[0] && checks[1] && (checks[2] || checks[6]);
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {

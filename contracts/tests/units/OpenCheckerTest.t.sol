@@ -3,12 +3,14 @@ pragma solidity 0.8.9;
 
 import "forge-std/Test.sol";
 
+import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
 abstract contract OpenCheckerTest is Test {
     address private _resolver;
     address private _owner = address(0x1);
+    address[3] private _addrs;
 
     bytes4 private _idNull = 0xffffffff;
     bytes4 private _idIERC165 = type(IERC165).interfaceId;
@@ -18,6 +20,39 @@ abstract contract OpenCheckerTest is Test {
 
     function setUpOpenChecker() public {
         _resolver = constructorTest(_owner);
+
+        bool[] memory options = new bool[](1);
+        options[0] = true;
+
+        OpenNFTsEx openNFTsEx = new OpenNFTsEx();
+        openNFTsEx.initialize("OpenNFTsEx", "NFT", _owner, options);
+        _addrs[0] = address(openNFTsEx);
+
+        OpenNFTsEx openNFTsEx2 = new OpenNFTsEx();
+        openNFTsEx2.initialize("OpenNFTsEx2", "NFT2", _owner, options);
+        _addrs[1] = address(openNFTsEx2);
+
+        _addrs[2] = _resolver;
+    }
+
+    function testOpenCheckerIsCollection() public {
+        assertTrue(IOpenChecker(_resolver).isCollection(_addrs[0]));
+        assertTrue(IOpenChecker(_resolver).isCollection(_addrs[1]));
+        assertFalse(IOpenChecker(_resolver).isCollection(_addrs[2]));
+    }
+
+    function testOpenCheckerIsCollections() public {
+        address[] memory addrs = new address[](3);
+        addrs[0] = _addrs[0];
+        addrs[1] = _addrs[1];
+        addrs[2] = _addrs[2];
+
+        bool[3] memory expected = [true, true, false];
+        bool[] memory checks = IOpenChecker(_resolver).isCollections(addrs);
+
+        for (uint256 i = 0; i < expected.length; i++) {
+            assertEq(checks[i], expected[i]);
+        }
     }
 
     function testOpenCheckerSupportsInterface() public {

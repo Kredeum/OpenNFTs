@@ -9,5 +9,7 @@ interface IOpenChecker {
         view
         returns (bool[] memory interfaceIdsChecks);
 
-    function isCollection(address collection) external view returns (bool);
+    function isCollection(address collection) external view returns (bool check);
+
+    function isCollections(address[] memory collection) external view returns (bool[] memory checks);
 }
