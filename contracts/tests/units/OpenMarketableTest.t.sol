@@ -25,11 +25,10 @@ abstract contract OpenMarketableTest is Test {
 
     function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
-    function setRoyaltyTest(
-        address collection_,
-        address receiver_,
-        uint96 fee_
-    ) public virtual returns (uint256 tokenID_);
+    function setRoyaltyTest(address collection_, address receiver_, uint96 fee_)
+        public
+        virtual
+        returns (uint256 tokenID_);
 
     function setUpMarketable() public {
         _collection = constructorTest(_owner);
@@ -38,10 +37,10 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testSetDefaultRoyalty(uint96 fee, uint256 price) public {
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
         vm.assume(fee < 10000);
 
-        (uint256 tokenID, ) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collection, _owner);
 
         changePrank(_owner);
         IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);
@@ -53,7 +52,7 @@ abstract contract OpenMarketableTest is Test {
 
     function testSetTokenRoyalty(uint96 fee, uint256 price) public {
         vm.assume(price != 0);
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
         vm.assume(fee < 10000);
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
@@ -70,7 +69,7 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testSetTokenPrice(uint256 price) public {
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
 
         changePrank(_minter);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, price);
@@ -78,7 +77,7 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testSetTokenPriceFromDefault(uint256 price) public {
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
 
         changePrank(_minter);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0);
@@ -93,14 +92,14 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testFailSetDefaultPriceTooExpensive(uint256 price) public {
-        vm.assume(price > 2**128);
+        vm.assume(price > 2 ** 128);
 
         changePrank(_owner);
         IOpenMarketable(payable(_collection)).setDefaultPrice(price);
     }
 
     function testFailSetTokenPriceTooExpensive(uint256 price) public {
-        vm.assume(price > 2**128);
+        vm.assume(price > 2 ** 128);
 
         changePrank(_minter);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, price);
@@ -112,10 +111,10 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testRoyaltyInfoCalculation(uint256 price, uint96 fee) public {
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
         vm.assume(fee < _maxFee);
 
-        (uint256 tokenID, ) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collection, _owner);
 
         changePrank(_owner);
         IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);

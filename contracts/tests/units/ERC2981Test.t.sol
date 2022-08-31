@@ -17,11 +17,10 @@ abstract contract ERC2981Test is Test {
 
     function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
 
-    function setRoyaltyTest(
-        address collection_,
-        address receiver_,
-        uint96 fee_
-    ) public virtual returns (uint256 tokenID_);
+    function setRoyaltyTest(address collection_, address receiver_, uint96 fee_)
+        public
+        virtual
+        returns (uint256 tokenID_);
 
     function setUpERC2981() public {
         _collection = constructorTest(_owner);
@@ -30,12 +29,12 @@ abstract contract ERC2981Test is Test {
     }
 
     function testERC2981RoyaltyInfo(uint256 price) public {
-        vm.assume(price < 2**128);
+        vm.assume(price < 2 ** 128);
         IERC2981(_collection).royaltyInfo(_tokenID0, price);
     }
 
     function testFailERC2981RoyaltyInfoTooExpensive(uint256 price) public {
-        vm.assume(price >= 2**128);
+        vm.assume(price >= 2 ** 128);
         IERC2981(_collection).royaltyInfo(_tokenID0, price);
     }
 

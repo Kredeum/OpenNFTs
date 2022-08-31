@@ -20,7 +20,7 @@ abstract contract ERC721EnumerableTest is Test {
 
     function setUpERC721Enumerable() public {
         _collection = constructorTest(_owner);
-        (_tokenID0, ) = mintTest(_collection, _minter);
+        (_tokenID0,) = mintTest(_collection, _minter);
     }
 
     function testERC721EnumerableTotalSupply() public {
@@ -42,7 +42,7 @@ abstract contract ERC721EnumerableTest is Test {
     }
 
     function testERC721EnumerableTokenByIndexSecond() public {
-        (uint256 tokenID, ) = mintTest(_collection, _tester);
+        (uint256 tokenID,) = mintTest(_collection, _tester);
         assertEq(IERC721Enumerable(_collection).tokenByIndex(1), tokenID);
     }
 
@@ -59,7 +59,7 @@ abstract contract ERC721EnumerableTest is Test {
         assertEq(IERC721Enumerable(_collection).tokenOfOwnerByIndex(_minter, 0), _tokenID0);
 
         changePrank(_tester);
-        (uint256 tokenID, ) = mintTest(_collection, _tester);
+        (uint256 tokenID,) = mintTest(_collection, _tester);
         console.log("tokenID", tokenID);
 
         assertEq(IERC721Enumerable(_collection).tokenOfOwnerByIndex(_tester, 0), tokenID);

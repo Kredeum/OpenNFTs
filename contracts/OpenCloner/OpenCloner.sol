@@ -47,7 +47,7 @@ abstract contract OpenCloner is IOpenCloner, OpenERC165 {
         return (clone_.code.length == 45) ? address(uint160(uint256(bytes32(clone_.code)) >> 16)) : address(0);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
         return interfaceId == type(IOpenCloner).interfaceId || super.supportsInterface(interfaceId);
     }
 }

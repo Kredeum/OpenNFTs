@@ -7,24 +7,14 @@ interface IERC1155 {
     event TransferSingle(address indexed operator, address indexed from, address indexed to, uint256 id, uint256 value);
 
     event TransferBatch(
-        address indexed operator,
-        address indexed from,
-        address indexed to,
-        uint256[] ids,
-        uint256[] values
+        address indexed operator, address indexed from, address indexed to, uint256[] ids, uint256[] values
     );
 
     event ApprovalForAll(address indexed account, address indexed operator, bool approved);
 
     event URI(string value, uint256 indexed id);
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes calldata data
-    ) external;
+    function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes calldata data) external;
 
     function safeBatchTransferFrom(
         address from,
@@ -32,7 +22,8 @@ interface IERC1155 {
         uint256[] calldata ids,
         uint256[] calldata amounts,
         bytes calldata data
-    ) external;
+    )
+        external;
 
     function setApprovalForAll(address operator, bool approved) external;
 

@@ -58,12 +58,12 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
 
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
-    function burn(uint256 tokenID) external override(IOpenNFTs) onlyTokenOwnerOrApproved(tokenID) {
+    function burn(uint256 tokenID) external override (IOpenNFTs) onlyTokenOwnerOrApproved(tokenID) {
         _burn(tokenID);
     }
 
     /// @notice withdraw token otherwise eth
-    function withdraw(address token) external override(IOpenNFTs) onlyOwner {
+    function withdraw(address token) external override (IOpenNFTs) onlyOwner {
         if ((token.code.length != 0) && (IERC165(token).supportsInterface(type(IERC20).interfaceId))) {
             require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
         } else {
@@ -73,7 +73,7 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
 
     function mint(address minter, string memory tokenURI)
         public
-        override(IOpenNFTs)
+        override (IOpenNFTs)
         onlyMinter
         returns (uint256 tokenID)
     {
@@ -87,7 +87,7 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
         public
         view
         virtual
-        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable)
+        override (OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable)
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);
@@ -98,11 +98,7 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
     /// @param symbol_ symbol of the NFT Collection
     /// @param owner_ owner of the NFT Collection
     // solhint-disable-next-line comprehensive-interface
-    function _initialize(
-        string memory name_,
-        string memory symbol_,
-        address owner_
-    ) internal {
+    function _initialize(string memory name_, string memory symbol_, address owner_) internal {
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);
         OpenERC173._initialize(owner_);
@@ -112,23 +108,21 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
     /// @param minter minter address
     /// @param tokenURI token metdata URI
     /// @param tokenID token ID
-    function _mint(
-        address minter,
-        string memory tokenURI,
-        uint256 tokenID
-    ) internal override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
+    function _mint(address minter, string memory tokenURI, uint256 tokenID)
+        internal
+        override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
+    {
         super._mint(minter, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
+    function _burn(uint256 tokenID) internal override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
         super._burn(tokenID);
     }
 
-    function _transferFromBefore(
-        address from,
-        address to,
-        uint256 tokenID
-    ) internal override(OpenERC721, OpenMarketable, OpenERC721Enumerable) {
+    function _transferFromBefore(address from, address to, uint256 tokenID)
+        internal
+        override (OpenERC721, OpenMarketable, OpenERC721Enumerable)
+    {
         super._transferFromBefore(from, to, tokenID);
     }
 }

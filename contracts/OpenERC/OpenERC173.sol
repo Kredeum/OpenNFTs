@@ -36,15 +36,15 @@ abstract contract OpenERC173 is IERC173, OpenERC165 {
         _;
     }
 
-    function transferOwnership(address newOwner) external override(IERC173) onlyOwner {
+    function transferOwnership(address newOwner) external override (IERC173) onlyOwner {
         _transferOwnership(newOwner);
     }
 
-    function owner() public view override(IERC173) returns (address) {
+    function owner() public view override (IERC173) returns (address) {
         return _owner;
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
         return interfaceId == 0x7f5828d0 || super.supportsInterface(interfaceId);
     }
 

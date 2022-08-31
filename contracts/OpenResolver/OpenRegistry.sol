@@ -43,25 +43,25 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         _;
     }
 
-    function setRegisterer(address registerer_) external override(IOpenRegistry) onlyOwner {
+    function setRegisterer(address registerer_) external override (IOpenRegistry) onlyOwner {
         _setRegisterer(registerer_);
     }
 
-    function addAddresses(address[] memory addrs) external override(IOpenRegistry) {
+    function addAddresses(address[] memory addrs) external override (IOpenRegistry) {
         for (uint256 i = 0; i < addrs.length; i++) {
             _addAddress(addrs[i]);
         }
     }
 
-    function addAddress(address addr) external override(IOpenRegistry) {
+    function addAddress(address addr) external override (IOpenRegistry) {
         _addAddress(addr);
     }
 
-    function removeAddress(address addr) external override(IOpenRegistry) {
+    function removeAddress(address addr) external override (IOpenRegistry) {
         _removeAddress(addr);
     }
 
-    function countAddresses() external view override(IOpenRegistry) returns (uint256) {
+    function countAddresses() external view override (IOpenRegistry) returns (uint256) {
         return _addresses.length;
     }
 
@@ -69,11 +69,11 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         return _numAddress[addr] >= 1;
     }
 
-    function getAddresses() public view override(IOpenRegistry) returns (address[] memory) {
+    function getAddresses() public view override (IOpenRegistry) returns (address[] memory) {
         return _addresses;
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC173) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC173) returns (bool) {
         return interfaceId == type(IOpenRegistry).interfaceId || super.supportsInterface(interfaceId);
     }
 

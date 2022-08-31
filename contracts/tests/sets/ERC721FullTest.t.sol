@@ -13,16 +13,16 @@ abstract contract ERC721FullTest is ERC165Test, ERC721Test, ERC721MetadataTest, 
     function constructorTest(address owner_)
         public
         virtual
-        override(ERC165Test, ERC721Test, ERC721MetadataTest, ERC721EnumerableTest)
+        override (ERC165Test, ERC721Test, ERC721MetadataTest, ERC721EnumerableTest)
         returns (address);
 
     function mintTest(address collection, address minter_)
         public
         virtual
-        override(ERC721Test, ERC721MetadataTest, ERC721EnumerableTest)
+        override (ERC721Test, ERC721MetadataTest, ERC721EnumerableTest)
         returns (uint256, string memory);
 
-    function burnTest(address collection, uint256 tokenID) public virtual override(ERC721Test);
+    function burnTest(address collection, uint256 tokenID) public virtual override (ERC721Test);
 
     function setUpERC721Full(string memory name_, string memory symbol_) public {
         // setUpERC165();

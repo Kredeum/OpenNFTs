@@ -35,7 +35,7 @@ import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
     /// @notice isValid, by default all addresses valid
-    modifier onlyValid(address addr) override(OpenRegistry) {
+    modifier onlyValid(address addr) override (OpenRegistry) {
         require(isCollection(addr), "Not Collection");
         _;
     }
@@ -44,17 +44,18 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         public
         view
         virtual
-        override(OpenRegistry, OpenGetter)
+        override (OpenRegistry, OpenGetter)
         returns (bool)
     {
         return interfaceId == type(IOpenResolver).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function getCollectionsInfos(
-        address[] memory collections,
-        address account,
-        bytes4[] memory interfaceIds
-    ) public view override(IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
+    function getCollectionsInfos(address[] memory collections, address account, bytes4[] memory interfaceIds)
+        public
+        view
+        override (IOpenResolver)
+        returns (CollectionInfos[] memory collectionsInfos)
+    {
         collectionsInfos = new CollectionInfos[](collections.length);
         for (uint256 i = 0; i < collections.length; i++) {
             collectionsInfos[i] = _getCollectionInfos(collections[i], account, interfaceIds);
@@ -70,15 +71,18 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
 
         uint256 len;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
-            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) len++;
+            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) {
+                len++;
+            }
         }
 
         collectionsInfos = new CollectionInfos[](len);
 
         uint256 j;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
-            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account)
+            if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) {
                 collectionsInfos[j++] = collectionsInfosAll[i];
+            }
         }
     }
 }

@@ -26,20 +26,15 @@ abstract contract ERC173Test is Test {
         assertEq(IERC173(_collection).owner(), _owner);
     }
 
-    function testERC173OnlyOwner() public {
-        changePrank(_owner);
-        IERC173(_collection).transferOwnership(_tester);
-    }
-
-    function testFailERC173NotOnlyOwner() public {
-        changePrank(_tester);
-        IERC173(_collection).transferOwnership(_minter);
-    }
-
     function testERC173TransferOwnership() public {
         changePrank(_owner);
         IERC173(_collection).transferOwnership(_tester);
         assertEq(IERC173(_collection).owner(), _tester);
+    }
+
+    function testFailERC173NotTransferOwnership() public {
+        changePrank(_tester);
+        IERC173(_collection).transferOwnership(_minter);
     }
 
     function testERC173EmitTransferOwnership() public {
@@ -47,11 +42,6 @@ abstract contract ERC173Test is Test {
         vm.expectEmit(true, true, false, false);
         emit OwnershipTransferred(_owner, _tester);
         IERC173(_collection).transferOwnership(_tester);
-    }
-
-    function testFailERC173NotTransferOwnership() public {
-        changePrank(_tester);
-        IERC173(_collection).transferOwnership(_minter);
     }
 
     function testERC173SupportsInterface() public {

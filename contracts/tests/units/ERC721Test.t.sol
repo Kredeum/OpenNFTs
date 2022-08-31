@@ -25,7 +25,7 @@ abstract contract ERC721Test is Test, IERC721Events {
     function setUpERC721() public {
         _collection = constructorTest(_owner);
 
-        (_tokenID0, ) = mintTest(_collection, _minter);
+        (_tokenID0,) = mintTest(_collection, _minter);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
     }
 
@@ -44,7 +44,7 @@ abstract contract ERC721Test is Test, IERC721Events {
     }
 
     function testERC721OwnerOfBis() public {
-        (uint256 tokenID, ) = mintTest(_collection, _tester);
+        (uint256 tokenID,) = mintTest(_collection, _tester);
         assertEq(IERC721(_collection).ownerOf(tokenID), _tester);
     }
 

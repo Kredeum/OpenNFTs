@@ -40,7 +40,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
 
     modifier notTooExpensive(uint256 price) {
         /// otherwise may overflow
-        require(price < 2**128, "Too expensive");
+        require(price < 2 ** 128, "Too expensive");
         _;
     }
 
@@ -52,7 +52,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
     function royaltyInfo(uint256 tokenID, uint256 price)
         public
         view
-        override(IERC2981)
+        override (IERC2981)
         notTooExpensive(price)
         returns (address receiver, uint256 royaltyAmount)
     {
@@ -67,7 +67,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         return (royalty.receiver, royaltyAmount);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
     }
 }

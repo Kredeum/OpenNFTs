@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "OpenNFTs/contracts/interfaces/IERC721Infos.sol";
+import "OpenNFTs/contracts/interfaces/IERCNftInfos.sol";
 
-interface IOpenResolverEx is IERC721Infos {
+interface IOpenResolverEx is IERCNftInfos {
     function initialize(address owner, address registerer) external;
 
     function getResolverExCollectionInfos(address collection, address account)

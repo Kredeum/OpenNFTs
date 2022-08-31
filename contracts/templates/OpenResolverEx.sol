@@ -16,7 +16,7 @@ import "OpenNFTs/contracts/interfaces/IOpenResolverEx.sol";
 contract OpenResolverEx is IOpenResolverEx, OpenResolver {
     bytes4[] private _interfaceIds = new bytes4[](5);
 
-    function initialize(address owner_, address registerer_) external override(IOpenResolverEx) {
+    function initialize(address owner_, address registerer_) external override (IOpenResolverEx) {
         OpenERC173._initialize(owner_);
         _setRegisterer(registerer_);
 
@@ -30,7 +30,7 @@ contract OpenResolverEx is IOpenResolverEx, OpenResolver {
     function getResolverExCollectionInfos(address collection, address account)
         external
         view
-        override(IOpenResolverEx)
+        override (IOpenResolverEx)
         returns (CollectionInfos memory collectionInfos)
     {
         collectionInfos = _getCollectionInfos(collection, account, _interfaceIds);
@@ -39,13 +39,13 @@ contract OpenResolverEx is IOpenResolverEx, OpenResolver {
     function getResolverExCollectionsInfos(address account)
         external
         view
-        override(IOpenResolverEx)
+        override (IOpenResolverEx)
         returns (CollectionInfos[] memory collectionsInfos)
     {
         collectionsInfos = _getCollectionsInfos(account, _interfaceIds);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override(OpenResolver) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override (OpenResolver) returns (bool) {
         return interfaceId == type(IOpenResolverEx).interfaceId || super.supportsInterface(interfaceId);
     }
 }

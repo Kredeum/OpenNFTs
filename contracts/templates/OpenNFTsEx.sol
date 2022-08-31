@@ -52,28 +52,26 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
     /// @notice override onlyMinter:
     /// @notice either everybody in open collection,
     /// @notice either only owner in specific collection
-    modifier onlyMinter() override(OpenNFTs) {
+    modifier onlyMinter() override (OpenNFTs) {
         require(open || (owner() == msg.sender), "Not minter");
         _;
     }
 
-    function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
-        this.safeTransferFrom{ value: msg.value }(ownerOf(tokenID), msg.sender, tokenID);
+    function buy(uint256 tokenID) external payable override (IOpenNFTsEx) {
+        this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 
-    function initialize(
-        string memory name_,
-        string memory symbol_,
-        address owner_,
-        bool[] memory options
-    ) external override(IOpenNFTsEx) {
+    function initialize(string memory name_, string memory symbol_, address owner_, bool[] memory options)
+        external
+        override (IOpenNFTsEx)
+    {
         OpenNFTs._initialize(name_, symbol_, owner_);
         open = options[0];
     }
 
     function mint(string memory tokenURI)
         external
-        override(IOpenNFTsEx)
+        override (IOpenNFTsEx)
         onlyMinter
         onlyWhenNotPaused
         returns (uint256)
@@ -81,7 +79,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         return OpenNFTs.mint(msg.sender, tokenURI);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override(OpenNFTs) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override (OpenNFTs) returns (bool) {
         return interfaceId == type(IOpenNFTsEx).interfaceId || super.supportsInterface(interfaceId);
     }
 }

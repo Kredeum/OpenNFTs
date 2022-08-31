@@ -1,13 +1,11 @@
 {
   "name": "OpenNFTs",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "OpenNFTs is a library of smarcontract components, enabling the creation of various NFT Collection templates.",
   "directories": {
     "lib": "lib"
   },
   "devDependencies": {
-    "prettier": "^2.7.1",
-    "prettier-plugin-solidity": "1.0.0-dev.23",
     "solhint": "^3.3.7"
   },
   "repository": {
@@ -25,7 +23,7 @@
     "clean": "forge clean",
     "submodule-update": "git submodule update --recursive",
     "build": "forge build",
-    "prettier": "prettier contracts/**/*.sol --write  --plugin prettier-plugin-solidity --loglevel error",
+    "format": "forge fmt",
     "check": "solhint contracts/**/*.sol",
     "test": "forge test"
   }
