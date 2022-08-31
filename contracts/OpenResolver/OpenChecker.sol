@@ -51,42 +51,49 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         bytes4(0x2a55205a)
     ];
 
-    function isCollections(address[] memory collections)
+    modifier onlyContract(address account) {
+        require(account.code.length > 0, "Not smartcontract");
+        _;
+    }
+
+    function isCollections(address[] memory smartcontracts)
         public
         view
         override (IOpenChecker)
         returns (bool[] memory checks)
     {
-        checks = new bool[](collections.length);
+        checks = new bool[](smartcontracts.length);
 
-        for (uint256 i = 0; i < collections.length; i++) {
-            checks[i] = isCollection(collections[i]);
+        for (uint256 i = 0; i < smartcontracts.length; i++) {
+            checks[i] = isCollection(smartcontracts[i]);
         }
     }
 
-    function isCollection(address collection) public view override (IOpenChecker) returns (bool check) {
-        bool[] memory checks = checkErcInterfaces(collection);
+    function isCollection(address smartcontract)
+        public
+        view
+        override (IOpenChecker)
+        onlyContract(smartcontract)
+        returns (bool)
+    {
+        bool[] memory checks = checkErcInterfaces(smartcontract);
 
-        check = !checks[0] && checks[1] && (checks[2] || checks[6]);
+        return !checks[0] && checks[1] && (checks[2] || checks[6]);
     }
 
     function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
         return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function checkErcInterfaces(address smartcontract)
-        public
-        view
-        override (IOpenChecker)
-        returns (bool[] memory ercInterfacesChecks)
-    {
-        ercInterfacesChecks = checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
+    function checkErcInterfaces(address smartcontract) public view override (IOpenChecker) returns (bool[] memory) {
+        return checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
     }
 
     function checkSupportedInterfaces(address smartcontract, bool erc, bytes4[] memory interfaceIds)
         public
         view
         override (IOpenChecker)
+        onlyContract(smartcontract)
         returns (bool[] memory interfaceIdsChecks)
     {
         uint256 i;
