@@ -1,6 +1,6 @@
 {
   "name": "OpenNFTs",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "description": "OpenNFTs is a library of smarcontract components, enabling the creation of various NFT Collection templates.",
   "directories": {
     "lib": "lib"
@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Kredeum/OpenNFTs#readme",
   "scripts": {
-    "all": "npm run submodule-update &&  npm run clean && npm run format && npm run check && npm run build && npm run test",
+    "all": "npm run submodule-update && forge update && npm run clean && npm run format && npm run check && npm run build && npm run test",
     "submodule-update": "git submodule update --recursive",
     "clean": "forge clean",
     "format": "forge fmt",

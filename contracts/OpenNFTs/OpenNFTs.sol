@@ -64,7 +64,7 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
 
     /// @notice withdraw token otherwise eth
     function withdraw(address token) external override (IOpenNFTs) onlyOwner {
-        if ((token.code.length != 0) && (IERC165(token).supportsInterface(type(IERC20).interfaceId))) {
+        if ((token.code.length > 0) && (IERC165(token).supportsInterface(type(IERC20).interfaceId))) {
             require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
         } else {
             payable(msg.sender).transfer(address(this).balance);

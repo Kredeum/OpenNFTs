@@ -107,6 +107,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function _getNftInfos(address collection, uint256 tokenID, address account)
         internal
         view
+        onlyContract(collection)
         returns (NftInfos memory nftInfos)
     {
         nftInfos.tokenID = tokenID;
@@ -126,10 +127,9 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function _getCollectionInfos(address collection, address account, bytes4[] memory interfaceIds)
         internal
         view
+        onlyContract(collection)
         returns (CollectionInfos memory collectionInfos)
     {
-        require(collection.code.length != 0, "Not smartcontract");
-
         bool[] memory supported = checkSupportedInterfaces(collection, true, interfaceIds);
         collectionInfos.supported = supported;
 
