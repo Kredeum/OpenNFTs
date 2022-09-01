@@ -7,7 +7,7 @@ import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/IOpenNFTsEx.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
 abstract contract OpenNFTsExBuyTest is Test {
@@ -25,7 +25,7 @@ abstract contract OpenNFTsExBuyTest is Test {
     function setUpOpenNFTsBuy() public {
         _collection = constructorTest(_owner);
 
-        (_tokenID0,) = mintTest(_collection, _minter);
+        (_tokenID0, ) = mintTest(_collection, _minter);
     }
 
     function testBuyOk() public {
@@ -40,7 +40,7 @@ abstract contract OpenNFTsExBuyTest is Test {
         uint256 balMinter = _minter.balance;
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTsEx(_collection).buy{value: 1.5 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1.5 ether }(_tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
@@ -56,8 +56,8 @@ abstract contract OpenNFTsExBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 
     function testFailBuyNotEnoughFunds() public {
@@ -67,7 +67,7 @@ abstract contract OpenNFTsExBuyTest is Test {
         changePrank(_buyer);
         deal(_buyer, 10 ether);
 
-        IOpenNFTsEx(_collection).buy{value: 0.5 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 0.5 ether }(_tokenID0);
     }
 
     function testFailBuyNotToSell() public {
@@ -77,6 +77,6 @@ abstract contract OpenNFTsExBuyTest is Test {
         deal(_buyer, 10 ether);
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
+        IOpenNFTsEx(_collection).buy{ value: 1 ether }(_tokenID0);
     }
 }

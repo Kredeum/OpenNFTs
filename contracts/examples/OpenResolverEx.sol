@@ -11,7 +11,7 @@
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenResolver/OpenResolver.sol";
-import "OpenNFTs/contracts/interfaces/IOpenResolverEx.sol";
+import "OpenNFTs/contracts/examples/IOpenResolverEx.sol";
 
 contract OpenResolverEx is IOpenResolverEx, OpenResolver {
     bytes4[] private _interfaceIds = new bytes4[](5);

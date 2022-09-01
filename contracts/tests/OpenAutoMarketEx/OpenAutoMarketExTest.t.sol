@@ -16,8 +16,8 @@ pragma solidity 0.8.9;
 
 import "forge-std/Test.sol";
 
-import "OpenNFTs/contracts/templates/OpenAutoMarket.sol";
-import "OpenNFTs/contracts/tests/OpenAutoMarket/OpenAutoMarketMintTest.t.sol";
+import "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
+import "OpenNFTs/contracts/tests/OpenAutoMarketEx/OpenAutoMarketExMintTest.t.sol";
 
 import "OpenNFTs/contracts/tests/units/ERC165Test.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC173Test.t.sol";
@@ -28,7 +28,7 @@ import "OpenNFTs/contracts/tests/units/OpenMarketableTest.t.sol";
 
 import "OpenNFTs/contracts/interfaces/ITest.sol";
 
-contract OpenAutoMarketTest is
+contract OpenAutoMarketExTest is
     ITest,
     ERC165Test,
     ERC173Test,
@@ -36,64 +36,68 @@ contract OpenAutoMarketTest is
     ERC721TransferableTest,
     ERC2981Test,
     OpenMarketableTest,
-    OpenAutoMarketMintTest
+    OpenAutoMarketExMintTest
 {
     string private constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
 
     function constructorTest(address owner)
         public
-        override (
+        override(
             ERC165Test,
             ERC173Test,
             ERC721Test,
             ERC721TransferableTest,
             ERC2981Test,
             OpenMarketableTest,
-            OpenAutoMarketMintTest
+            OpenAutoMarketExMintTest
         )
         returns (address)
     {
         changePrank(owner);
-        OpenAutoMarket collection = new OpenAutoMarket();
+        OpenAutoMarketEx collection = new OpenAutoMarketEx();
         collection.initialize(owner);
         return address(collection);
     }
 
     function mintTest(address collection, address minter)
         public
-        override (ERC721Test, ERC721TransferableTest, ERC2981Test, OpenMarketableTest, OpenAutoMarketMintTest)
+        override(ERC721Test, ERC721TransferableTest, ERC2981Test, OpenMarketableTest, OpenAutoMarketExMintTest)
         returns (uint256 tokenID, string memory tokenURI)
     {
         changePrank(minter);
         tokenURI = _TOKEN_URI;
-        tokenID = OpenAutoMarket(payable(collection)).mint(tokenURI);
+        tokenID = OpenAutoMarketEx(payable(collection)).mint(tokenURI);
     }
 
-    function burnTest(address collection, uint256 tokenID) public override (ERC721Test) {
-        changePrank(OpenAutoMarket(payable(collection)).ownerOf(tokenID));
-        OpenAutoMarket(payable(collection)).burn(tokenID);
+    function burnTest(address collection, uint256 tokenID) public override(ERC721Test) {
+        changePrank(OpenAutoMarketEx(payable(collection)).ownerOf(tokenID));
+        OpenAutoMarketEx(payable(collection)).burn(tokenID);
     }
 
-    function setPriceTest(address collection, uint256 tokenID, uint256 price) public {
-        OpenAutoMarket(payable(collection)).setTokenPrice(tokenID, price);
+    function setPriceTest(
+        address collection,
+        uint256 tokenID,
+        uint256 price
+    ) public {
+        OpenAutoMarketEx(payable(collection)).setTokenPrice(tokenID, price);
     }
 
-    function setRoyaltyTest(address collection, address receiver, uint96 fee)
-        public
-        override (ERC2981Test, OpenMarketableTest)
-        returns (uint256 tokenID)
-    {
-        (tokenID,) = mintTest(collection, receiver);
-        OpenAutoMarket(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
+    function setRoyaltyTest(
+        address collection,
+        address receiver,
+        uint96 fee
+    ) public override(ERC2981Test, OpenMarketableTest) returns (uint256 tokenID) {
+        (tokenID, ) = mintTest(collection, receiver);
+        OpenAutoMarketEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function setUp() public override (ITest) {
+    function setUp() public override(ITest) {
         setUpERC165();
         setUpERC721();
         setUpERC173();
         setUpERC2981();
         setUpMarketable();
         setUpERC721Transferable();
-        setUpOpenAutoMarketMint();
+        setUpOpenAutoMarketExMint();
     }
 }

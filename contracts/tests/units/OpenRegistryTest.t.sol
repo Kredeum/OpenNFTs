@@ -6,7 +6,7 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
 import "OpenNFTs/contracts/interfaces/IOpenGetter.sol";
-import "OpenNFTs/contracts/templates/OpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
 
 abstract contract OpenRegistryTest is Test {
     address private _resolver;

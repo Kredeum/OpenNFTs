@@ -4,7 +4,7 @@ pragma solidity 0.8.9;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IAll.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/IOpenNFTsEx.sol";
 
 abstract contract OpenNFTsExInitializeTest is Test {
     address private _collection;

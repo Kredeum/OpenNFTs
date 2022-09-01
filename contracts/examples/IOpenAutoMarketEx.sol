@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.9;
 
-interface IOpenAutoMarket {
+interface IOpenAutoMarketEx {
     function initialize(address owner) external;
 
     function buy(uint256 tokenID) external payable;

@@ -4,8 +4,8 @@ pragma solidity 0.8.9;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IAll.sol";
-import "OpenNFTs/contracts/interfaces/IOpenBoundEx.sol";
-import "OpenNFTs/contracts/templates/OpenResolverEx.sol";
+import "OpenNFTs/contracts/examples/IOpenBoundEx.sol";
+import "OpenNFTs/contracts/examples/OpenResolverEx.sol";
 
 abstract contract OpenBoundExSupportsTest is Test {
     OpenResolverEx private _resolver;
