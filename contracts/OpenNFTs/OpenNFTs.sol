@@ -48,7 +48,7 @@ import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
 /// @title OpenNFTs smartcontract
 contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMarketable, OpenPauseable, OpenCloneable {
     /// @notice tokenID of next minted NFT
-    uint256 public tokenIdNext = 1;
+    uint256 public tokenIdNext;
 
     /// @notice onlyMinter, by default only owner can mint, can be overriden
     modifier onlyMinter() virtual {
@@ -99,6 +99,7 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
     /// @param owner_ owner of the NFT Collection
     // solhint-disable-next-line comprehensive-interface
     function _initialize(string memory name_, string memory symbol_, address owner_) internal {
+        tokenIdNext = 1;
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);
         OpenERC173._initialize(owner_);
