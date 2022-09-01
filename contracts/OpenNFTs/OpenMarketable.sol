@@ -25,16 +25,17 @@
 //        |            |             |
 //        ————————————————————————————
 //        |
-//  OpenMarketable —— IOpenMarketable
+//  OpenMarketable —— IOpenMarketable - OpenGuard
 //
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC173.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC2981.sol";
+import "OpenNFTs/contracts/OpenNFTs/OpenGuard.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, OpenERC2981 {
+abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, OpenERC2981, OpenGuard {
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
@@ -150,7 +151,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         emit SetDefaultPrice(price);
     }
 
-    function _pay(uint256 tokenID, uint256 price, address payer, address payee) private {
+    function _pay(uint256 tokenID, uint256 price, address buyer, address seller) private reEntryGuard {
         uint256 unspent = msg.value;
 
         if (price > 0) {
@@ -162,24 +163,26 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
             require(royalties <= price, "Invalid royalties");
             uint256 paid = price - royalties;
 
-            /// Transfer amount to previous payee
-            if (paid > 0) {
-                payable(payee).transfer(paid);
+            /// Transfer amount to  seller, previous owner
+            if (seller != address(0) && paid > 0) {
                 unspent = unspent - paid;
+
+                payable(seller).transfer(paid);
             }
 
             /// Transfer royalties to receiver
-            if (royalties > 0) {
-                payable(receiver).transfer(royalties);
+            if (receiver != address(0) && royalties > 0) {
                 unspent = unspent - royalties;
+
+                payable(receiver).transfer(royalties);
             }
 
-            emit Pay(tokenID, price, payer, payee);
+            emit Pay(tokenID, price, buyer, seller);
         }
 
-        /// Transfer back unspent funds to payer
-        if (unspent > 0) {
-            payable(payer).transfer(unspent);
+        /// Transfer back unspent funds to buyer
+        if (buyer != address(0) && unspent > 0) {
+            payable(buyer).transfer(unspent);
         }
     }
 }

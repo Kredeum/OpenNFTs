@@ -25,7 +25,6 @@ pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";
-import "forge-std/console.sol";
 
 abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
     mapping(address => uint256) private _numAddress;

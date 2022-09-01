@@ -43,7 +43,14 @@ abstract contract OpenERC721Metadata is IERC721Metadata, OpenERC721 {
         return _symbol;
     }
 
-    function tokenURI(uint256 tokenID) external view virtual override (IERC721Metadata) returns (string memory) {
+    function tokenURI(uint256 tokenID)
+        external
+        view
+        virtual
+        override (IERC721Metadata)
+        existsToken(tokenID)
+        returns (string memory)
+    {
         return _tokenURIs[tokenID];
     }
 

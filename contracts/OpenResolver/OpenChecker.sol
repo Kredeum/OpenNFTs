@@ -59,7 +59,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function isCollections(address[] memory smartcontracts)
         public
         view
-        override(IOpenChecker)
+        override (IOpenChecker)
         returns (bool[] memory checks)
     {
         checks = new bool[](smartcontracts.length);
@@ -72,7 +72,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function isCollection(address smartcontract)
         public
         view
-        override(IOpenChecker)
+        override (IOpenChecker)
         onlyContract(smartcontract)
         returns (bool)
     {
@@ -82,19 +82,21 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         return !checks[0] && checks[1] && (checks[2] || checks[6]);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
         return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function checkErcInterfaces(address smartcontract) public view override(IOpenChecker) returns (bool[] memory) {
+    function checkErcInterfaces(address smartcontract) public view override (IOpenChecker) returns (bool[] memory) {
         return checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
     }
 
-    function checkSupportedInterfaces(
-        address smartcontract,
-        bool erc,
-        bytes4[] memory interfaceIds
-    ) public view override(IOpenChecker) onlyContract(smartcontract) returns (bool[] memory interfaceIdsChecks) {
+    function checkSupportedInterfaces(address smartcontract, bool erc, bytes4[] memory interfaceIds)
+        public
+        view
+        override (IOpenChecker)
+        onlyContract(smartcontract)
+        returns (bool[] memory interfaceIdsChecks)
+    {
         uint256 i;
         uint256 len = (erc ? _ercInterfaceIds.length : 0) + interfaceIds.length;
 

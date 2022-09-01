@@ -53,24 +53,16 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     function testOpenGetterGetNftsInfos1() public {
-        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) = IOpenGetter(_resolver).getNftsInfos(
-            address(_collection),
-            _owner,
-            0,
-            0
-        );
+        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) =
+            IOpenGetter(_resolver).getNftsInfos(address(_collection), _owner, 0, 0);
         assertEq(nftsInfos.length, 0);
         assertEq(count, 0);
         assertEq(total, 3);
     }
 
     function testOpenGetterGetNftsInfos2() public {
-        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) = IOpenGetter(_resolver).getNftsInfos(
-            address(_collection),
-            _owner,
-            5,
-            0
-        );
+        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) =
+            IOpenGetter(_resolver).getNftsInfos(address(_collection), _owner, 5, 0);
         assertEq(nftsInfos.length, 3);
         assertEq(nftsInfos[0].tokenID, _tokenID0);
         assertEq(nftsInfos[1].tokenID, _tokenID1);
@@ -80,12 +72,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     function testOpenGetterGetNftsInfos3() public {
-        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) = IOpenGetter(_resolver).getNftsInfos(
-            address(_collection),
-            address(0),
-            0,
-            0
-        );
+        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) =
+            IOpenGetter(_resolver).getNftsInfos(address(_collection), address(0), 0, 0);
 
         assertEq(nftsInfos.length, 0);
         assertEq(count, 0);
@@ -93,12 +81,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     function testOpenGetterGetNftsInfos4() public {
-        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) = IOpenGetter(_resolver).getNftsInfos(
-            address(_collection),
-            address(0),
-            3,
-            1
-        );
+        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) =
+            IOpenGetter(_resolver).getNftsInfos(address(_collection), address(0), 3, 1);
 
         assertEq(nftsInfos.length, 2);
         assertEq(count, 2);
@@ -106,12 +90,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     function testOpenGetterGetNftsInfos5() public {
-        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) = IOpenGetter(_resolver).getNftsInfos(
-            address(_collection),
-            _random,
-            10,
-            0
-        );
+        (NftInfos[] memory nftsInfos, uint256 count, uint256 total) =
+            IOpenGetter(_resolver).getNftsInfos(address(_collection), _random, 10, 0);
 
         assertEq(nftsInfos.length, 0);
         assertEq(count, 0);
@@ -121,10 +101,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     function testOpenGetterGetCollectionInfosOwner() public {
         assertEq(IERC173(_collection).owner(), _owner);
 
-        CollectionInfos memory collectionInfos = IOpenGetter(_resolver).getCollectionInfos(
-            address(_collection),
-            _random
-        );
+        CollectionInfos memory collectionInfos =
+            IOpenGetter(_resolver).getCollectionInfos(address(_collection), _random);
         assertEq(collectionInfos.collection, _collection);
         assertEq(collectionInfos.owner, _owner);
         assertEq(collectionInfos.name, "ERC721");
@@ -136,20 +114,16 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         assertEq(IERC173(address(smartcontract)).owner(), _owner);
         assertFalse(IERC165(smartcontract).supportsInterface(_idIERC173));
 
-        CollectionInfos memory collectionInfos = IOpenGetter(_resolver).getCollectionInfos(
-            address(smartcontract),
-            _random
-        );
+        CollectionInfos memory collectionInfos =
+            IOpenGetter(_resolver).getCollectionInfos(address(smartcontract), _random);
         assertEq(collectionInfos.owner, _owner);
     }
 
     function testOpenGetterERC173Not() public {
         ERC173Not smartcontract = new ERC173Not();
 
-        CollectionInfos memory collectionInfos = IOpenGetter(_resolver).getCollectionInfos(
-            address(smartcontract),
-            _random
-        );
+        CollectionInfos memory collectionInfos =
+            IOpenGetter(_resolver).getCollectionInfos(address(smartcontract), _random);
         assertEq(collectionInfos.owner, address(0));
     }
 

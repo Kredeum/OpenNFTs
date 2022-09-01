@@ -42,7 +42,7 @@ contract OpenAutoMarketExTest is
 
     function constructorTest(address owner)
         public
-        override(
+        override (
             ERC165Test,
             ERC173Test,
             ERC721Test,
@@ -61,7 +61,7 @@ contract OpenAutoMarketExTest is
 
     function mintTest(address collection, address minter)
         public
-        override(ERC721Test, ERC721TransferableTest, ERC2981Test, OpenMarketableTest, OpenAutoMarketExMintTest)
+        override (ERC721Test, ERC721TransferableTest, ERC2981Test, OpenMarketableTest, OpenAutoMarketExMintTest)
         returns (uint256 tokenID, string memory tokenURI)
     {
         changePrank(minter);
@@ -69,29 +69,25 @@ contract OpenAutoMarketExTest is
         tokenID = OpenAutoMarketEx(payable(collection)).mint(tokenURI);
     }
 
-    function burnTest(address collection, uint256 tokenID) public override(ERC721Test) {
+    function burnTest(address collection, uint256 tokenID) public override (ERC721Test) {
         changePrank(OpenAutoMarketEx(payable(collection)).ownerOf(tokenID));
         OpenAutoMarketEx(payable(collection)).burn(tokenID);
     }
 
-    function setPriceTest(
-        address collection,
-        uint256 tokenID,
-        uint256 price
-    ) public {
+    function setPriceTest(address collection, uint256 tokenID, uint256 price) public {
         OpenAutoMarketEx(payable(collection)).setTokenPrice(tokenID, price);
     }
 
-    function setRoyaltyTest(
-        address collection,
-        address receiver,
-        uint96 fee
-    ) public override(ERC2981Test, OpenMarketableTest) returns (uint256 tokenID) {
-        (tokenID, ) = mintTest(collection, receiver);
+    function setRoyaltyTest(address collection, address receiver, uint96 fee)
+        public
+        override (ERC2981Test, OpenMarketableTest)
+        returns (uint256 tokenID)
+    {
+        (tokenID,) = mintTest(collection, receiver);
         OpenAutoMarketEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function setUp() public override(ITest) {
+    function setUp() public override (ITest) {
         setUpERC165();
         setUpERC721();
         setUpERC173();

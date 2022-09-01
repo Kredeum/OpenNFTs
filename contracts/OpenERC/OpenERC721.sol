@@ -46,6 +46,11 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         _;
     }
 
+    modifier existsToken(uint256 tokenID) {
+        require(_owners[tokenID] != address(0), "Invalid token ID");
+        _;
+    }
+
     function approve(address spender, uint256 tokenID) external override (IERC721) {
         require(_isOwnerOrOperator(msg.sender, tokenID), "Not token owner nor operator");
 
@@ -85,13 +90,11 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         return _balances[owner];
     }
 
-    function ownerOf(uint256 tokenID) public view override (IERC721) returns (address owner) {
-        require((owner = _owners[tokenID]) != address(0), "Invalid token ID");
+    function ownerOf(uint256 tokenID) public view override (IERC721) existsToken(tokenID) returns (address) {
+        return _owners[tokenID];
     }
 
-    function getApproved(uint256 tokenID) public view override (IERC721) returns (address) {
-        require(_exists(tokenID), "Invalid token ID");
-
+    function getApproved(uint256 tokenID) public view override (IERC721) existsToken(tokenID) returns (address) {
         return _tokenApprovals[tokenID];
     }
 
@@ -101,7 +104,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
 
     function _mint(address to, string memory, uint256 tokenID) internal virtual {
         require(to != address(0), "Mint to zero address");
-        require(!_exists(tokenID), "Token already minted");
+        require(_owners[tokenID] == address(0), "Token already minted");
 
         _balances[to] += 1;
         _owners[tokenID] = to;
@@ -122,10 +125,6 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     }
 
     function _transferFromBefore(address from, address to, uint256 tokenID) internal virtual {}
-
-    function _exists(uint256 tokenID) internal view returns (bool exists) {
-        exists = _owners[tokenID] != address(0);
-    }
 
     function _isOwnerOrOperator(address spender, uint256 tokenID)
         internal

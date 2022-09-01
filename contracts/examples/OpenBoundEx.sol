@@ -30,7 +30,7 @@
 //      |
 //  OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
 //
-pragma solidity ^0.8.9;
+pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
@@ -126,9 +126,13 @@ contract OpenBoundEx is
     }
 
     /// IERC721Metadata
-    function tokenURI(uint256 tokenID) external view override (IERC721Metadata) returns (string memory) {
-        require(_exists(tokenID), "NFT doesn't exists");
-
+    function tokenURI(uint256 tokenID)
+        external
+        view
+        override (IERC721Metadata)
+        existsToken(tokenID)
+        returns (string memory)
+    {
         return _tokenURI(_cidOfToken[tokenID]);
     }
 

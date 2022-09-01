@@ -14,7 +14,7 @@ import "OpenNFTs/contracts/tests/units/OpenRegistryTest.t.sol";
 contract OpenResolverExTest is ITest, OpenResolverTest, OpenCheckerTest, OpenGetterTest, OpenRegistryTest {
     function constructorTest(address owner)
         public
-        override(OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)
+        override (OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)
         returns (address)
     {
         changePrank(owner);
