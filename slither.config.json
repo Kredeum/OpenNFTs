@@ -1,9 +1,15 @@
 {
+  "detectors_to_exclude": "external-function,delegatecall_loop",
   "exclude_informational": true,
   "exclude_low": true,
   "exclude_medium": true,
   "exclude_high": false,
+  "filter_paths": "lib|out|node_modules",
+  "legacy_ast": false,
+  "compile_force_framework": false,
   "solc_remaps": [
-    "OpenNFTs/contracts=contracts"
+    "OpenNFTs/contracts=contracts",
+    "ds-test=lib/forge-std/lib/ds-test/src",
+    "forge-std=lib/forge-std/src"
   ]
 }
