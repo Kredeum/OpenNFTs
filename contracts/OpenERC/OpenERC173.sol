@@ -49,7 +49,7 @@ abstract contract OpenERC173 is IERC173, OpenERC165 {
     }
 
     function _initialize(address owner_) internal {
-        require(_openERC173Initialized == false, "Init already call");
+        require(_openERC173Initialized == false, "Already initialized");
         _openERC173Initialized = true;
 
         _transferOwnership(owner_);

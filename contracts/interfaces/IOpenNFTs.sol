@@ -6,5 +6,7 @@ interface IOpenNFTs {
 
     function burn(uint256 tokenID) external;
 
+    function withdraw() external;
+
     function withdraw(address token) external;
 }

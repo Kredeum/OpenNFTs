@@ -59,7 +59,7 @@ abstract contract OpenERC721Metadata is IERC721Metadata, OpenERC721 {
     }
 
     function _initialize(string memory name_, string memory symbol_) internal {
-        require(_openERC721MetadataInitialized == false, "Only once!");
+        require(_openERC721MetadataInitialized == false, "Already initialized");
         _openERC721MetadataInitialized = true;
 
         _name = name_;

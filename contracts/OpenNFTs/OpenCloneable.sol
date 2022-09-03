@@ -34,7 +34,7 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
     }
 
     function _initialize(string memory template_, uint256 version_) internal {
-        require(initialized == false, "Only once!");
+        require(initialized == false, "Already initialized");
         initialized = true;
 
         template = template_;
