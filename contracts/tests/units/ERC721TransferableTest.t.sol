@@ -155,7 +155,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     function testERC721TransferFromToSameAddress() public {
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(_minter, _minter, _tokenID0);
-        assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
+        IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
     }
 }

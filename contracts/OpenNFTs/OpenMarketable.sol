@@ -157,18 +157,20 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         reEntryGuard
     {
         require(msg.value >= price, "Not enough funds");
+        if (msg.value == 0) {
+            return;
+        }
+
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
-        require(buyer != seller, "Can't buy to yourself");
 
         address receiver;
         uint256 royalties;
         uint256 paid;
         uint256 unspent = msg.value;
 
-        if (price > 0) {
+        if (price > 0 && buyer != seller) {
             (receiver, royalties) = royaltyInfo(tokenID, price);
-
             if (receiver == address(0)) {
                 royalties = 0;
             }
