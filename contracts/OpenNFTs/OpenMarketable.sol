@@ -151,38 +151,51 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         emit SetDefaultPrice(price);
     }
 
-    function _pay(uint256 tokenID, uint256 price, address buyer, address seller) private reEntryGuard {
+    function _pay(uint256 tokenID, uint256 price, address buyer, address seller)
+        private
+        existsToken(tokenID)
+        reEntryGuard
+    {
+        require(msg.value >= price, "Not enough funds");
+        require(buyer != address(0), "Invalid buyer");
+        require(seller != address(0), "Invalid seller");
+        require(buyer != seller, "Can't buy to yourself");
+
+        address receiver;
+        uint256 royalties;
+        uint256 paid;
         uint256 unspent = msg.value;
 
         if (price > 0) {
-            /// Require enough value sent
-            require(unspent >= price, "Not enough funds");
+            (receiver, royalties) = royaltyInfo(tokenID, price);
 
-            (address receiver, uint256 royalties) = royaltyInfo(tokenID, price);
+            if (receiver == address(0)) {
+                royalties = 0;
+            }
 
             require(royalties <= price, "Invalid royalties");
-            uint256 paid = price - royalties;
 
-            /// Transfer amount to  seller, previous owner
-            if (seller != address(0) && paid > 0) {
+            /// Transfer amount to be paid to seller, the previous owner
+            paid = price - royalties;
+            if (paid > 0) {
                 unspent = unspent - paid;
-
                 payable(seller).transfer(paid);
             }
 
             /// Transfer royalties to receiver
-            if (receiver != address(0) && royalties > 0) {
+            if (royalties > 0) {
                 unspent = unspent - royalties;
-
                 payable(receiver).transfer(royalties);
             }
-
-            emit Pay(tokenID, price, buyer, seller);
         }
+
+        assert(paid + royalties + unspent == msg.value);
 
         /// Transfer back unspent funds to buyer
-        if (buyer != address(0) && unspent > 0) {
+        if (unspent > 0) {
             payable(buyer).transfer(unspent);
         }
+
+        emit Pay(tokenID, price, seller, paid, receiver, royalties, buyer, unspent);
     }
 }

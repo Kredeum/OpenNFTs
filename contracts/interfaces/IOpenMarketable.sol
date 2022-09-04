@@ -10,7 +10,16 @@ interface IOpenMarketable {
 
     event SetTokenPrice(uint256 tokenID, uint256 price);
 
-    event Pay(uint256 tokenID, uint256 price, address payer, address payee);
+    event Pay(
+        uint256 tokenID,
+        uint256 price,
+        address seller,
+        uint256 paid,
+        address receiver,
+        uint256 royalties,
+        address buyer,
+        uint256 unspent
+    );
 
     receive() external payable;
 
