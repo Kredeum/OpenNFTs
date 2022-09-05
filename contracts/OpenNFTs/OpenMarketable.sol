@@ -107,9 +107,9 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID) internal virtual override (OpenERC721) {
-        super._mint(to, tokenURI, tokenID);
-
         _pay(tokenID, defaultPrice, to, owner());
+
+        super._mint(to, tokenURI, tokenID);
     }
 
     function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
@@ -122,6 +122,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     function _transferFromBefore(address from, address to, uint256 tokenID) internal virtual override (OpenERC721) {
         /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
         _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
+
         delete tokenPrice[tokenID];
 
         super._transferFromBefore(from, to, tokenID);
@@ -151,11 +152,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         emit SetDefaultPrice(price);
     }
 
-    function _pay(uint256 tokenID, uint256 price, address buyer, address seller)
-        private
-        existsToken(tokenID)
-        reEntryGuard
-    {
+    function _pay(uint256 tokenID, uint256 price, address buyer, address seller) private reEntryGuard {
         require(msg.value >= price, "Not enough funds");
         if (msg.value == 0) {
             return;

@@ -32,6 +32,8 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     }
 
     function buy(uint256 tokenID) external payable override (IOpenAutoMarketEx) {
+        require(tokenPrice[tokenID] > 0, "Not on sale");
+
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 

@@ -17,7 +17,7 @@ abstract contract OpenMarketableTest is Test {
     uint256 private _tokenID0;
     uint256 private _notTokenID = 42;
 
-    uint96 private _maxFee = 10000;
+    uint96 private _maxFee = 10_000;
 
     // uint256 private maxPrice = uint256(((2**256) - 1)) / _maxFee;
 
@@ -38,7 +38,7 @@ abstract contract OpenMarketableTest is Test {
 
     function testSetDefaultRoyalty(uint96 fee, uint256 price) public {
         vm.assume(price < 2 ** 128);
-        vm.assume(fee < 10000);
+        vm.assume(fee < 10_000);
 
         (uint256 tokenID,) = mintTest(_collection, _owner);
 
@@ -53,7 +53,7 @@ abstract contract OpenMarketableTest is Test {
     function testSetTokenRoyalty(uint96 fee, uint256 price) public {
         vm.assume(price != 0);
         vm.assume(price < 2 ** 128);
-        vm.assume(fee < 10000);
+        vm.assume(fee < 10_000);
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
         changePrank(_minter);

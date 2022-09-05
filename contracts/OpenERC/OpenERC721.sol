@@ -72,8 +72,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         payable
         override (IERC721)
     {
-        _transferFrom(from, to, tokenID);
-        require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Received");
+        _safeTransferFrom(from, to, tokenID, data);
     }
 
     function safeTransferFrom(address from, address to, uint256 tokenID) public payable override (IERC721) {
@@ -143,9 +142,9 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     }
 
     function _transferFrom(address from, address to, uint256 tokenID) private onlyTokenOwnerOrApproved(tokenID) {
-        require(from == ownerOf(tokenID), "From not owner");
         require(from != address(0), "Transfer from zero address");
         require(to != address(0), "Transfer to zero address");
+        require(from == ownerOf(tokenID), "From not owner");
 
         _transferFromBefore(from, to, tokenID);
 

@@ -93,9 +93,6 @@ abstract contract OpenAutoMarketExMintTest is Test {
         IOpenMarketable(_collection).setTokenRoyalty(tokenID, _tester, 100);
         IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
 
-        address own = IERC173(_collection).owner();
-        console.log("testOpenAutoMarketExBuy ~ own", own);
-
         changePrank(_buyer);
         deal(_buyer, 10 ether);
         uint256 balMinter = _minter.balance;
