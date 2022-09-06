@@ -41,33 +41,22 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
 
     receive() external payable override (IOpenMarketable) {}
 
-    function setTokenPrice(uint256 tokenID) external override (IOpenMarketable) {
-        setTokenPrice(tokenID, defaultPrice);
+    /// @notice SET default mint price
+    /// @param price : default price in wei
+    function setDefaultPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
+        _setDefaultPrice(price);
     }
 
-    /// @notice SET default royalty configuration
+    /// @notice SET default royalty info
     /// @param receiver : address of the royalty receiver, or address(0) to reset
     /// @param fee : fee Numerator, less than 10000
     function setDefaultRoyalty(address receiver, uint96 fee) public override (IOpenMarketable) onlyOwner {
         _setDefaultRoyalty(receiver, fee);
     }
 
-    function setDefaultPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
-        _setDefaultPrice(price);
-    }
-
-    /// @notice SET token royalty configuration
+    /// @notice SET token price
     /// @param tokenID : token ID
-    /// @param receiver : address of the royalty receiver, or address(0) to reset
-    /// @param fee : fee Numerator, less than 10000
-    function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
-        public
-        override (IOpenMarketable)
-        onlyTokenOwnerOrApproved(tokenID)
-    {
-        _setTokenRoyalty(tokenID, receiver, fee);
-    }
-
+    /// @param price : token price in wei
     function setTokenPrice(uint256 tokenID, uint256 price)
         public
         override (IOpenMarketable)
@@ -76,24 +65,52 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         _setTokenPrice(tokenID, price);
     }
 
-    function getDefaultRoyaltyInfo()
+    /// @notice SET token royalty info
+    /// @param tokenID : token ID
+    /// @param receiver : address of the royalty receiver, or address(0) to reset
+    /// @param fee : fee Numerator, less than 10_000
+    function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
         public
-        view
         override (IOpenMarketable)
-        returns (address receiver, uint96 fraction)
+        existsToken(tokenID)
+        onlyOwner
+        onlyTokenOwnerOrApproved(tokenID)
     {
-        receiver = _defaultRoyaltyInfo.receiver;
-        fraction = _defaultRoyaltyInfo.fraction;
+        _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function getTokenRoyaltyInfo(uint256 tokenID)
+    /// @notice SET token royalty receiver
+    /// @param tokenID : token ID
+    /// @param receiver : address of the royalty receiver, or address(0) to reset
+    function setTokenRoyaltyReceiver(uint256 tokenID, address receiver)
+        public
+        override (IOpenMarketable)
+        existsToken(tokenID)
+        onlyOwner
+    {
+        _tokenRoyaltyInfo[tokenID].receiver = receiver;
+    }
+
+    /// @notice GET default royalty info
+    /// @return receiver : address of the royalty receiver, or address(0) to reset
+    /// @return fee : fee Numerator, less than 10_000
+    function getDefaultRoyalty() public view override (IOpenMarketable) returns (address receiver, uint96 fee) {
+        receiver = _defaultRoyaltyInfo.receiver;
+        fee = _defaultRoyaltyInfo.fee;
+    }
+
+    /// @notice GET token royalty info
+    /// @param tokenID : token ID
+    /// @return receiver : address of the royalty receiver, or address(0) to reset
+    /// @return fee : fee Numerator, less than 10_000
+    function getTokenRoyalty(uint256 tokenID)
         public
         view
         override (IOpenMarketable)
-        returns (address receiver, uint96 fraction)
+        returns (address receiver, uint96 fee)
     {
         receiver = _tokenRoyaltyInfo[tokenID].receiver;
-        fraction = _tokenRoyaltyInfo[tokenID].fraction;
+        fee = _tokenRoyaltyInfo[tokenID].fee;
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -107,6 +124,8 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID) internal virtual override (OpenERC721) {
+        _setTokenRoyalty(tokenID, _defaultRoyaltyInfo.receiver, _defaultRoyaltyInfo.fee);
+
         _pay(tokenID, defaultPrice, to, owner());
 
         super._mint(to, tokenURI, tokenID);
@@ -128,7 +147,7 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         super._transferFromBefore(from, to, tokenID);
     }
 
-    function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
+    function _setDefaultRoyalty(address receiver, uint96 fee) internal onlyOwner lessThanMaxFee(fee) {
         _defaultRoyaltyInfo = RoyaltyInfo(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);

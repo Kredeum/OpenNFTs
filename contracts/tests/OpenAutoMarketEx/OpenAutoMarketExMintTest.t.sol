@@ -86,51 +86,51 @@ abstract contract OpenAutoMarketExMintTest is Test {
 
     // Secondary market, token already minted, pay token via OpenAutoMarketEx "buy" function
     function testOpenAutoMarketExBuy() public {
-        (uint256 tokenID,) = mintTest(_collection, _minter);
+        (uint256 tokenID,) = mintTest(_collection, _owner);
 
-        changePrank(_minter);
+        changePrank(_owner);
         IERC721(_collection).setApprovalForAll(_collection, true);
         IOpenMarketable(_collection).setTokenRoyalty(tokenID, _tester, 100);
         IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
-        uint256 balMinter = _minter.balance;
+        uint256 balMinter = _owner.balance;
 
-        assertEq(IERC721(_collection).ownerOf(tokenID), _minter);
+        assertEq(IERC721(_collection).ownerOf(tokenID), _owner);
         IOpenAutoMarketEx(_collection).buy{value: 1.5 ether}(tokenID);
         assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_minter.balance, balMinter + 0.99 ether);
+        assertEq(_owner.balance, balMinter + 0.99 ether);
     }
 
     // Secondary market, token already minted, pay token via ERC721 "safeTransferFrom" function (after approval)
     // can be done by any smartcontract : for example can be used by OpenSea if following ERC2981
     function testOpenAutoMarketExBuyViaSafeTransferFrom() public {
-        (uint256 tokenID,) = mintTest(_collection, _minter);
+        (uint256 tokenID,) = mintTest(_collection, _owner);
 
-        changePrank(_minter);
+        changePrank(_owner);
         IERC721(_collection).setApprovalForAll(address(this), true);
         IOpenMarketable(_collection).setTokenRoyalty(tokenID, _tester, 100);
         IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
-        uint256 balMinter = _minter.balance;
+        uint256 balMinter = _owner.balance;
         (bool sent,) = payable(address(this)).call{value: 1.5 ether}("");
         require(sent, "Failed to send Ether");
 
         changePrank(address(this));
-        assertEq(IERC721(_collection).ownerOf(tokenID), _minter);
-        IERC721(_collection).safeTransferFrom{value: 1.5 ether}(_minter, _buyer, tokenID);
+        assertEq(IERC721(_collection).ownerOf(tokenID), _owner);
+        IERC721(_collection).safeTransferFrom{value: 1.5 ether}(_owner, _buyer, tokenID);
         assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_minter.balance, balMinter + 0.99 ether);
+        assertEq(_owner.balance, balMinter + 0.99 ether);
     }
 }

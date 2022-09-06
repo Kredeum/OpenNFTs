@@ -96,7 +96,8 @@ contract OpenNFTsExTest is
         override (ERC2981Test, OpenMarketableTest)
         returns (uint256 tokenID)
     {
-        (tokenID,) = mintTest(collection, receiver);
+        changePrank(OpenNFTsEx(payable(collection)).owner());
+        (tokenID,) = (OpenNFTsEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
         OpenNFTsEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
     }
 

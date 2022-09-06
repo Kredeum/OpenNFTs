@@ -83,7 +83,8 @@ contract OpenAutoMarketExTest is
         override (ERC2981Test, OpenMarketableTest)
         returns (uint256 tokenID)
     {
-        (tokenID,) = mintTest(collection, receiver);
+        changePrank(OpenAutoMarketEx(payable(collection)).owner());
+        (tokenID,) = (OpenAutoMarketEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
         OpenAutoMarketEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
     }
 

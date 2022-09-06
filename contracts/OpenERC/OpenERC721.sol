@@ -114,6 +114,8 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
 
     function _burn(uint256 tokenID) internal virtual {
         address owner = ownerOf(tokenID);
+        require(owner != address(0), "Invalid token ID");
+
         assert(_balances[owner] > 0);
 
         _balances[owner] -= 1;

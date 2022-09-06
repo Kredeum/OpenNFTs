@@ -30,7 +30,7 @@ import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 abstract contract OpenERC2981 is IERC2981, OpenERC165 {
     struct RoyaltyInfo {
         address receiver;
-        uint96 fraction;
+        uint96 fee;
     }
 
     RoyaltyInfo internal _defaultRoyaltyInfo;
@@ -62,7 +62,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
             royalty = _defaultRoyaltyInfo;
         }
 
-        royaltyAmount = (price * royalty.fraction) / _MAX_FEE;
+        royaltyAmount = (price * royalty.fee) / _MAX_FEE;
 
         return (royalty.receiver, royaltyAmount);
     }

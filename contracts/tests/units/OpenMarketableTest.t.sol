@@ -33,7 +33,7 @@ abstract contract OpenMarketableTest is Test {
     function setUpMarketable() public {
         _collection = constructorTest(_owner);
 
-        _tokenID0 = setRoyaltyTest(_collection, _minter, 420);
+        _tokenID0 = setRoyaltyTest(_collection, _owner, 420);
     }
 
     function testSetDefaultRoyalty(uint96 fee, uint256 price) public {
@@ -55,8 +55,8 @@ abstract contract OpenMarketableTest is Test {
         vm.assume(price < 2 ** 128);
         vm.assume(fee < 10_000);
 
-        assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
-        changePrank(_minter);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
+        changePrank(_owner);
         IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, fee);
 
         (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(_tokenID0, price);
@@ -71,7 +71,7 @@ abstract contract OpenMarketableTest is Test {
     function testSetTokenPrice(uint256 price) public {
         vm.assume(price < 2 ** 128);
 
-        changePrank(_minter);
+        changePrank(_owner);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, price);
         assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), price);
     }
@@ -79,16 +79,10 @@ abstract contract OpenMarketableTest is Test {
     function testSetTokenPriceFromDefault(uint256 price) public {
         vm.assume(price < 2 ** 128);
 
-        changePrank(_minter);
-        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0);
-        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), 0);
-
         changePrank(_owner);
-        IOpenMarketable(payable(_collection)).setDefaultPrice(price);
-
-        changePrank(_minter);
-        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0);
-        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), price);
+        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), 0);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
+        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), 1 ether);
     }
 
     function testFailSetDefaultPriceTooExpensive(uint256 price) public {
@@ -126,9 +120,15 @@ abstract contract OpenMarketableTest is Test {
     }
 
     function testTokenOwner() public {
-        changePrank(_minter);
+        changePrank(_owner);
         IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
+    }
+
+    function testFailTokenOwner() public {
+        /// must be collection owner
+        changePrank(_minter);
+        IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
     }
 
     function testFailSetTokenRoyaltyNotOwner() public {
