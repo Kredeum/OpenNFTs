@@ -82,11 +82,22 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         return !checks[0] && checks[1] && (checks[2] || checks[6]);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC165)
+        returns (bool)
+    {
         return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
     }
 
-    function checkErcInterfaces(address smartcontract) public view override (IOpenChecker) returns (bool[] memory) {
+    function checkErcInterfaces(address smartcontract)
+        public
+        view
+        override (IOpenChecker)
+        returns (bool[] memory)
+    {
         return checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
     }
 
@@ -104,7 +115,8 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
 
         if (erc) {
             for (uint256 j = 0; j < _ercInterfaceIds.length; j++) {
-                interfaceIdsChecks[i++] = IERC165(smartcontract).supportsInterface(_ercInterfaceIds[j]);
+                interfaceIdsChecks[i++] =
+                    IERC165(smartcontract).supportsInterface(_ercInterfaceIds[j]);
             }
         }
         for (uint256 k = 0; k < interfaceIds.length; k++) {

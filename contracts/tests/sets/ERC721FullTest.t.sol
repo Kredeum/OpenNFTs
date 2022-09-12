@@ -6,8 +6,14 @@ import "OpenNFTs/contracts/tests/units/ERC721Test.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC721MetadataTest.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC721EnumerableTest.t.sol";
 
-abstract contract ERC721FullTest is ERC165Test, ERC721Test, ERC721MetadataTest, ERC721EnumerableTest {
-    string internal constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
+abstract contract ERC721FullTest is
+    ERC165Test,
+    ERC721Test,
+    ERC721MetadataTest,
+    ERC721EnumerableTest
+{
+    string internal constant _TOKEN_URI =
+        "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
     bool private _transferable = true;
 
     function constructorTest(address owner_)

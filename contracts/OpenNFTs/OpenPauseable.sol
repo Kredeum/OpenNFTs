@@ -42,8 +42,15 @@ abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
         return _paused;
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC173) returns (bool) {
-        return interfaceId == type(IOpenPauseable).interfaceId || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC173)
+        returns (bool)
+    {
+        return interfaceId == type(IOpenPauseable).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 
     function _setPaused(bool paused_) private {

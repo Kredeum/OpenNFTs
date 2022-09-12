@@ -47,10 +47,15 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         override (OpenRegistry, OpenGetter)
         returns (bool)
     {
-        return interfaceId == type(IOpenResolver).interfaceId || super.supportsInterface(interfaceId);
+        return interfaceId == type(IOpenResolver).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 
-    function getCollectionsInfos(address[] memory collections, address account, bytes4[] memory interfaceIds)
+    function getCollectionsInfos(
+        address[] memory collections,
+        address account,
+        bytes4[] memory interfaceIds
+    )
         public
         view
         override (IOpenResolver)
@@ -67,7 +72,8 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         view
         returns (CollectionInfos[] memory collectionsInfos)
     {
-        CollectionInfos[] memory collectionsInfosAll = getCollectionsInfos(getAddresses(), account, interfaceIds);
+        CollectionInfos[] memory collectionsInfosAll =
+            getCollectionsInfos(getAddresses(), account, interfaceIds);
 
         uint256 len;
         for (uint256 i = 0; i < collectionsInfosAll.length; i++) {

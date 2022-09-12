@@ -63,7 +63,11 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         emit ApprovalForAll(msg.sender, operator, approved);
     }
 
-    function transferFrom(address from, address to, uint256 tokenID) external payable override (IERC721) {
+    function transferFrom(address from, address to, uint256 tokenID)
+        external
+        payable
+        override (IERC721)
+    {
         _transferFrom(from, to, tokenID);
     }
 
@@ -75,11 +79,21 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         _safeTransferFrom(from, to, tokenID, data);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenID) public payable override (IERC721) {
+    function safeTransferFrom(address from, address to, uint256 tokenID)
+        public
+        payable
+        override (IERC721)
+    {
         _safeTransferFrom(from, to, tokenID, "");
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC165)
+        returns (bool)
+    {
         return interfaceId == 0x80ac58cd // = type(IERC721).interfaceId
             || super.supportsInterface(interfaceId);
     }
@@ -89,15 +103,32 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         return _balances[owner];
     }
 
-    function ownerOf(uint256 tokenID) public view override (IERC721) existsToken(tokenID) returns (address) {
+    function ownerOf(uint256 tokenID)
+        public
+        view
+        override (IERC721)
+        existsToken(tokenID)
+        returns (address)
+    {
         return _owners[tokenID];
     }
 
-    function getApproved(uint256 tokenID) public view override (IERC721) existsToken(tokenID) returns (address) {
+    function getApproved(uint256 tokenID)
+        public
+        view
+        override (IERC721)
+        existsToken(tokenID)
+        returns (address)
+    {
         return _tokenApprovals[tokenID];
     }
 
-    function isApprovedForAll(address owner, address operator) public view override (IERC721) returns (bool) {
+    function isApprovedForAll(address owner, address operator)
+        public
+        view
+        override (IERC721)
+        returns (bool)
+    {
         return _operatorApprovals[owner][operator];
     }
 
@@ -137,13 +168,18 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         ownerOrOperator = (tokenOwner == spender || isApprovedForAll(tokenOwner, spender));
     }
 
-    function _safeTransferFrom(address from, address to, uint256 tokenID, bytes memory data) private {
+    function _safeTransferFrom(address from, address to, uint256 tokenID, bytes memory data)
+        private
+    {
         _transferFrom(from, to, tokenID);
 
         require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Receiver");
     }
 
-    function _transferFrom(address from, address to, uint256 tokenID) private onlyTokenOwnerOrApproved(tokenID) {
+    function _transferFrom(address from, address to, uint256 tokenID)
+        private
+        onlyTokenOwnerOrApproved(tokenID)
+    {
         require(from != address(0), "Transfer from zero address");
         require(to != address(0), "Transfer to zero address");
         require(from == ownerOf(tokenID), "From not owner");
@@ -161,13 +197,21 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         emit Transfer(from, to, tokenID);
     }
 
-    function _isERC721Receiver(address from, address to, uint256 tokenID, bytes memory data) private returns (bool) {
+    function _isERC721Receiver(address from, address to, uint256 tokenID, bytes memory data)
+        private
+        returns (bool)
+    {
         return to.code.length == 0
             || IERC721TokenReceiver(to).onERC721Received(msg.sender, from, tokenID, data)
                 == IERC721TokenReceiver.onERC721Received.selector;
     }
 
-    function _isOwnerOrApproved(address spender, uint256 tokenID) private view returns (bool ownerOrApproved) {
-        ownerOrApproved = (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
+    function _isOwnerOrApproved(address spender, uint256 tokenID)
+        private
+        view
+        returns (bool ownerOrApproved)
+    {
+        ownerOrApproved =
+            (_isOwnerOrOperator(spender, tokenID) || (getApproved(tokenID) == spender));
     }
 }

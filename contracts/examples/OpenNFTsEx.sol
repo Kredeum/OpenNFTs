@@ -61,7 +61,12 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 
-    function initialize(string memory name_, string memory symbol_, address owner_, bool[] memory options)
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        bool[] memory options
+    )
         external
         override (IOpenNFTsEx)
     {

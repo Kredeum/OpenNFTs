@@ -15,7 +15,10 @@ abstract contract ERC2981Test is Test {
 
     function constructorTest(address owner_) public virtual returns (address contract_);
 
-    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
+    function mintTest(address collection_, address minter_)
+        public
+        virtual
+        returns (uint256, string memory);
 
     function setRoyaltyTest(address collection_, address receiver_, uint96 fee_)
         public

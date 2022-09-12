@@ -35,7 +35,13 @@ import "OpenNFTs/contracts/OpenERC/OpenERC2981.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenGuard.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
-abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, OpenERC2981, OpenGuard {
+abstract contract OpenMarketable is
+    IOpenMarketable,
+    OpenERC721,
+    OpenERC173,
+    OpenERC2981,
+    OpenGuard
+{
     mapping(uint256 => uint256) public tokenPrice;
     uint256 public defaultPrice;
 
@@ -50,7 +56,11 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     /// @notice SET default royalty info
     /// @param receiver : address of the royalty receiver, or address(0) to reset
     /// @param fee : fee Numerator, less than 10000
-    function setDefaultRoyalty(address receiver, uint96 fee) public override (IOpenMarketable) onlyOwner {
+    function setDefaultRoyalty(address receiver, uint96 fee)
+        public
+        override (IOpenMarketable)
+        onlyOwner
+    {
         _setDefaultRoyalty(receiver, fee);
     }
 
@@ -94,7 +104,12 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
     /// @notice GET default royalty info
     /// @return receiver : address of the royalty receiver, or address(0) to reset
     /// @return fee : fee Numerator, less than 10_000
-    function getDefaultRoyalty() public view override (IOpenMarketable) returns (address receiver, uint96 fee) {
+    function getDefaultRoyalty()
+        public
+        view
+        override (IOpenMarketable)
+        returns (address receiver, uint96 fee)
+    {
         receiver = _defaultRoyaltyInfo.receiver;
         fee = _defaultRoyaltyInfo.fee;
     }
@@ -120,10 +135,15 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         override (OpenERC721, OpenERC173, OpenERC2981)
         returns (bool)
     {
-        return interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);
+        return interfaceId == type(IOpenMarketable).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 
-    function _mint(address to, string memory tokenURI, uint256 tokenID) internal virtual override (OpenERC721) {
+    function _mint(address to, string memory tokenURI, uint256 tokenID)
+        internal
+        virtual
+        override (OpenERC721)
+    {
         _setTokenRoyalty(tokenID, _defaultRoyaltyInfo.receiver, _defaultRoyaltyInfo.fee);
 
         _pay(tokenID, defaultPrice, to, owner());
@@ -138,7 +158,11 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         super._burn(tokenID);
     }
 
-    function _transferFromBefore(address from, address to, uint256 tokenID) internal virtual override (OpenERC721) {
+    function _transferFromBefore(address from, address to, uint256 tokenID)
+        internal
+        virtual
+        override (OpenERC721)
+    {
         /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
         _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
 
@@ -147,13 +171,20 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         super._transferFromBefore(from, to, tokenID);
     }
 
-    function _setDefaultRoyalty(address receiver, uint96 fee) internal onlyOwner lessThanMaxFee(fee) {
+    function _setDefaultRoyalty(address receiver, uint96 fee)
+        internal
+        onlyOwner
+        lessThanMaxFee(fee)
+    {
         _defaultRoyaltyInfo = RoyaltyInfo(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);
     }
 
-    function _setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee) internal lessThanMaxFee(fee) {
+    function _setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
+        internal
+        lessThanMaxFee(fee)
+    {
         _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
@@ -171,7 +202,10 @@ abstract contract OpenMarketable is IOpenMarketable, OpenERC721, OpenERC173, Ope
         emit SetDefaultPrice(price);
     }
 
-    function _pay(uint256 tokenID, uint256 price, address buyer, address seller) private reEntryGuard {
+    function _pay(uint256 tokenID, uint256 price, address buyer, address seller)
+        private
+        reEntryGuard
+    {
         require(msg.value >= price, "Not enough funds");
         if (msg.value == 0) {
             return;

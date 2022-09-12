@@ -38,7 +38,8 @@ contract OpenAutoMarketExTest is
     OpenMarketableTest,
     OpenAutoMarketExMintTest
 {
-    string private constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
+    string private constant _TOKEN_URI =
+        "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
 
     function constructorTest(address owner)
         public
@@ -61,7 +62,13 @@ contract OpenAutoMarketExTest is
 
     function mintTest(address collection, address minter)
         public
-        override (ERC721Test, ERC721TransferableTest, ERC2981Test, OpenMarketableTest, OpenAutoMarketExMintTest)
+        override (
+            ERC721Test,
+            ERC721TransferableTest,
+            ERC2981Test,
+            OpenMarketableTest,
+            OpenAutoMarketExMintTest
+        )
         returns (uint256 tokenID, string memory tokenURI)
     {
         changePrank(minter);

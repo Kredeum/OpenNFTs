@@ -6,7 +6,9 @@ interface IERC721 {
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external payable;
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data)
+        external
+        payable;
 
     function safeTransferFrom(address from, address to, uint256 tokenId) external payable;
 

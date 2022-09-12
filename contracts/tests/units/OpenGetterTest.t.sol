@@ -18,7 +18,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     uint256 private _tokenID0;
     uint256 private _tokenID1;
     uint256 private _tokenID2;
-    string private constant _TOKEN_URI = "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
+    string private constant _TOKEN_URI =
+        "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
 
     bytes4 private _idNull = 0xffffffff;
     bytes4 private _idIERC165 = type(IERC165).interfaceId;
@@ -45,7 +46,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     function testOpenGetterGetNftInfos() public {
-        NftInfos memory nftInfos = IOpenGetter(_resolver).getNftInfos(address(_collection), _tokenID0, _random);
+        NftInfos memory nftInfos =
+            IOpenGetter(_resolver).getNftInfos(address(_collection), _tokenID0, _random);
         assertEq(nftInfos.tokenID, _tokenID0);
         assertEq(nftInfos.tokenURI, _TOKEN_URI);
         assertEq(nftInfos.owner, _owner);

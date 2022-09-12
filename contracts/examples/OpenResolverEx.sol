@@ -45,7 +45,13 @@ contract OpenResolverEx is IOpenResolverEx, OpenResolver {
         collectionsInfos = _getCollectionsInfos(account, _interfaceIds);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override (OpenResolver) returns (bool) {
-        return interfaceId == type(IOpenResolverEx).interfaceId || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override (OpenResolver)
+        returns (bool)
+    {
+        return interfaceId == type(IOpenResolverEx).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 }

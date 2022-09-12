@@ -23,7 +23,10 @@ abstract contract OpenMarketableTest is Test {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
+    function mintTest(address collection_, address minter_)
+        public
+        virtual
+        returns (uint256, string memory);
 
     function setRoyaltyTest(address collection_, address receiver_, uint96 fee_)
         public

@@ -39,5 +39,8 @@ interface IOpenMarketable {
 
     function getDefaultRoyalty() external view returns (address receiver, uint96 fee);
 
-    function getTokenRoyalty(uint256 tokenID) external view returns (address receiver, uint96 fee);
+    function getTokenRoyalty(uint256 tokenID)
+        external
+        view
+        returns (address receiver, uint96 fee);
 }

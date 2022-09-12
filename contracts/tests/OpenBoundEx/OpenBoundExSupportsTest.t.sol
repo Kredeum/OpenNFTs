@@ -25,7 +25,8 @@ abstract contract OpenBoundExSupportsTest is Test {
     }
 
     function testOpenBoundExCheckErcInterfaces() public {
-        bool[11] memory expected = [false, true, true, true, true, false, false, false, false, true, false];
+        bool[11] memory expected =
+            [false, true, true, true, true, false, false, false, false, true, false];
 
         bool[] memory checks = IOpenChecker(_resolver).checkErcInterfaces(_collection);
 
@@ -49,7 +50,8 @@ abstract contract OpenBoundExSupportsTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenChecker(_resolver).checkSupportedInterfaces(_collection, false, interfaceIds);
+        bool[] memory checks =
+            IOpenChecker(_resolver).checkSupportedInterfaces(_collection, false, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             assertEq(checks[i], expected[i]);

@@ -67,7 +67,13 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         return (royalty.receiver, royaltyAmount);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC165)
+        returns (bool)
+    {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
     }
 }

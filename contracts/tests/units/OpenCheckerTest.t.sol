@@ -62,7 +62,8 @@ abstract contract OpenCheckerTest is Test {
     }
 
     function testOpenCheckerErcSupportedInterfaces() public {
-        bool[11] memory expected = [false, true, false, false, false, false, false, false, false, true, false];
+        bool[11] memory expected =
+            [false, true, false, false, false, false, false, false, false, true, false];
 
         bool[] memory checks = IOpenChecker(_resolver).checkErcInterfaces(_resolver);
 
@@ -80,7 +81,8 @@ abstract contract OpenCheckerTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenChecker(_resolver).checkSupportedInterfaces(_resolver, false, interfaceIds);
+        bool[] memory checks =
+            IOpenChecker(_resolver).checkSupportedInterfaces(_resolver, false, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             assertEq(checks[i], expected[i]);

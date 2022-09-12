@@ -45,7 +45,8 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
         override (OpenERC165)
         returns (bool)
     {
-        return interfaceId == type(IOpenCloneable).interfaceId || super.supportsInterface(interfaceId);
+        return interfaceId == type(IOpenCloneable).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 
     function _initialize(string memory template_, uint256 version_) internal {

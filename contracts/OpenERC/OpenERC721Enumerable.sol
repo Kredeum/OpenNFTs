@@ -58,16 +58,31 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         return _allTokens.length;
     }
 
-    function tokenByIndex(uint256 index) external view override (IERC721Enumerable) returns (uint256) {
+    function tokenByIndex(uint256 index)
+        external
+        view
+        override (IERC721Enumerable)
+        returns (uint256)
+    {
         require(index < _allTokens.length, "Invalid index!");
         return _allTokens[index];
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC721) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC721)
+        returns (bool)
+    {
         return interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
     }
 
-    function _mint(address to, string memory tokenURI, uint256 tokenID) internal virtual override (OpenERC721) {
+    function _mint(address to, string memory tokenURI, uint256 tokenID)
+        internal
+        virtual
+        override (OpenERC721)
+    {
         _addOwnedToken(to, tokenID);
 
         _allTokensIndex[tokenID] = _allTokens.length;
@@ -94,7 +109,11 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         super._burn(tokenID);
     }
 
-    function _transferFromBefore(address from, address to, uint256 tokenID) internal virtual override (OpenERC721) {
+    function _transferFromBefore(address from, address to, uint256 tokenID)
+        internal
+        virtual
+        override (OpenERC721)
+    {
         _removeOwnedToken(from, tokenID);
         _addOwnedToken(to, tokenID);
 

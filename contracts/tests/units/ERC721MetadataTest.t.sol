@@ -16,7 +16,10 @@ abstract contract ERC721MetadataTest is Test {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
+    function mintTest(address collection_, address minter_)
+        public
+        virtual
+        returns (uint256, string memory);
 
     function setUpERC721Metadata(string memory name_, string memory symbol_) public {
         _name = name_;

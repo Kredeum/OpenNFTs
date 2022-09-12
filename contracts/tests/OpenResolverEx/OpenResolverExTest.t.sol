@@ -11,7 +11,13 @@ import "OpenNFTs/contracts/tests/units/OpenCheckerTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenGetterTest.t.sol";
 import "OpenNFTs/contracts/tests/units/OpenRegistryTest.t.sol";
 
-contract OpenResolverExTest is ITest, OpenResolverTest, OpenCheckerTest, OpenGetterTest, OpenRegistryTest {
+contract OpenResolverExTest is
+    ITest,
+    OpenResolverTest,
+    OpenCheckerTest,
+    OpenGetterTest,
+    OpenRegistryTest
+{
     function constructorTest(address owner)
         public
         override (OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)

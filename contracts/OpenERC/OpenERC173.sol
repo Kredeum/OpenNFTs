@@ -44,7 +44,13 @@ abstract contract OpenERC173 is IERC173, OpenERC165 {
         return _owner;
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC165)
+        returns (bool)
+    {
         return interfaceId == 0x7f5828d0 || super.supportsInterface(interfaceId);
     }
 

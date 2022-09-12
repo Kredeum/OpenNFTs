@@ -26,7 +26,8 @@ abstract contract OpenNFTsExSupportsTest is Test {
     }
 
     function testOpenNFTsExCheckErcInterfaces() public {
-        bool[11] memory expected = [false, true, true, true, true, false, false, false, false, true, true];
+        bool[11] memory expected =
+            [false, true, true, true, true, false, false, false, false, true, true];
 
         bool[] memory checks = IOpenChecker(_resolver).checkErcInterfaces(_collection);
 
@@ -53,7 +54,8 @@ abstract contract OpenNFTsExSupportsTest is Test {
             interfaceIds[i] = ids[i];
         }
 
-        bool[] memory checks = IOpenChecker(_resolver).checkSupportedInterfaces(_collection, false, interfaceIds);
+        bool[] memory checks =
+            IOpenChecker(_resolver).checkSupportedInterfaces(_collection, false, interfaceIds);
 
         for (uint256 i = 0; i < ids.length; i++) {
             console.log("testOpenNFTsExCheckErcInterfaces ~ i", i);

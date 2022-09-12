@@ -22,7 +22,12 @@ import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
 contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     uint256 private _tokenID;
 
-    function mint(string memory tokenURI) external payable override (IOpenAutoMarketEx) returns (uint256 tokenID) {
+    function mint(string memory tokenURI)
+        external
+        payable
+        override (IOpenAutoMarketEx)
+        returns (uint256 tokenID)
+    {
         tokenID = _tokenID++;
         OpenMarketable._mint(msg.sender, tokenURI, tokenID);
     }
@@ -41,7 +46,13 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         OpenERC173._initialize(owner);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override (OpenMarketable) returns (bool) {
-        return interfaceId == type(IOpenAutoMarketEx).interfaceId || super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override (OpenMarketable)
+        returns (bool)
+    {
+        return interfaceId == type(IOpenAutoMarketEx).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 }

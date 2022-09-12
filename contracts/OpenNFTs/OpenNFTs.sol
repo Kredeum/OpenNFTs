@@ -46,7 +46,14 @@ import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
 
 /// @title OpenNFTs smartcontract
-contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMarketable, OpenPauseable, OpenCloneable {
+contract OpenNFTs is
+    IOpenNFTs,
+    OpenERC721Metadata,
+    OpenERC721Enumerable,
+    OpenMarketable,
+    OpenPauseable,
+    OpenCloneable
+{
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext;
 
@@ -58,7 +65,11 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
 
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
-    function burn(uint256 tokenID) external override (IOpenNFTs) onlyTokenOwnerOrApproved(tokenID) {
+    function burn(uint256 tokenID)
+        external
+        override (IOpenNFTs)
+        onlyTokenOwnerOrApproved(tokenID)
+    {
         _burn(tokenID);
     }
 
@@ -69,7 +80,10 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
 
     /// @notice withdraw token
     function withdraw(address token) external override (IOpenNFTs) onlyOwner {
-        require(IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))), "Withdraw failed");
+        require(
+            IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))),
+            "Withdraw failed"
+        );
     }
 
     function mint(address minter, string memory tokenURI)
@@ -88,7 +102,9 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
         public
         view
         virtual
-        override (OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable)
+        override (
+            OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable
+        )
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);
@@ -117,7 +133,10 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
         super._mint(minter, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable) {
+    function _burn(uint256 tokenID)
+        internal
+        override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
+    {
         super._burn(tokenID);
     }
 

@@ -20,7 +20,10 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
+    function mintTest(address collection_, address minter_)
+        public
+        virtual
+        returns (uint256, string memory);
 
     function setUpERC721Transferable() public {
         _collection = constructorTest(_owner);

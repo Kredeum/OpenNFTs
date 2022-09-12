@@ -67,7 +67,12 @@ contract OpenBoundEx is
     string private constant _BASE_URI = "ipfs://";
 
     /// IOpenBoundEx
-    function initialize(string memory name_, string memory symbol_, address owner_, uint256 maxSupply_)
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        uint256 maxSupply_
+    )
         external
         override (IOpenBoundEx)
     {
@@ -79,11 +84,20 @@ contract OpenBoundEx is
         maxSupply = maxSupply_;
     }
 
-    function mint(uint256 cid) external override (IOpenBoundEx) onlyWhenNotPaused returns (uint256 tokenID) {
+    function mint(uint256 cid)
+        external
+        override (IOpenBoundEx)
+        onlyWhenNotPaused
+        returns (uint256 tokenID)
+    {
         tokenID = OpenBoundEx._mint(msg.sender, cid);
     }
 
-    function claim(uint256 tokenID, uint256 cid) external override (IOpenBoundEx) onlyWhenNotPaused {
+    function claim(uint256 tokenID, uint256 cid)
+        external
+        override (IOpenBoundEx)
+        onlyWhenNotPaused
+    {
         require(tokenID == _tokenID(msg.sender, cid), "Not owner");
         OpenBoundEx._mint(msg.sender, cid);
     }
@@ -95,7 +109,12 @@ contract OpenBoundEx is
         _burn(tokenID);
     }
 
-    function getMyTokenID(uint256 cid) external view override (IOpenBoundEx) returns (uint256 myTokenID) {
+    function getMyTokenID(uint256 cid)
+        external
+        view
+        override (IOpenBoundEx)
+        returns (uint256 myTokenID)
+    {
         myTokenID = _tokenID(msg.sender, cid);
     }
 
@@ -104,7 +123,12 @@ contract OpenBoundEx is
     }
 
     /// IERC721Enumerable
-    function totalSupply() external view override (IERC721Enumerable) returns (uint256 tokensLength) {
+    function totalSupply()
+        external
+        view
+        override (IERC721Enumerable)
+        returns (uint256 tokensLength)
+    {
         tokensLength = _tokens.length;
     }
 
@@ -119,7 +143,12 @@ contract OpenBoundEx is
         tokenID = _tokenOfOwner[tokenOwner];
     }
 
-    function tokenByIndex(uint256 index) external view override (IERC721Enumerable) returns (uint256 tokenID) {
+    function tokenByIndex(uint256 index)
+        external
+        view
+        override (IERC721Enumerable)
+        returns (uint256 tokenID)
+    {
         require(index < _tokens.length, "Invalid index");
 
         tokenID = _tokens[index];
@@ -136,7 +165,12 @@ contract OpenBoundEx is
         return _tokenURI(_cidOfToken[tokenID]);
     }
 
-    function getTokenID(address addr, uint256 cid) external pure override (IOpenBoundEx) returns (uint256 tokenID) {
+    function getTokenID(address addr, uint256 cid)
+        external
+        pure
+        override (IOpenBoundEx)
+        returns (uint256 tokenID)
+    {
         tokenID = _tokenID(addr, cid);
     }
 
@@ -147,8 +181,10 @@ contract OpenBoundEx is
         override (OpenPauseable, OpenCloneable, OpenERC721, OpenChecker)
         returns (bool)
     {
-        return interfaceId == type(IOpenBoundEx).interfaceId || interfaceId == type(IERC721Metadata).interfaceId
-            || interfaceId == type(IERC721Enumerable).interfaceId || super.supportsInterface(interfaceId);
+        return interfaceId == type(IOpenBoundEx).interfaceId
+            || interfaceId == type(IERC721Metadata).interfaceId
+            || interfaceId == type(IERC721Enumerable).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 
     function _mint(address to, uint256 cid) internal returns (uint256 tokenID) {
@@ -165,7 +201,10 @@ contract OpenBoundEx is
         OpenBoundEx._mint(to, _tokenURI(cid), tokenID);
     }
 
-    function _mint(address to, string memory newTokenURI, uint256 tokenID) internal override (OpenERC721) {
+    function _mint(address to, string memory newTokenURI, uint256 tokenID)
+        internal
+        override (OpenERC721)
+    {
         super._mint(to, newTokenURI, tokenID);
     }
 

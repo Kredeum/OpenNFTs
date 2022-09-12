@@ -30,7 +30,13 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 
 abstract contract OpenGetter is IOpenGetter, OpenChecker {
-    function supportsInterface(bytes4 interfaceId) public view virtual override (OpenChecker) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenChecker)
+        returns (bool)
+    {
         return interfaceId == type(IOpenGetter).interfaceId || super.supportsInterface(interfaceId);
     }
 
@@ -76,8 +82,9 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
 
                 nftsInfos = new NftInfos[](count);
                 for (uint256 i; i < count; i++) {
-                    nftsInfos[i] =
-                        _getNftInfos(collection, IERC721Enumerable(collection).tokenByIndex(offset + i), account);
+                    nftsInfos[i] = _getNftInfos(
+                        collection, IERC721Enumerable(collection).tokenByIndex(offset + i), account
+                    );
                 }
             } else {
                 total = IERC721(collection).balanceOf(account);
@@ -88,7 +95,9 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
                 nftsInfos = new NftInfos[](count);
                 for (uint256 i; i < count; i++) {
                     nftsInfos[i] = _getNftInfos(
-                        collection, IERC721Enumerable(collection).tokenOfOwnerByIndex(account, offset + i), account
+                        collection,
+                        IERC721Enumerable(collection).tokenOfOwnerByIndex(account, offset + i),
+                        account
                     );
                 }
             }

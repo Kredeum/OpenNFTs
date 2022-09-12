@@ -51,7 +51,11 @@ contract OpenNFTsExTest is
         return constructorTest(owner, true);
     }
 
-    function constructorTest(address owner, bool init) public override (OpenNFTsExInitializeTest) returns (address) {
+    function constructorTest(address owner, bool init)
+        public
+        override (OpenNFTsExInitializeTest)
+        returns (address)
+    {
         changePrank(owner);
         bool[] memory options = new bool[](1);
         options[0] = true;
@@ -82,7 +86,10 @@ contract OpenNFTsExTest is
         return (OpenNFTsEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
     }
 
-    function burnTest(address collection, uint256 tokenID) public override (OpenNFTsTest, OpenNFTsBurnTest) {
+    function burnTest(address collection, uint256 tokenID)
+        public
+        override (OpenNFTsTest, OpenNFTsBurnTest)
+    {
         changePrank(OpenNFTsEx(payable(collection)).ownerOf(tokenID));
         OpenNFTsEx(payable(collection)).burn(tokenID);
     }

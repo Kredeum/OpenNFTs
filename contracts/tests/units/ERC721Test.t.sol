@@ -18,7 +18,10 @@ abstract contract ERC721Test is Test, IERC721Events {
 
     function constructorTest(address owner_) public virtual returns (address);
 
-    function mintTest(address collection_, address minter_) public virtual returns (uint256, string memory);
+    function mintTest(address collection_, address minter_)
+        public
+        virtual
+        returns (uint256, string memory);
 
     function burnTest(address collection_, uint256 tokenID_) public virtual;
 
