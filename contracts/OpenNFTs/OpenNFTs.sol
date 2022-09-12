@@ -47,8 +47,6 @@ import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
 
 /// @title OpenNFTs smartcontract
 contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMarketable, OpenPauseable, OpenCloneable {
-    bool private _openNFTsInitialized;
-
     /// @notice tokenID of next minted NFT
     uint256 public tokenIdNext;
 
@@ -102,9 +100,6 @@ contract OpenNFTs is IOpenNFTs, OpenERC721Metadata, OpenERC721Enumerable, OpenMa
     /// @param owner_ owner of the NFT Collection
     // solhint-disable-next-line comprehensive-interface
     function _initialize(string memory name_, string memory symbol_, address owner_) internal {
-        require(_openNFTsInitialized == false, "Already initialized");
-        _openNFTsInitialized = true;
-
         tokenIdNext = 1;
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);

@@ -5,5 +5,9 @@ out = 'out'
 solc_version='0.8.9'
 
 [fmt]
+line_length = 100
+bracket_spacing = false
 number_underscore = "thousands"
+
+
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

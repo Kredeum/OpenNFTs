@@ -7,4 +7,6 @@ interface IOpenCloneable {
     function template() external view returns (string memory);
 
     function version() external view returns (uint256);
+
+    function parent() external view returns (address);
 }
