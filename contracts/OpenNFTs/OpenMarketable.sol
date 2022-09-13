@@ -171,11 +171,7 @@ abstract contract OpenMarketable is
         super._transferFromBefore(from, to, tokenID);
     }
 
-    function _setDefaultRoyalty(address receiver, uint96 fee)
-        internal
-        onlyOwner
-        lessThanMaxFee(fee)
-    {
+    function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
         _defaultRoyaltyInfo = RoyaltyInfo(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);

@@ -40,7 +40,7 @@ abstract contract OpenNFTsExBuyTest is Test {
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
-        uint256 balMinter = _minter.balance;
+        uint256 balOwner = _owner.balance;
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
         IOpenNFTsEx(_collection).buy{value: 1.5 ether}(_tokenID0);
@@ -49,7 +49,7 @@ abstract contract OpenNFTsExBuyTest is Test {
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_owner.balance, balMinter + 0.99 ether);
+        assertEq(_owner.balance, balOwner + 0.99 ether);
     }
 
     function testFailBuyTwice() public {
