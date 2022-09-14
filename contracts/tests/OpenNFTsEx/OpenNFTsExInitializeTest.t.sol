@@ -22,23 +22,21 @@ abstract contract OpenNFTsExInitializeTest is Test {
         _options[0] = true;
     }
 
-    function testInitializeName() public {
-        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
-        // assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
-    }
-
-    function testInitializeSymbol() public {
-        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
+    function testInitializeDirect() public {
+        IOpenCloneable(_collection).initialize(
+            abi.encode("OpenERC721Test", "TEST", _owner, _options)
+        );
+        assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
         assertEq(IERC721Metadata(_collection).symbol(), "TEST");
-    }
-
-    function testInitializeOwner() public {
-        IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
         assertEq(IERC173(_collection).owner(), _owner);
+        assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 
-    function testInitializeOpen() public {
+    function testInitializeParam() public {
         IOpenNFTsEx(_collection).initialize("OpenERC721Test", "TEST", _owner, _options);
+        assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
+        assertEq(IERC721Metadata(_collection).symbol(), "TEST");
+        assertEq(IERC173(_collection).owner(), _owner);
         assertEq(IOpenNFTsEx(_collection).open(), true);
     }
 

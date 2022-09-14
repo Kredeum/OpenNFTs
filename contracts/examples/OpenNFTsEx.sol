@@ -61,19 +61,6 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 
-    function initialize(
-        string memory name_,
-        string memory symbol_,
-        address owner_,
-        bool[] memory options
-    )
-        external
-        override (IOpenNFTsEx)
-    {
-        OpenNFTs._initialize(name_, symbol_, owner_);
-        open = options[0];
-    }
-
     function mint(string memory tokenURI)
         external
         override (IOpenNFTsEx)
@@ -82,6 +69,25 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         returns (uint256)
     {
         return OpenNFTs.mint(msg.sender, tokenURI);
+    }
+
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        bool[] memory options
+    )
+        public
+        override (IOpenNFTsEx)
+    {
+        OpenNFTs._initialize(name_, symbol_, owner_);
+        open = options[0];
+    }
+
+    function initialize(bytes memory params) public override (OpenCloneable) {
+        (string memory name, string memory symbol, address owner, bool[] memory options) =
+            abi.decode(params, (string, string, address, bool[]));
+        initialize(name, symbol, owner, options);
     }
 
     function supportsInterface(bytes4 interfaceId) public view override (OpenNFTs) returns (bool) {

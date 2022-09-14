@@ -4,12 +4,13 @@ pragma solidity 0.8.9;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/ITest.sol";
-import "OpenNFTs/contracts/examples/OpenTesterEx.sol";
+import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
+import "OpenNFTs/contracts/examples/OpenClonerEx.sol";
 import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
 
-contract OpenTesterExTest is Test {
+contract OpenClonerExTest is Test {
     OpenNFTsEx private _collection;
-    OpenTesterEx private _cloner;
+    OpenClonerEx private _cloner;
     address private _owner = address(0x5);
 
     function setUp() public {
@@ -19,14 +20,14 @@ contract OpenTesterExTest is Test {
         _collection = new OpenNFTsEx();
         _collection.initialize("OpenERC721Test", "OPTEST", _owner, options);
 
-        _cloner = new OpenTesterEx();
+        _cloner = new OpenClonerEx();
     }
 
     function testOne() public {
         changePrank(_owner);
 
         address clone = _cloner.clone(address(_collection));
-        address parent = _cloner.parent(clone);
+        address parent = IOpenCloneable(clone).parent();
         assertEq(parent, address(_collection));
 
         uint256 len = clone.code.length;

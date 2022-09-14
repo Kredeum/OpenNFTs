@@ -34,7 +34,7 @@ pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
-import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenCloner/OpenCloneable.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 
 import "OpenNFTs/contracts/examples/IOpenBoundEx.sol";
@@ -65,24 +65,6 @@ contract OpenBoundEx is
     uint256[] private _tokens;
 
     string private constant _BASE_URI = "ipfs://";
-
-    /// IOpenBoundEx
-    function initialize(
-        string memory name_,
-        string memory symbol_,
-        address owner_,
-        uint256 maxSupply_
-    )
-        external
-        override (IOpenBoundEx)
-    {
-        OpenCloneable._initialize("OpenBound", 1);
-        OpenERC173._initialize(owner_);
-
-        name = name_;
-        symbol = symbol_;
-        maxSupply = maxSupply_;
-    }
 
     function mint(uint256 cid)
         external
@@ -172,6 +154,30 @@ contract OpenBoundEx is
         returns (uint256 tokenID)
     {
         tokenID = _tokenID(addr, cid);
+    }
+
+    /// IOpenBoundEx
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        uint256 maxSupply_
+    )
+        public
+        override (IOpenBoundEx)
+    {
+        OpenCloneable._initialize("OpenBound", 1);
+        OpenERC173._initialize(owner_);
+
+        name = name_;
+        symbol = symbol_;
+        maxSupply = maxSupply_;
+    }
+
+    function initialize(bytes memory params) public override (OpenCloneable) {
+        (string memory name_, string memory symbol_, address owner_, uint256 maxSupply_) =
+            abi.decode(params, (string, string, address, uint256));
+        initialize(name_, symbol_, owner_, maxSupply_);
     }
 
     /// IERC165

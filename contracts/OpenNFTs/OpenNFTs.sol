@@ -43,10 +43,10 @@ import "OpenNFTs/contracts/OpenERC/OpenERC721Metadata.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC721Enumerable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
-import "OpenNFTs/contracts/OpenNFTs/OpenCloneable.sol";
+import "OpenNFTs/contracts/OpenCloner/OpenCloneable.sol";
 
 /// @title OpenNFTs smartcontract
-contract OpenNFTs is
+abstract contract OpenNFTs is
     IOpenNFTs,
     OpenERC721Metadata,
     OpenERC721Enumerable,
