@@ -19,21 +19,21 @@
 //   OpenERC165
 //   (supports)
 //       |
-//       ———————————————————————————————————————————————————————————————————————————————————————
-//       |                                                         |             |             |
-//   OpenERC721                                               OpenERC173  OpenChecker  OpenCloneable
-//     (NFT)                                                   (ownable)         |             |
-//       |                                                         |             |             |
-//       —————————————————————————————————————————————      ————————             |             |
-//       |                        |                  |      |      |             |             |
-//  OpenERC721Metadata  OpenERC721Enumerable   OpenERC2981  |      |             |             |
-//       |                        |           (RoyaltyInfo) |      |             |             |
-//       |                        |                  |      |      |             |             |
-//       |                        |                  ————————      |             |             |
-//       |                        |                  |             |             |             |
-//       |                        |            OpenMarketable OpenPauseable      |             |
-//       |                        |                  |             |             |             |
-//       ———————————————————————————————————————————————————————————————————————————————————————
+//       ———————————————————————————————————————————————————————————————————
+//       |                                     |             |             |
+//   OpenERC721                           OpenERC173  OpenChecker  OpenCloneable
+//     (NFT)                               (ownable)         |             |
+//       |                                     |             |             |
+//       ————————————————————————————      ——————————        |             |
+//       |           |              |      |        |        |             |
+//   OpenERC721  OpenERC721   OpenERC2981  |        |        |             |
+//    Metadata   Enumerable  (RoyaltyInfo) |        |        |             |
+//       |           |              |      |        |        |             |
+//       |           |              ————————        |        |             |
+//       |           |              |               |        |             |
+//       |           |        OpenMarketable  OpenPauseable  |             |
+//       |           |              |               |        |             |
+//       ———————————————————————————————————————————————————————————————————
 //       |
 //    OpenNFTs
 //       |
@@ -84,10 +84,16 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         open = options[0];
     }
 
-    function initialize(bytes memory params) public override (OpenCloneable) {
-        (string memory name, string memory symbol, address owner, bool[] memory options) =
-            abi.decode(params, (string, string, address, bool[]));
-        initialize(name, symbol, owner, options);
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        bytes memory params_
+    )
+        public
+        override (OpenCloneable)
+    {
+        initialize(name_, symbol_, owner_, abi.decode(params_, (bool[])));
     }
 
     function supportsInterface(bytes4 interfaceId) public view override (OpenNFTs) returns (bool) {

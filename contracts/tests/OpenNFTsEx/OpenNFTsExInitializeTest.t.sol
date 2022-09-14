@@ -24,7 +24,7 @@ abstract contract OpenNFTsExInitializeTest is Test {
 
     function testInitializeDirect() public {
         IOpenCloneable(_collection).initialize(
-            abi.encode("OpenERC721Test", "TEST", _owner, _options)
+            "OpenERC721Test", "TEST", _owner, abi.encode(_options)
         );
         assertEq(IERC721Metadata(_collection).name(), "OpenERC721Test");
         assertEq(IERC721Metadata(_collection).symbol(), "TEST");

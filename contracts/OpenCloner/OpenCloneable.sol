@@ -38,7 +38,15 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
             : address(0);
     }
 
-    function initialize(bytes memory params) public virtual override (IOpenCloneable);
+    function initialize(
+        string memory name,
+        string memory symbol,
+        address owner,
+        bytes memory params
+    )
+        public
+        virtual
+        override (IOpenCloneable);
 
     function supportsInterface(bytes4 interfaceId)
         public

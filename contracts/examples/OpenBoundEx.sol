@@ -18,15 +18,15 @@
 //
 //  OpenERC165 (supports)
 //      |
-//      ———————————————————————————————————————————————
-//      |                 |             |             |
+//      ——————————————————————————————————————————————
+//      |                 |             |            |
 //  OpenERC721 (NFT)  OpenERC173  OpenChecker  OpenCloneable
-//      |             (ownable)         |             |
-//      |                 |             |             |
-//      |                 |             |             |
-//      |            OpenPauseable      |             |
-//      |                 |             |             |
-//      ———————————————————————————————————————————————
+//      |             (ownable)         |            |
+//      |                 |             |            |
+//      |                 |             |            |
+//      |            OpenPauseable      |            |
+//      |                 |             |            |
+//      ——————————————————————————————————————————————
 //      |
 //  OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
 //
@@ -38,6 +38,7 @@ import "OpenNFTs/contracts/OpenCloner/OpenCloneable.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 
 import "OpenNFTs/contracts/examples/IOpenBoundEx.sol";
+import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
@@ -174,10 +175,16 @@ contract OpenBoundEx is
         maxSupply = maxSupply_;
     }
 
-    function initialize(bytes memory params) public override (OpenCloneable) {
-        (string memory name_, string memory symbol_, address owner_, uint256 maxSupply_) =
-            abi.decode(params, (string, string, address, uint256));
-        initialize(name_, symbol_, owner_, maxSupply_);
+    function initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        bytes memory params_
+    )
+        public
+        override (OpenCloneable)
+    {
+        initialize(name_, symbol_, owner_, abi.decode(params_, (uint256)));
     }
 
     /// IERC165

@@ -38,13 +38,21 @@ abstract contract OpenCloner is IOpenCloner, OpenERC165 {
             let ptr := mload(0x40)
             mstore(ptr, 0x3d602d80600a3d3981f3363d3d373d3d3d363d73000000000000000000000000)
             mstore(add(ptr, 0x14), shl(0x60, template_))
-            mstore(add(ptr, 0x28), 0x5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000)
+            mstore(
+                add(ptr, 0x28), 0x5af43d82803e903d91602b57fd5bf30000000000000000000000000000000000
+            )
             clone_ := create(0, ptr, 0x37)
         }
         assert(clone_ != address(0));
     }
 
-    function supportsInterface(bytes4 interfaceId) public view virtual override(OpenERC165) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override (OpenERC165)
+        returns (bool)
+    {
         return interfaceId == type(IOpenCloner).interfaceId || super.supportsInterface(interfaceId);
     }
 }
