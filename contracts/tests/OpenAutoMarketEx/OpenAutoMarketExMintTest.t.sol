@@ -56,7 +56,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
         changePrank(_owner);
         IOpenMarketable(_collection).setDefaultPrice(1 ether);
 
-        assertEq(IOpenMarketable(_collection).defaultPrice(), 1 ether);
+        assertEq(IOpenMarketable(_collection).getDefaultPrice(), 1 ether);
     }
 
     function testOpenAutoMarketExSetTokenPrice() public {
@@ -66,7 +66,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
         IOpenMarketable(_collection).setTokenPrice(tokenID, 2 ether);
         IOpenMarketable(_collection).setDefaultPrice(1 ether);
 
-        assertEq(IOpenMarketable(_collection).tokenPrice(tokenID), 2 ether);
+        assertEq(IOpenMarketable(_collection).getTokenPrice(tokenID), 2 ether);
     }
 
     // Primary market, token not minted yet, pay token via OpenAutoMarketEx "mint" function

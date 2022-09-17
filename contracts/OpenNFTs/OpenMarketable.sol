@@ -42,8 +42,7 @@ abstract contract OpenMarketable is
     OpenERC2981,
     OpenGuard
 {
-    mapping(uint256 => uint256) public tokenPrice;
-    uint256 public defaultPrice;
+    mapping(uint256 => uint256) internal _tokenPrice;
 
     receive() external payable override (IOpenMarketable) {}
 
@@ -72,7 +71,24 @@ abstract contract OpenMarketable is
         override (IOpenMarketable)
         onlyTokenOwnerOrApproved(tokenID)
     {
+        setTokenPrice(tokenID, price, address(0), Approve.None);
+    }
+
+    /// @notice SET token price
+    /// @param tokenID : token ID
+    /// @param price : token price in wei
+    function setTokenPrice(uint256 tokenID, uint256 price, address approved, Approve approveType)
+        public
+        override (IOpenMarketable)
+        onlyTokenOwnerOrApproved(tokenID)
+    {
         _setTokenPrice(tokenID, price);
+
+        if (approveType == Approve.All) {
+            setApprovalForAll(approved, true);
+        } else if (approveType == Approve.One) {
+            approve(approved, tokenID);
+        }
     }
 
     /// @notice SET token royalty info
@@ -99,6 +115,19 @@ abstract contract OpenMarketable is
         onlyOwner
     {
         _tokenRoyaltyInfo[tokenID].receiver = receiver;
+    }
+
+    function getDefaultPrice() public view override (IOpenMarketable) returns (uint256) {
+        return _defaultPrice;
+    }
+
+    function getTokenPrice(uint256 tokenID)
+        public
+        view
+        override (IOpenMarketable)
+        returns (uint256)
+    {
+        return _tokenPrice[tokenID];
     }
 
     /// @notice GET default royalty info
@@ -146,14 +175,14 @@ abstract contract OpenMarketable is
     {
         _setTokenRoyalty(tokenID, _defaultRoyaltyInfo.receiver, _defaultRoyaltyInfo.fee);
 
-        _pay(tokenID, defaultPrice, to, owner());
+        _pay(tokenID, _defaultPrice, to, owner());
 
         super._mint(to, tokenURI, tokenID);
     }
 
     function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
         delete _tokenRoyaltyInfo[tokenID];
-        delete tokenPrice[tokenID];
+        delete _tokenPrice[tokenID];
 
         super._burn(tokenID);
     }
@@ -164,9 +193,9 @@ abstract contract OpenMarketable is
         override (OpenERC721)
     {
         /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
-        _pay(tokenID, tokenPrice[tokenID], to, ownerOf(tokenID));
+        _pay(tokenID, _tokenPrice[tokenID], to, ownerOf(tokenID));
 
-        delete tokenPrice[tokenID];
+        delete _tokenPrice[tokenID];
 
         super._transferFromBefore(from, to, tokenID);
     }
@@ -187,13 +216,13 @@ abstract contract OpenMarketable is
     }
 
     function _setTokenPrice(uint256 tokenID, uint256 price) internal notTooExpensive(price) {
-        tokenPrice[tokenID] = price;
+        _tokenPrice[tokenID] = price;
 
         emit SetTokenPrice(tokenID, price);
     }
 
     function _setDefaultPrice(uint256 price) internal notTooExpensive(price) {
-        defaultPrice = price;
+        _defaultPrice = price;
 
         emit SetDefaultPrice(price);
     }

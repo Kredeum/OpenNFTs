@@ -2,6 +2,12 @@
 pragma solidity 0.8.9;
 
 interface IOpenMarketable {
+    enum Approve {
+        None,
+        One,
+        All
+    }
+
     event SetDefaultRoyalty(address receiver, uint96 fee);
 
     event SetTokenRoyalty(uint256 tokenID, address receiver, uint96 fee);
@@ -23,24 +29,27 @@ interface IOpenMarketable {
 
     receive() external payable;
 
-    function setDefaultRoyalty(address receiver, uint96 fee) external;
-
-    function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee) external;
-
-    function setTokenRoyaltyReceiver(uint256 tokenID, address receiver) external;
-
     function setDefaultPrice(uint256 price) external;
 
     function setTokenPrice(uint256 tokenID, uint256 price) external;
 
-    function defaultPrice() external view returns (uint256 defPrice);
+    function setTokenPrice(uint256 tokenID, uint256 price, address approved, Approve approveType)
+        external;
 
-    function tokenPrice(uint256 tokenID) external view returns (uint256 price);
+    function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee) external;
 
-    function getDefaultRoyalty() external view returns (address receiver, uint96 fee);
+    function setDefaultRoyalty(address receiver, uint96 fee) external;
+
+    function setTokenRoyaltyReceiver(uint256 tokenID, address receiver) external;
+
+    function getDefaultPrice() external view returns (uint256 price);
+
+    function getTokenPrice(uint256 tokenID) external view returns (uint256 price);
 
     function getTokenRoyalty(uint256 tokenID)
         external
         view
         returns (address receiver, uint96 fee);
+
+    function getDefaultRoyalty() external view returns (address receiver, uint96 fee);
 }

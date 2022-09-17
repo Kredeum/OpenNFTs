@@ -69,6 +69,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         }
     }
 
+    // TODO check only 4 interfaces
     function isCollection(address smartcontract)
         public
         view

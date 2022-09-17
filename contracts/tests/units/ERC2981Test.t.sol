@@ -33,7 +33,10 @@ abstract contract ERC2981Test is Test {
 
     function testERC2981RoyaltyInfo(uint256 price) public {
         vm.assume(price < 2 ** 128);
-        IERC2981(_collection).royaltyInfo(_tokenID0, price);
+        (address receiver, uint256 royalty) = IERC2981(_collection).royaltyInfo(_tokenID0, price);
+
+        assertEq(receiver, _minter);
+        assertEq(royalty, (price * 420) / 10_000);
     }
 
     function testFailERC2981RoyaltyInfoTooExpensive(uint256 price) public {

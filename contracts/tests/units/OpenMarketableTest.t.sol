@@ -76,16 +76,16 @@ abstract contract OpenMarketableTest is Test {
 
         changePrank(_owner);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, price);
-        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), price);
+        assertEq(IOpenMarketable(payable(_collection)).getTokenPrice(_tokenID0), price);
     }
 
     function testSetTokenPriceFromDefault(uint256 price) public {
         vm.assume(price < 2 ** 128);
 
         changePrank(_owner);
-        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), 0);
+        assertEq(IOpenMarketable(payable(_collection)).getTokenPrice(_tokenID0), 0);
         IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
-        assertEq(IOpenMarketable(payable(_collection)).tokenPrice(_tokenID0), 1 ether);
+        assertEq(IOpenMarketable(payable(_collection)).getTokenPrice(_tokenID0), 1 ether);
     }
 
     function testFailSetDefaultPriceTooExpensive(uint256 price) public {

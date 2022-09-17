@@ -33,6 +33,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         uint96 fee;
     }
 
+    uint256 internal _defaultPrice;
     RoyaltyInfo internal _defaultRoyaltyInfo;
     mapping(uint256 => RoyaltyInfo) internal _tokenRoyaltyInfo;
 
