@@ -18,7 +18,9 @@ contract OpenClonerExTest is Test {
         options[0] = true;
 
         _collection = new OpenNFTsEx();
-        _collection.initialize("OpenERC721Test", "OPTEST", _owner, options);
+        _collection.initialize(
+            "OpenERC721Test", "OPTEST", _owner, payable(address(0x7)), 0, options
+        );
 
         _cloner = new OpenClonerEx();
     }

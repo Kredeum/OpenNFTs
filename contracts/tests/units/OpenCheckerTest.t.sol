@@ -25,11 +25,11 @@ abstract contract OpenCheckerTest is Test {
         options[0] = true;
 
         OpenNFTsEx openNFTsEx = new OpenNFTsEx();
-        openNFTsEx.initialize("OpenNFTsEx", "NFT", _owner, options);
+        openNFTsEx.initialize("OpenNFTsEx", "NFT", _owner, payable(address(0x7)), 0, options);
         _addrs[0] = address(openNFTsEx);
 
         OpenNFTsEx openNFTsEx2 = new OpenNFTsEx();
-        openNFTsEx2.initialize("OpenNFTsEx2", "NFT2", _owner, options);
+        openNFTsEx2.initialize("OpenNFTsEx2", "NFT2", _owner, payable(address(0x7)), 0, options);
         _addrs[1] = address(openNFTsEx2);
 
         _addrs[2] = _resolver;

@@ -34,7 +34,9 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         bool[] memory options = new bool[](1);
         options[0] = true;
         _collection = address(new OpenNFTsEx());
-        IOpenNFTsEx(_collection).initialize("ERC721", "NFT", _owner, options);
+        IOpenNFTsEx(_collection).initialize(
+            "ERC721", "NFT", _owner, payable(address(0x7)), 0, options
+        );
 
         _tokenID0 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
         _tokenID1 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);

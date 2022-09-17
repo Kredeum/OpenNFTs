@@ -36,9 +36,8 @@
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
-import "OpenNFTs/contracts/interfaces/IERC20.sol";
-import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 
+import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC721Metadata.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC721Enumerable.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
@@ -73,19 +72,6 @@ abstract contract OpenNFTs is
         _burn(tokenID);
     }
 
-    /// @notice withdraw eth
-    function withdraw() external override (IOpenNFTs) onlyOwner {
-        payable(msg.sender).transfer(address(this).balance);
-    }
-
-    /// @notice withdraw token
-    function withdraw(address token) external override (IOpenNFTs) onlyOwner {
-        require(
-            IERC20(token).transfer(msg.sender, IERC20(token).balanceOf(address(this))),
-            "Withdraw failed"
-        );
-    }
-
     function mint(address minter, string memory tokenURI)
         public
         override (IOpenNFTs)
@@ -115,11 +101,21 @@ abstract contract OpenNFTs is
     /// @param symbol_ symbol of the NFT Collection
     /// @param owner_ owner of the NFT Collection
     // solhint-disable-next-line comprehensive-interface
-    function _initialize(string memory name_, string memory symbol_, address owner_) internal {
+    function _initialize(
+        string memory name_,
+        string memory symbol_,
+        address owner_,
+        address payable treasury_,
+        uint96 treasuryFee_
+    )
+        internal
+    {
         tokenIdNext = 1;
+
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);
         OpenERC173._initialize(owner_);
+        OpenMarketable._initialize(treasury_, treasuryFee_);
     }
 
     /// @notice _mint

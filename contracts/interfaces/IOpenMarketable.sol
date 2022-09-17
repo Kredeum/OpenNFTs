@@ -23,11 +23,14 @@ interface IOpenMarketable {
         uint256 paid,
         address receiver,
         uint256 royalties,
+        uint256 fee,
         address buyer,
         uint256 unspent
     );
 
     receive() external payable;
+
+    function withdraw() external;
 
     function setDefaultPrice(uint256 price) external;
 

@@ -64,6 +64,10 @@ abstract contract OpenMarketableTest is Test {
 
         (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(_tokenID0, price);
         assertEq(receiver, _tester);
+        console.log("testSetTokenRoyalty ~ _maxFee", _maxFee);
+        console.log("testSetTokenRoyalty ~ fee", fee);
+        console.log("testSetTokenRoyalty ~ price", price);
+        console.log("testSetTokenRoyalty ~ royalties", royalties);
         assertEq(royalties, (price * fee) / _maxFee);
     }
 

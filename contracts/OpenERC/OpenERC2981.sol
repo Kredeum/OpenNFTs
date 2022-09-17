@@ -63,7 +63,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
             royalty = _defaultRoyaltyInfo;
         }
 
-        royaltyAmount = (price * royalty.fee) / _MAX_FEE;
+        royaltyAmount = _calculateAmount(price, royalty.fee);
 
         return (royalty.receiver, royaltyAmount);
     }
@@ -76,5 +76,9 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         returns (bool)
     {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
+    }
+
+    function _calculateAmount(uint256 price, uint96 fee) internal pure returns (uint256) {
+        return (price * fee) / _MAX_FEE;
     }
 }

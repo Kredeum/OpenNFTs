@@ -44,7 +44,15 @@ abstract contract OpenMarketable is
 {
     mapping(uint256 => uint256) internal _tokenPrice;
 
+    address payable internal _treasury;
+    uint96 internal _treasuryFee;
+
     receive() external payable override (IOpenMarketable) {}
+
+    /// @notice withdraw eth
+    function withdraw() external override (IOpenMarketable) onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
 
     /// @notice SET default mint price
     /// @param price : default price in wei
@@ -168,6 +176,11 @@ abstract contract OpenMarketable is
             || super.supportsInterface(interfaceId);
     }
 
+    function _initialize(address payable treasury_, uint96 treasuryFee_) internal {
+        _treasury = treasury_;
+        _treasuryFee = treasuryFee_;
+    }
+
     function _mint(address to, string memory tokenURI, uint256 tokenID)
         internal
         virtual
@@ -238,22 +251,24 @@ abstract contract OpenMarketable is
 
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
-
         address receiver;
         uint256 royalties;
+        uint256 fee;
         uint256 paid;
         uint256 unspent = msg.value;
 
         if (price > 0 && buyer != seller) {
+            fee = _calculateAmount(price, _treasuryFee);
+
             (receiver, royalties) = royaltyInfo(tokenID, price);
             if (receiver == address(0)) {
                 royalties = 0;
             }
 
-            require(royalties <= price, "Invalid royalties");
+            require(royalties + fee <= price, "Invalid royalties");
 
             /// Transfer amount to be paid to seller, the previous owner
-            paid = price - royalties;
+            paid = price - (royalties + fee);
             if (paid > 0) {
                 unspent = unspent - paid;
                 payable(seller).transfer(paid);
@@ -264,15 +279,21 @@ abstract contract OpenMarketable is
                 unspent = unspent - royalties;
                 payable(receiver).transfer(royalties);
             }
+
+            /// Transfer fee to treasury
+            if (fee > 0) {
+                unspent = unspent - fee;
+                payable(_treasury).transfer(fee);
+            }
         }
 
-        assert(paid + royalties + unspent == msg.value);
+        assert(paid + royalties + fee + unspent == msg.value);
 
         /// Transfer back unspent funds to buyer
         if (unspent > 0) {
             payable(buyer).transfer(unspent);
         }
 
-        emit Pay(tokenID, price, seller, paid, receiver, royalties, buyer, unspent);
+        emit Pay(tokenID, price, seller, paid, receiver, royalties, fee, buyer, unspent);
     }
 }

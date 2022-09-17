@@ -65,7 +65,9 @@ contract OpenNFTsExTest is
 
         OpenNFTsEx collection = new OpenNFTsEx();
         if (init) {
-            collection.initialize("OpenERC721Test", "OPTEST", owner, options);
+            collection.initialize(
+                "OpenERC721Test", "OPTEST", owner, payable(address(0x7)), 0, options
+            );
         }
 
         return address(collection);

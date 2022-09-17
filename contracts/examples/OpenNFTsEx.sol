@@ -75,13 +75,15 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         string memory name_,
         string memory symbol_,
         address owner_,
-        bool[] memory options
+        address payable treasury_,
+        uint96 treasuryFee_,
+        bool[] memory options_
     )
         public
         override (IOpenNFTsEx)
     {
-        OpenNFTs._initialize(name_, symbol_, owner_);
-        open = options[0];
+        OpenNFTs._initialize(name_, symbol_, owner_, treasury_, treasuryFee_);
+        open = options_[0];
     }
 
     function initialize(
@@ -93,7 +95,9 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         public
         override (OpenCloneable)
     {
-        initialize(name_, symbol_, owner_, abi.decode(params_, (bool[])));
+        (address payable treasury_, uint96 treasuryFee_, bool[] memory options_) =
+            abi.decode(params_, (address, uint96, bool[]));
+        initialize(name_, symbol_, owner_, treasury_, treasuryFee_, options_);
     }
 
     function supportsInterface(bytes4 interfaceId) public view override (OpenNFTs) returns (bool) {

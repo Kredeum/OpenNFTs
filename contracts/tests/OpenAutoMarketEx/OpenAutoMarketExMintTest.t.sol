@@ -81,7 +81,8 @@ abstract contract OpenAutoMarketExMintTest is Test {
         assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
         assertEq(_buyer.balance, 9 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_owner.balance, 0.99 ether);
+        assertEq(_owner.balance, 0.981 ether);
+        assertEq(makeAddr("treasury").balance, 0.009 ether);
     }
 
     // Secondary market, token already minted, pay token via OpenAutoMarketEx "buy" function
@@ -104,7 +105,8 @@ abstract contract OpenAutoMarketExMintTest is Test {
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_owner.balance, balMinter + 0.99 ether);
+        assertEq(_owner.balance, balMinter + 0.981 ether);
+        assertEq(makeAddr("treasury").balance, 0.009 ether);
     }
 
     // Secondary market, token already minted, pay token via ERC721 "safeTransferFrom" function (after approval)
@@ -131,6 +133,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
-        assertEq(_owner.balance, balMinter + 0.99 ether);
+        assertEq(_owner.balance, balMinter + 0.981 ether);
+        assertEq(makeAddr("treasury").balance, 0.009 ether);
     }
 }
