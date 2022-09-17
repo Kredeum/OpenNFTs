@@ -105,7 +105,7 @@ abstract contract OpenNFTs is
         string memory name_,
         string memory symbol_,
         address owner_,
-        address payable treasury_,
+        address treasury_,
         uint96 treasuryFee_
     )
         internal

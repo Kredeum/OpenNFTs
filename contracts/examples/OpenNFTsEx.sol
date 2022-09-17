@@ -75,7 +75,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         string memory name_,
         string memory symbol_,
         address owner_,
-        address payable treasury_,
+        address treasury_,
         uint96 treasuryFee_,
         bool[] memory options_
     )

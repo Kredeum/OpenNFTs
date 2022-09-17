@@ -6,7 +6,7 @@ interface IOpenNFTsEx {
         string memory name,
         string memory symbol,
         address owner,
-        address payable treasury,
+        address treasury,
         uint96 treasuryFee,
         bool[] memory options
     )

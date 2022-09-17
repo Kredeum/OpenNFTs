@@ -44,7 +44,7 @@ abstract contract OpenMarketable is
 {
     mapping(uint256 => uint256) internal _tokenPrice;
 
-    address payable internal _treasury;
+    address internal _treasury;
     uint96 internal _treasuryFee;
 
     receive() external payable override (IOpenMarketable) {}
@@ -176,7 +176,7 @@ abstract contract OpenMarketable is
             || super.supportsInterface(interfaceId);
     }
 
-    function _initialize(address payable treasury_, uint96 treasuryFee_) internal {
+    function _initialize(address treasury_, uint96 treasuryFee_) internal {
         _treasury = treasury_;
         _treasuryFee = treasuryFee_;
     }
