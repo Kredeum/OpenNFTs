@@ -44,8 +44,7 @@ abstract contract OpenMarketable is
 {
     mapping(uint256 => uint256) internal _tokenPrice;
 
-    address internal _treasury;
-    uint96 internal _treasuryFee;
+    Receiver internal _treasury;
 
     receive() external payable override (IOpenMarketable) {}
 
@@ -122,7 +121,7 @@ abstract contract OpenMarketable is
         existsToken(tokenID)
         onlyOwner
     {
-        _tokenRoyaltyInfo[tokenID].receiver = receiver;
+        _tokenRoyalty[tokenID].account = receiver;
     }
 
     function getDefaultPrice() public view override (IOpenMarketable) returns (uint256) {
@@ -147,8 +146,8 @@ abstract contract OpenMarketable is
         override (IOpenMarketable)
         returns (address receiver, uint96 fee)
     {
-        receiver = _defaultRoyaltyInfo.receiver;
-        fee = _defaultRoyaltyInfo.fee;
+        receiver = _defaultRoyalty.account;
+        fee = _defaultRoyalty.fee;
     }
 
     /// @notice GET token royalty info
@@ -161,8 +160,8 @@ abstract contract OpenMarketable is
         override (IOpenMarketable)
         returns (address receiver, uint96 fee)
     {
-        receiver = _tokenRoyaltyInfo[tokenID].receiver;
-        fee = _tokenRoyaltyInfo[tokenID].fee;
+        receiver = _tokenRoyalty[tokenID].account;
+        fee = _tokenRoyalty[tokenID].fee;
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -176,9 +175,18 @@ abstract contract OpenMarketable is
             || super.supportsInterface(interfaceId);
     }
 
-    function _initialize(address treasury_, uint96 treasuryFee_) internal {
-        _treasury = treasury_;
-        _treasuryFee = treasuryFee_;
+    function _initialize(
+        uint256 defaultPrice_,
+        address receiver_,
+        uint96 fee_,
+        address treasury_,
+        uint96 treasuryFee_
+    )
+        internal
+    {
+        _defaultPrice = defaultPrice_;
+        _defaultRoyalty = Receiver(receiver_, fee_);
+        _treasury = Receiver(treasury_, treasuryFee_);
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID)
@@ -186,7 +194,7 @@ abstract contract OpenMarketable is
         virtual
         override (OpenERC721)
     {
-        _setTokenRoyalty(tokenID, _defaultRoyaltyInfo.receiver, _defaultRoyaltyInfo.fee);
+        _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
         _pay(tokenID, _defaultPrice, to, owner());
 
@@ -194,7 +202,7 @@ abstract contract OpenMarketable is
     }
 
     function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
-        delete _tokenRoyaltyInfo[tokenID];
+        delete _tokenRoyalty[tokenID];
         delete _tokenPrice[tokenID];
 
         super._burn(tokenID);
@@ -214,7 +222,7 @@ abstract contract OpenMarketable is
     }
 
     function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
-        _defaultRoyaltyInfo = RoyaltyInfo(receiver, fee);
+        _defaultRoyalty = Receiver(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);
     }
@@ -223,7 +231,7 @@ abstract contract OpenMarketable is
         internal
         lessThanMaxFee(fee)
     {
-        _tokenRoyaltyInfo[tokenID] = RoyaltyInfo(receiver, fee);
+        _tokenRoyalty[tokenID] = Receiver(receiver, fee);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }
@@ -258,7 +266,7 @@ abstract contract OpenMarketable is
         uint256 unspent = msg.value;
 
         if (price > 0 && buyer != seller) {
-            fee = _calculateAmount(price, _treasuryFee);
+            fee = _calculateAmount(price, _treasury.fee);
 
             (receiver, royalties) = royaltyInfo(tokenID, price);
             if (receiver == address(0)) {
@@ -283,7 +291,7 @@ abstract contract OpenMarketable is
             /// Transfer fee to treasury
             if (fee > 0) {
                 unspent = unspent - fee;
-                payable(_treasury).transfer(fee);
+                payable(_treasury.account).transfer(fee);
             }
         }
 

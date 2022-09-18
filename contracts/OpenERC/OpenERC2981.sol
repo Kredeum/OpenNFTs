@@ -28,14 +28,14 @@ import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 
 abstract contract OpenERC2981 is IERC2981, OpenERC165 {
-    struct RoyaltyInfo {
-        address receiver;
+    struct Receiver {
+        address account;
         uint96 fee;
     }
 
     uint256 internal _defaultPrice;
-    RoyaltyInfo internal _defaultRoyaltyInfo;
-    mapping(uint256 => RoyaltyInfo) internal _tokenRoyaltyInfo;
+    Receiver internal _defaultRoyalty;
+    mapping(uint256 => Receiver) internal _tokenRoyalty;
 
     uint96 private constant _MAX_FEE = 10_000;
 
@@ -57,15 +57,15 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         notTooExpensive(price)
         returns (address receiver, uint256 royaltyAmount)
     {
-        RoyaltyInfo memory royalty = _tokenRoyaltyInfo[tokenID];
+        Receiver memory royalty = _tokenRoyalty[tokenID];
 
-        if (royalty.receiver == address(0)) {
-            royalty = _defaultRoyaltyInfo;
+        if (royalty.account == address(0)) {
+            royalty = _defaultRoyalty;
         }
 
         royaltyAmount = _calculateAmount(price, royalty.fee);
 
-        return (royalty.receiver, royaltyAmount);
+        return (royalty.account, royaltyAmount);
     }
 
     function supportsInterface(bytes4 interfaceId)

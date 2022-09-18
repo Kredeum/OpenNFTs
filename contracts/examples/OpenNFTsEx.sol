@@ -82,7 +82,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         public
         override (IOpenNFTsEx)
     {
-        OpenNFTs._initialize(name_, symbol_, owner_, treasury_, treasuryFee_);
+        OpenNFTs._initialize(name_, symbol_, owner_, 0, address(0), 0, treasury_, treasuryFee_);
         open = options_[0];
     }
 
