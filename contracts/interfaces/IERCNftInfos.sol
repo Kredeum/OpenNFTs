@@ -15,6 +15,7 @@ interface IERCNftInfos {
         string symbol;
         uint256 totalSupply;
         uint256 balanceOf;
+        bool approvedForAll;
         bool[] supported;
         NftType erc;
     }

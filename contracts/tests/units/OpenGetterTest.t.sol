@@ -12,8 +12,9 @@ import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
 abstract contract OpenGetterTest is Test, IERCNftInfos {
     address private _resolver;
     address private _collection;
-    address private _owner = address(0x1);
-    address private _random = address(0x9);
+    address private _owner = makeAddr("owner");
+    address private _tester = makeAddr("tester");
+    address private _random = makeAddr("random");
 
     uint256 private _tokenID0;
     uint256 private _tokenID1;
@@ -41,10 +42,6 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         _tokenID0 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
         _tokenID1 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
         _tokenID2 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
-    }
-
-    function testOpenGetterGetCollectionInfos() public view {
-        IOpenGetter(_resolver).getCollectionInfos(address(_collection), _random);
     }
 
     function testOpenGetterGetNftInfos() public {
@@ -102,7 +99,22 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         assertEq(total, 0);
     }
 
-    function testOpenGetterGetCollectionInfosOwner() public {
+    function testOpenGetterGetCollectionInfosApprovedForAll1() public {
+        CollectionInfos memory collectionInfos =
+            IOpenGetter(_resolver).getCollectionInfos(address(_collection), _random);
+        assertEq(collectionInfos.approvedForAll, false);
+    }
+
+    function testOpenGetterGetCollectionInfosApprovedForAll2() public {
+        changePrank(_tester);
+        IERC721(_collection).setApprovalForAll(_collection, true);
+
+        CollectionInfos memory collectionInfos =
+            IOpenGetter(_resolver).getCollectionInfos(address(_collection), _tester);
+        assertEq(collectionInfos.approvedForAll, true);
+    }
+
+    function testOpenGetterGetCollectionInfos() public {
         assertEq(IERC173(_collection).owner(), _owner);
 
         CollectionInfos memory collectionInfos =

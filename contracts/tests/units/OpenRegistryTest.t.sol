@@ -31,6 +31,8 @@ abstract contract OpenRegistryTest is Test {
     }
 
     function testOpenRegistryAddAddress() public {
+        changePrank(_owner);
+
         address[] memory addrs = new address[](1);
         addrs[0] = _collection;
 
@@ -40,6 +42,8 @@ abstract contract OpenRegistryTest is Test {
     }
 
     function testOpenRegistryBurnAddress() public {
+        changePrank(_owner);
+
         address[] memory addrs = new address[](3);
         addrs[0] = address(new OpenNFTsEx());
         addrs[1] = address(new OpenNFTsEx());

@@ -174,6 +174,12 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
             try IERC721(collection).balanceOf(account) returns (uint256 balanceOf) {
                 collectionInfos.balanceOf = balanceOf;
             } catch {}
+
+            try IERC721(collection).isApprovedForAll(account, collection) returns (
+                bool approvedForAll
+            ) {
+                collectionInfos.approvedForAll = approvedForAll;
+            } catch {}
         }
     }
 }
