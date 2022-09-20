@@ -47,7 +47,7 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         override (IOpenAutoMarketEx)
     {
         OpenERC173._initialize(owner);
-        OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee);
+        OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee, false);
     }
 
     function supportsInterface(bytes4 interfaceId)

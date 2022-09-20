@@ -44,6 +44,8 @@ abstract contract OpenMarketable is
 {
     mapping(uint256 => uint256) internal _tokenPrice;
 
+    bool private _minimum;
+
     Receiver internal _treasury;
 
     receive() external payable override (IOpenMarketable) {}
@@ -180,13 +182,15 @@ abstract contract OpenMarketable is
         address receiver_,
         uint96 fee_,
         address treasury_,
-        uint96 treasuryFee_
+        uint96 treasuryFee_,
+        bool minimum_
     )
         internal
     {
         _defaultPrice = defaultPrice_;
-        _defaultRoyalty = Receiver(receiver_, fee_);
-        _treasury = Receiver(treasury_, treasuryFee_);
+        _defaultRoyalty = Receiver(receiver_, fee_, 0);
+        _treasury = Receiver(treasury_, treasuryFee_, 0);
+        _minimum = minimum_;
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID)
@@ -222,7 +226,7 @@ abstract contract OpenMarketable is
     }
 
     function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
-        _defaultRoyalty = Receiver(receiver, fee);
+        _defaultRoyalty = Receiver(receiver, fee, 0);
 
         emit SetDefaultRoyalty(receiver, fee);
     }
@@ -231,7 +235,9 @@ abstract contract OpenMarketable is
         internal
         lessThanMaxFee(fee)
     {
-        _tokenRoyalty[tokenID] = Receiver(receiver, fee);
+        uint256 minimum = _minimum ? _calculateAmount(_defaultPrice, fee) : 0;
+
+        _tokenRoyalty[tokenID] = Receiver(receiver, fee, minimum);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }

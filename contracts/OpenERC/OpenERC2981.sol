@@ -31,13 +31,14 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
     struct Receiver {
         address account;
         uint96 fee;
+        uint256 minimum;
     }
 
     uint256 internal _defaultPrice;
     Receiver internal _defaultRoyalty;
     mapping(uint256 => Receiver) internal _tokenRoyalty;
 
-    uint96 private constant _MAX_FEE = 10_000;
+    uint96 internal constant _MAX_FEE = 10_000;
 
     modifier notTooExpensive(uint256 price) {
         /// otherwise may overflow
@@ -64,6 +65,23 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         }
 
         royaltyAmount = _calculateAmount(price, royalty.fee);
+
+        /// MINIMAL royaltyAmount
+        if (royalty.minimum > 0) {
+            /// with zero price, token owner can bypass royalties...
+            /// SO set a minimumRoyaltyAmount calculated on defaultPrice (than can only be modified by collection owner)
+            /// BUT collection owner can higher too much defaultPrice making fees too high
+            /// SO moreover store a minimumRoyaltyAmount per token defined during mint, or last transfer
+
+            /// MIN(royalty.minimum, defaultRoyaltyAmount)
+            uint256 defaultRoyaltyAmount = _calculateAmount(_defaultPrice, royalty.fee);
+            uint256 minimumRoyaltyAmount =
+                royalty.minimum < defaultRoyaltyAmount ? royalty.minimum : defaultRoyaltyAmount;
+
+            /// MAX(normalRoyaltyAmount, minimumRoyaltyAmount)
+            royaltyAmount =
+                royaltyAmount < minimumRoyaltyAmount ? minimumRoyaltyAmount : royaltyAmount;
+        }
 
         return (royalty.account, royaltyAmount);
     }

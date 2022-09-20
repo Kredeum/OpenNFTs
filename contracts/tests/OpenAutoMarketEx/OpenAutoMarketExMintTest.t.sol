@@ -8,10 +8,10 @@ import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
 
 abstract contract OpenAutoMarketExMintTest is Test {
     address payable private _collection;
-    address private _owner = address(0x5);
-    address private _minter = address(0x12);
-    address private _buyer = address(0x13);
-    address private _tester = address(0x4);
+    address private _owner = makeAddr("owner");
+    address private _minter = makeAddr("minter");
+    address private _buyer = makeAddr("buyer");
+    address private _tester = makeAddr("tester");
     bool[] private _options = new bool[](1);
 
     receive() external payable {}
