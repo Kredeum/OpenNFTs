@@ -252,46 +252,46 @@ abstract contract OpenMarketable is
         private
         reEntryGuard
     {
-        require(msg.value >= price, "Not enough funds");
-        if (msg.value == 0) {
-            return;
-        }
-
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
+
         address receiver;
         uint256 royalties;
         uint256 fee;
         uint256 paid;
         uint256 unspent = msg.value;
 
-        if (price > 0 && buyer != seller) {
-            fee = _calculateAmount(price, _treasury.fee);
+        if (!(price == 0 || buyer == seller)) {
+            require(msg.value >= price, "Not enough funds");
 
-            (receiver, royalties) = royaltyInfo(tokenID, price);
-            if (receiver == address(0)) {
-                royalties = 0;
-            }
+            if (msg.value != 0) {
+                fee = _calculateAmount(price, _treasury.fee);
 
-            require(royalties + fee <= price, "Invalid royalties");
+                (receiver, royalties) = royaltyInfo(tokenID, price);
+                if (receiver == address(0)) {
+                    royalties = 0;
+                }
 
-            /// Transfer amount to be paid to seller, the previous owner
-            paid = price - (royalties + fee);
-            if (paid > 0) {
-                unspent = unspent - paid;
-                payable(seller).transfer(paid);
-            }
+                require(royalties + fee <= price, "Invalid royalties");
 
-            /// Transfer royalties to receiver
-            if (royalties > 0) {
-                unspent = unspent - royalties;
-                payable(receiver).transfer(royalties);
-            }
+                /// Transfer amount to be paid to seller, the previous owner
+                paid = price - (royalties + fee);
+                if (paid > 0) {
+                    unspent = unspent - paid;
+                    payable(seller).transfer(paid);
+                }
 
-            /// Transfer fee to treasury
-            if (fee > 0) {
-                unspent = unspent - fee;
-                payable(_treasury.account).transfer(fee);
+                /// Transfer royalties to receiver
+                if (royalties > 0) {
+                    unspent = unspent - royalties;
+                    payable(receiver).transfer(royalties);
+                }
+
+                /// Transfer fee to treasury
+                if (fee > 0) {
+                    unspent = unspent - fee;
+                    payable(_treasury.account).transfer(fee);
+                }
             }
         }
 
