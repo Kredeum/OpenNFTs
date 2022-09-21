@@ -18,7 +18,7 @@ contract OpenClonerEx is OpenCloner {
 
         address payable treasury = payable(address(0x7));
         uint96 treasuryFee = 90;
-        bool[] memory options = new bool[](1);
+        bool[] memory options = new bool[](2);
         options[0] = true;
         IOpenCloneable(clone_).initialize(
             "Cloned by OpenClonerEx",

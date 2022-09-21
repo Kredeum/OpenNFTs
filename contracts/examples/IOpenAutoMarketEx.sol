@@ -2,7 +2,8 @@
 pragma solidity 0.8.9;
 
 interface IOpenAutoMarketEx {
-    function initialize(address owner, address payable treasury, uint96 treasuryFee) external;
+    function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimal)
+        external;
 
     function buy(uint256 tokenID) external payable;
 

@@ -56,7 +56,7 @@ contract OpenAutoMarketExTest is
     {
         changePrank(owner);
         OpenAutoMarketEx collection = new OpenAutoMarketEx();
-        collection.initialize(owner, payable(makeAddr("treasury")), 90);
+        collection.initialize(owner, payable(makeAddr("treasury")), 90, true);
         return address(collection);
     }
 

@@ -8,12 +8,13 @@ import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
+import "OpenNFTs/contracts/interfaces/IOpenReceiverInfos.sol";
 
-abstract contract OpenMarketableTest is Test {
+abstract contract OpenMarketableTest is Test, IOpenReceiverInfos {
     address private _collection;
-    address private _owner = address(0x1);
-    address private _minter = address(0x2);
-    address private _tester = address(0x4);
+    address private _owner = makeAddr("owner");
+    address private _minter = makeAddr("minter");
+    address private _tester = makeAddr("tester");
     uint256 private _tokenID0;
     uint256 private _notTokenID = 42;
 
@@ -124,6 +125,41 @@ abstract contract OpenMarketableTest is Test {
         assertEq(receiver, _minter);
 
         assertEq(royalties, (price * fee) / _maxFee);
+    }
+
+    function testRoyaltyInfoMinimal() public {
+        uint256 price = 1 ether;
+        uint96 fee = 100;
+
+        changePrank(_owner);
+        IOpenMarketable(payable(_collection)).setDefaultPrice(price);
+        IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);
+
+        (uint256 tokenID,) = mintTest(_collection, _owner);
+
+        (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(tokenID, 0);
+        assertEq(receiver, _minter);
+
+        assertEq(royalties, (price * fee) / _maxFee);
+    }
+
+    function testRoyaltyInfoMinimal(uint256 defaultPrice, uint256 tokenPrice, uint96 fee) public {
+        vm.assume(defaultPrice < 2 ** 128);
+        vm.assume(tokenPrice < 2 ** 128);
+        vm.assume(fee < _maxFee);
+
+        changePrank(_owner);
+        IOpenMarketable(payable(_collection)).setDefaultPrice(defaultPrice);
+        IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);
+
+        (uint256 tokenID,) = mintTest(_collection, _owner);
+
+        (address receiver, uint256 royalties) =
+            IERC2981(_collection).royaltyInfo(tokenID, tokenPrice);
+        assertEq(receiver, _minter);
+
+        uint256 maxPrice = defaultPrice > tokenPrice ? defaultPrice : tokenPrice;
+        assertEq(royalties, (maxPrice * fee) / _maxFee);
     }
 
     function testTokenOwner() public {

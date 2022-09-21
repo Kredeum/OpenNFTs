@@ -18,7 +18,7 @@ abstract contract OpenNFTsSetupTest is Test {
     address private _tester = address(0x4);
     uint256 private _tokenID0;
     string private _tokenURI0;
-    bool[] private _options = new bool[](1);
+    bool[] private _options = new bool[](2);
 
     function constructorTest(address owner_) public virtual returns (address);
 

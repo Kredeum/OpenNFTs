@@ -14,7 +14,7 @@ contract OpenClonerExTest is Test {
     address private _owner = address(0x5);
 
     function setUp() public {
-        bool[] memory options = new bool[](1);
+        bool[] memory options = new bool[](2);
         options[0] = true;
 
         _collection = new OpenNFTsEx();

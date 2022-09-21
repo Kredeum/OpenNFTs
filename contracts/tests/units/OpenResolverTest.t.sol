@@ -45,7 +45,7 @@ abstract contract OpenResolverTest is Test {
         bytes4[] memory ids = new bytes4[](1);
         ids[0] = bytes4(0x80ac58cd);
 
-        bool[] memory options = new bool[](1);
+        bool[] memory options = new bool[](2);
         options[0] = true;
 
         changePrank(_owner);

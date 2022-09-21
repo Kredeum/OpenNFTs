@@ -32,7 +32,7 @@ contract OpenBoundExTest is
         returns (address)
     {
         changePrank(owner);
-        bool[] memory options = new bool[](1);
+        bool[] memory options = new bool[](2);
         options[0] = true;
 
         OpenBoundEx collection = new OpenBoundEx();

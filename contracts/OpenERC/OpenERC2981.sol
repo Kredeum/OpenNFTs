@@ -20,23 +20,18 @@
 //
 //  OpenERC165
 //       |
-//  OpenERC2981 —— IERC2981
+//  OpenERC2981 —— IERC2981 —— IOpenReceiverInfos
 //
 pragma solidity 0.8.9;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
+import "OpenNFTs/contracts/interfaces/IOpenReceiverInfos.sol";
 
-abstract contract OpenERC2981 is IERC2981, OpenERC165 {
-    struct Receiver {
-        address account;
-        uint96 fee;
-        uint256 minimum;
-    }
-
+abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
     uint256 internal _defaultPrice;
-    Receiver internal _defaultRoyalty;
-    mapping(uint256 => Receiver) internal _tokenRoyalty;
+    ReceiverInfos internal _defaultRoyalty;
+    mapping(uint256 => ReceiverInfos) internal _tokenRoyalty;
 
     uint96 internal constant _MAX_FEE = 10_000;
 
@@ -58,7 +53,7 @@ abstract contract OpenERC2981 is IERC2981, OpenERC165 {
         notTooExpensive(price)
         returns (address receiver, uint256 royaltyAmount)
     {
-        Receiver memory royalty = _tokenRoyalty[tokenID];
+        ReceiverInfos memory royalty = _tokenRoyalty[tokenID];
 
         if (royalty.account == address(0)) {
             royalty = _defaultRoyalty;

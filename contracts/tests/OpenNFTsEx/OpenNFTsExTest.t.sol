@@ -60,8 +60,9 @@ contract OpenNFTsExTest is
         returns (address)
     {
         changePrank(owner);
-        bool[] memory options = new bool[](1);
-        options[0] = true;
+        bool[] memory options = new bool[](2);
+        options[0] = true; // open
+        options[1] = true; // minimal
 
         OpenNFTsEx collection = new OpenNFTsEx();
         if (init) {

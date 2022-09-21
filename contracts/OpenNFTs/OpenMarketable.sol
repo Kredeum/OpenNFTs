@@ -46,7 +46,7 @@ abstract contract OpenMarketable is
 
     bool private _minimum;
 
-    Receiver internal _treasury;
+    ReceiverInfos internal _treasury;
 
     receive() external payable override (IOpenMarketable) {}
 
@@ -80,24 +80,7 @@ abstract contract OpenMarketable is
         override (IOpenMarketable)
         onlyTokenOwnerOrApproved(tokenID)
     {
-        setTokenPrice(tokenID, price, address(0), Approve.None);
-    }
-
-    /// @notice SET token price
-    /// @param tokenID : token ID
-    /// @param price : token price in wei
-    function setTokenPrice(uint256 tokenID, uint256 price, address approved, Approve approveType)
-        public
-        override (IOpenMarketable)
-        onlyTokenOwnerOrApproved(tokenID)
-    {
-        _setTokenPrice(tokenID, price);
-
-        if (approveType == Approve.All) {
-            setApprovalForAll(approved, true);
-        } else if (approveType == Approve.One) {
-            approve(approved, tokenID);
-        }
+        _setTokenPrice(tokenID, price, address(this), Approve.All);
     }
 
     /// @notice SET token royalty info
@@ -114,18 +97,6 @@ abstract contract OpenMarketable is
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    /// @notice SET token royalty receiver
-    /// @param tokenID : token ID
-    /// @param receiver : address of the royalty receiver, or address(0) to reset
-    function setTokenRoyaltyReceiver(uint256 tokenID, address receiver)
-        public
-        override (IOpenMarketable)
-        existsToken(tokenID)
-        onlyOwner
-    {
-        _tokenRoyalty[tokenID].account = receiver;
-    }
-
     function getDefaultPrice() public view override (IOpenMarketable) returns (uint256) {
         return _defaultPrice;
     }
@@ -140,30 +111,26 @@ abstract contract OpenMarketable is
     }
 
     /// @notice GET default royalty info
-    /// @return receiver : address of the royalty receiver, or address(0) to reset
-    /// @return fee : fee Numerator, less than 10_000
+    /// @return receiver : default royalty receiver infos
     function getDefaultRoyalty()
         public
         view
         override (IOpenMarketable)
-        returns (address receiver, uint96 fee)
+        returns (ReceiverInfos memory receiver)
     {
-        receiver = _defaultRoyalty.account;
-        fee = _defaultRoyalty.fee;
+        receiver = _defaultRoyalty;
     }
 
     /// @notice GET token royalty info
     /// @param tokenID : token ID
-    /// @return receiver : address of the royalty receiver, or address(0) to reset
-    /// @return fee : fee Numerator, less than 10_000
+    /// @return receiver :  token royalty receiver infos
     function getTokenRoyalty(uint256 tokenID)
         public
         view
         override (IOpenMarketable)
-        returns (address receiver, uint96 fee)
+        returns (ReceiverInfos memory receiver)
     {
-        receiver = _tokenRoyalty[tokenID].account;
-        fee = _tokenRoyalty[tokenID].fee;
+        receiver = _tokenRoyalty[tokenID];
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -188,8 +155,8 @@ abstract contract OpenMarketable is
         internal
     {
         _defaultPrice = defaultPrice_;
-        _defaultRoyalty = Receiver(receiver_, fee_, 0);
-        _treasury = Receiver(treasury_, treasuryFee_, 0);
+        _defaultRoyalty = ReceiverInfos(receiver_, fee_, 0);
+        _treasury = ReceiverInfos(treasury_, treasuryFee_, 0);
         _minimum = minimum_;
     }
 
@@ -226,7 +193,7 @@ abstract contract OpenMarketable is
     }
 
     function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
-        _defaultRoyalty = Receiver(receiver, fee, 0);
+        _defaultRoyalty = ReceiverInfos(receiver, fee, 0);
 
         emit SetDefaultRoyalty(receiver, fee);
     }
@@ -237,15 +204,28 @@ abstract contract OpenMarketable is
     {
         uint256 minimum = _minimum ? _calculateAmount(_defaultPrice, fee) : 0;
 
-        _tokenRoyalty[tokenID] = Receiver(receiver, fee, minimum);
+        _tokenRoyalty[tokenID] = ReceiverInfos(receiver, fee, minimum);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function _setTokenPrice(uint256 tokenID, uint256 price) internal notTooExpensive(price) {
+    /// @notice SET token price
+    /// @param tokenID : token ID
+    /// @param price : token price in wei
+    function _setTokenPrice(uint256 tokenID, uint256 price, address approved, Approve approveType)
+        internal
+        onlyTokenOwnerOrApproved(tokenID)
+        notTooExpensive(price)
+    {
         _tokenPrice[tokenID] = price;
 
         emit SetTokenPrice(tokenID, price);
+
+        if (approveType == Approve.All) {
+            setApprovalForAll(approved, true);
+        } else if (approveType == Approve.One) {
+            approve(approved, tokenID);
+        }
     }
 
     function _setDefaultPrice(uint256 price) internal notTooExpensive(price) {

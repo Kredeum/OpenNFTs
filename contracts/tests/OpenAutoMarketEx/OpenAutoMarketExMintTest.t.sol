@@ -12,7 +12,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
     address private _minter = makeAddr("minter");
     address private _buyer = makeAddr("buyer");
     address private _tester = makeAddr("tester");
-    bool[] private _options = new bool[](1);
+    bool[] private _options = new bool[](2);
 
     receive() external payable {}
 

@@ -12,7 +12,7 @@ abstract contract OpenNFTsExInitializeTest is Test {
     address private _minter = address(0x12);
     address private _buyer = address(0x13);
     address private _tester = address(0x4);
-    bool[] private _options = new bool[](1);
+    bool[] private _options = new bool[](2);
     address payable private _treasury = payable(address(0x7));
     uint96 private _treasuryFee = 0;
 
@@ -22,6 +22,7 @@ abstract contract OpenNFTsExInitializeTest is Test {
         _collection = constructorTest(_owner, false);
 
         _options[0] = true;
+        _options[1] = false;
     }
 
     function testInitializeDirect() public {

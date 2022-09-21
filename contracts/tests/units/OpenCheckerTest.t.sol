@@ -21,7 +21,7 @@ abstract contract OpenCheckerTest is Test {
     function setUpOpenChecker() public {
         _resolver = constructorTest(_owner);
 
-        bool[] memory options = new bool[](1);
+        bool[] memory options = new bool[](2);
         options[0] = true;
 
         OpenNFTsEx openNFTsEx = new OpenNFTsEx();

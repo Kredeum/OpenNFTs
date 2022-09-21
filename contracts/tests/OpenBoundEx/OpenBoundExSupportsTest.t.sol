@@ -14,7 +14,7 @@ abstract contract OpenBoundExSupportsTest is Test {
     address private _minter = address(0x12);
     address private _buyer = address(0x13);
     address private _tester = address(0x4);
-    bool[] private _options = new bool[](1);
+    bool[] private _options = new bool[](2);
 
     function constructorTest(address owner_) public virtual returns (address);
 
