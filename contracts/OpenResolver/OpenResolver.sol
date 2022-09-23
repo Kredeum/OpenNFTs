@@ -55,12 +55,7 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         address[] memory collections,
         address account,
         bytes4[] memory interfaceIds
-    )
-        public
-        view
-        override (IOpenResolver)
-        returns (CollectionInfos[] memory collectionsInfos)
-    {
+    ) public view override (IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
         collectionsInfos = new CollectionInfos[](collections.length);
         for (uint256 i = 0; i < collections.length; i++) {
             collectionsInfos[i] = _getCollectionInfos(collections[i], account, interfaceIds);

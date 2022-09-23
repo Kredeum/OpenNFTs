@@ -151,9 +151,7 @@ abstract contract OpenMarketable is
         address treasury_,
         uint96 treasuryFee_,
         bool minimum_
-    )
-        internal
-    {
+    ) internal {
         _defaultPrice = defaultPrice_;
         _defaultRoyalty = ReceiverInfos(receiver_, fee_, 0);
         _treasury = ReceiverInfos(treasury_, treasuryFee_, 0);

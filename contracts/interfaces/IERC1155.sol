@@ -30,8 +30,7 @@ interface IERC1155 {
         uint256 id,
         uint256 amount,
         bytes calldata data
-    )
-        external;
+    ) external;
 
     function safeBatchTransferFrom(
         address from,
@@ -39,8 +38,7 @@ interface IERC1155 {
         uint256[] calldata ids,
         uint256[] calldata amounts,
         bytes calldata data
-    )
-        external;
+    ) external;
 
     function setApprovalForAll(address operator, bool approved) external;
 

@@ -8,8 +8,5 @@ interface IOpenResolver is IERCNftInfos {
         address[] memory collections,
         address account,
         bytes4[] memory interfaceIds
-    )
-        external
-        view
-        returns (CollectionInfos[] memory collectionsInfos);
+    ) external view returns (CollectionInfos[] memory collectionsInfos);
 }

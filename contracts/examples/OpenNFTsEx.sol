@@ -78,10 +78,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         address treasury_,
         uint96 treasuryFee_,
         bool[] memory options_
-    )
-        public
-        override (IOpenNFTsEx)
-    {
+    ) public override (IOpenNFTsEx) {
         open = options_[0];
         OpenNFTs._initialize(
             name_, symbol_, owner_, 0, address(0), 0, treasury_, treasuryFee_, options_[1]
@@ -93,10 +90,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         string memory symbol_,
         address owner_,
         bytes memory params_
-    )
-        public
-        override (OpenCloneable)
-    {
+    ) public override (OpenCloneable) {
         (address payable treasury_, uint96 treasuryFee_, bool[] memory options_) =
             abi.decode(params_, (address, uint96, bool[]));
         initialize(name_, symbol_, owner_, treasury_, treasuryFee_, options_);

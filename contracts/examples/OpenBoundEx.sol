@@ -23,8 +23,8 @@
 //  OpenERC721 (NFT)  OpenERC173  OpenChecker  OpenCloneable
 //      |             (ownable)         |            |
 //      |                 |             |            |
-//      |                 |             |            |
-//      |            OpenPauseable      |            |
+//  OpenERC5192      OpenPauseable      |            |
+//  (SoulBound)           |             |            |
 //      |                 |             |            |
 //      ——————————————————————————————————————————————
 //      |
@@ -35,7 +35,7 @@ pragma solidity 0.8.9;
 import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";
 import "OpenNFTs/contracts/OpenCloner/OpenCloneable.sol";
-import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC5192.sol";
 
 import "OpenNFTs/contracts/examples/IOpenBoundEx.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
@@ -53,7 +53,7 @@ contract OpenBoundEx is
     OpenCloneable,
     OpenChecker,
     OpenPauseable,
-    OpenERC721
+    OpenERC5192
 {
     uint256 public maxSupply;
 
@@ -163,10 +163,7 @@ contract OpenBoundEx is
         string memory symbol_,
         address owner_,
         uint256 maxSupply_
-    )
-        public
-        override (IOpenBoundEx)
-    {
+    ) public override (IOpenBoundEx) {
         OpenCloneable._initialize("OpenBound", 1);
         OpenERC173._initialize(owner_);
 
@@ -180,10 +177,7 @@ contract OpenBoundEx is
         string memory symbol_,
         address owner_,
         bytes memory params_
-    )
-        public
-        override (OpenCloneable)
-    {
+    ) public override (OpenCloneable) {
         initialize(name_, symbol_, owner_, abi.decode(params_, (uint256)));
     }
 
@@ -191,7 +185,7 @@ contract OpenBoundEx is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override (OpenPauseable, OpenCloneable, OpenERC721, OpenChecker)
+        override (OpenPauseable, OpenCloneable, OpenERC5192, OpenChecker)
         returns (bool)
     {
         return interfaceId == type(IOpenBoundEx).interfaceId
@@ -216,7 +210,7 @@ contract OpenBoundEx is
 
     function _mint(address to, string memory newTokenURI, uint256 tokenID)
         internal
-        override (OpenERC721)
+        override (OpenERC5192)
     {
         super._mint(to, newTokenURI, tokenID);
     }
@@ -243,11 +237,7 @@ contract OpenBoundEx is
         address from,
         address to,
         uint256 // tokenId
-    )
-        internal
-        pure
-        override (OpenERC721)
-    {
+    ) internal pure override (OpenERC721) {
         require(from == address(0) || to == address(0), "Non transferable NFT");
     }
 

@@ -111,9 +111,7 @@ abstract contract OpenNFTs is
         address treasury_,
         uint96 treasuryFee_,
         bool minimum_
-    )
-        internal
-    {
+    ) internal {
         tokenIdNext = 1;
 
         OpenCloneable._initialize("OpenNFTs", 4);

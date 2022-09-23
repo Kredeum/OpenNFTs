@@ -10,9 +10,7 @@ interface IERC1155TokenReceiver {
         uint256[] calldata,
         uint256[] calldata,
         bytes calldata
-    )
-        external
-        returns (bytes4);
+    ) external returns (bytes4);
 
     function onERC1155Received(address, address, uint256, uint256, bytes calldata)
         external

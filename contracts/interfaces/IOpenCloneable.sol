@@ -7,8 +7,7 @@ interface IOpenCloneable {
         string memory symbol,
         address owner,
         bytes memory params
-    )
-        external;
+    ) external;
 
     function initialized() external view returns (bool);
 

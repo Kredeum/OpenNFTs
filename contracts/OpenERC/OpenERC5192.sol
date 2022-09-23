@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 //
-// Derived from Kredeum NFTs
-// https://github.com/Kredeum/kredeum
+// EIP-5192: Minimal Soulbound NFTs Standard
+// https://eips.ethereum.org/EIPS/eip-5192
 //
 //       ___           ___         ___           ___              ___           ___                     ___
 //      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
@@ -15,51 +15,39 @@
 //     \  \::/       \  \:\      \  \::/       \  \:\           \  \:\        \  \:\         \__\/     /__/:/
 //      \__\/         \__\/       \__\/         \__\/            \__\/         \__\/                   \__\/
 //
-//   OpenERC165
-//        |
-//  OpenCloneable —— IOpenCloneable
+//  OpenERC165
+//       |
+//  OpenERC721
+//       |
+//  OpenERC5192 —— IERC5192
 //
 pragma solidity 0.8.9;
 
-import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
-import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
+import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
+import "OpenNFTs/contracts/interfaces/IERC5192.sol";
 
-abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
-    bool public initialized;
-    string public template;
-    uint256 public version;
-
-    function parent() external view override (IOpenCloneable) returns (address parent_) {
-        // eip1167 deployed code = 45 bytes = 10 bytes + 20 bytes address + 15 bytes
-        // extract bytes 10 to 30: shift 2 bytes (16 bits) then truncate to address 20 bytes (uint160)
-        return (address(this).code.length == 45)
-            ? address(uint160(uint256(bytes32(address(this).code)) >> 16))
-            : address(0);
-    }
-
-    function initialize(
-        string memory name,
-        string memory symbol,
-        address owner,
-        bytes memory params
-    ) public virtual override (IOpenCloneable);
-
+abstract contract OpenERC5192 is IERC5192, OpenERC721 {
     function supportsInterface(bytes4 interfaceId)
         public
         view
         virtual
-        override (OpenERC165)
+        override (OpenERC721)
         returns (bool)
     {
-        return interfaceId == type(IOpenCloneable).interfaceId
-            || super.supportsInterface(interfaceId);
+        return interfaceId == 0xb45a3c0e || super.supportsInterface(interfaceId);
     }
 
-    function _initialize(string memory template_, uint256 version_) internal {
-        require(initialized == false, "Already initialized");
-        initialized = true;
+    function locked(uint256) public pure override (IERC5192) returns (bool) {
+        return true;
+    }
 
-        template = template_;
-        version = version_;
+    function _mint(address to, string memory tokenURI, uint256 tokenID)
+        internal
+        virtual
+        override (OpenERC721)
+    {
+        super._mint(to, tokenURI, tokenID);
+
+        emit Locked(tokenID);
     }
 }

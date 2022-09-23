@@ -9,8 +9,7 @@ interface IOpenNFTsEx {
         address treasury,
         uint96 treasuryFee,
         bool[] memory options
-    )
-        external;
+    ) external;
 
     function mint(string memory tokenURI) external returns (uint256 tokenID);
 
