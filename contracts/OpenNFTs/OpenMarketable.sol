@@ -57,8 +57,8 @@ abstract contract OpenMarketable is
 
     /// @notice SET default mint price
     /// @param price : default price in wei
-    function setDefaultPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
-        _setDefaultPrice(price);
+    function setMintPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
+        _setMintPrice(price);
     }
 
     /// @notice SET default royalty info
@@ -97,8 +97,8 @@ abstract contract OpenMarketable is
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function getDefaultPrice() public view override (IOpenMarketable) returns (uint256) {
-        return _defaultPrice;
+    function getMintPrice() public view override (IOpenMarketable) returns (uint256) {
+        return _mintPrice;
     }
 
     function getTokenPrice(uint256 tokenID)
@@ -145,14 +145,14 @@ abstract contract OpenMarketable is
     }
 
     function _initialize(
-        uint256 defaultPrice_,
+        uint256 mintPrice_,
         address receiver_,
         uint96 fee_,
         address treasury_,
         uint96 treasuryFee_,
         bool minimum_
     ) internal {
-        _defaultPrice = defaultPrice_;
+        _mintPrice = mintPrice_;
         _defaultRoyalty = ReceiverInfos(receiver_, fee_, 0);
         _treasury = ReceiverInfos(treasury_, treasuryFee_, 0);
         _minimum = minimum_;
@@ -165,7 +165,7 @@ abstract contract OpenMarketable is
     {
         _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
-        _pay(tokenID, _defaultPrice, to, owner());
+        _pay(tokenID, _mintPrice, to, owner());
 
         super._mint(to, tokenURI, tokenID);
     }
@@ -200,7 +200,7 @@ abstract contract OpenMarketable is
         internal
         lessThanMaxFee(fee)
     {
-        uint256 minimum = _minimum ? _calculateAmount(_defaultPrice, fee) : 0;
+        uint256 minimum = _minimum ? _calculateAmount(_mintPrice, fee) : 0;
 
         _tokenRoyalty[tokenID] = ReceiverInfos(receiver, fee, minimum);
 
@@ -226,10 +226,10 @@ abstract contract OpenMarketable is
         }
     }
 
-    function _setDefaultPrice(uint256 price) internal notTooExpensive(price) {
-        _defaultPrice = price;
+    function _setMintPrice(uint256 price) internal notTooExpensive(price) {
+        _mintPrice = price;
 
-        emit SetDefaultPrice(price);
+        emit SetMintPrice(price);
     }
 
     function _pay(uint256 tokenID, uint256 price, address buyer, address seller)

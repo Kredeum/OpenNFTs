@@ -93,11 +93,11 @@ abstract contract OpenMarketableTest is Test, IOpenReceiverInfos {
         assertEq(IOpenMarketable(payable(_collection)).getTokenPrice(_tokenID0), 1 ether);
     }
 
-    function testFailSetDefaultPriceTooExpensive(uint256 price) public {
+    function testFailSetMintPriceTooExpensive(uint256 price) public {
         vm.assume(price > 2 ** 128);
 
         changePrank(_owner);
-        IOpenMarketable(payable(_collection)).setDefaultPrice(price);
+        IOpenMarketable(payable(_collection)).setMintPrice(price);
     }
 
     function testFailSetTokenPriceTooExpensive(uint256 price) public {
@@ -132,7 +132,7 @@ abstract contract OpenMarketableTest is Test, IOpenReceiverInfos {
         uint96 fee = 100;
 
         changePrank(_owner);
-        IOpenMarketable(payable(_collection)).setDefaultPrice(price);
+        IOpenMarketable(payable(_collection)).setMintPrice(price);
         IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);
 
         (uint256 tokenID,) = mintTest(_collection, _owner);
@@ -143,13 +143,13 @@ abstract contract OpenMarketableTest is Test, IOpenReceiverInfos {
         assertEq(royalties, (price * fee) / _maxFee);
     }
 
-    function testRoyaltyInfoMinimal(uint256 defaultPrice, uint256 tokenPrice, uint96 fee) public {
-        vm.assume(defaultPrice < 2 ** 128);
+    function testRoyaltyInfoMinimal(uint256 mintPrice, uint256 tokenPrice, uint96 fee) public {
+        vm.assume(mintPrice < 2 ** 128);
         vm.assume(tokenPrice < 2 ** 128);
         vm.assume(fee < _maxFee);
 
         changePrank(_owner);
-        IOpenMarketable(payable(_collection)).setDefaultPrice(defaultPrice);
+        IOpenMarketable(payable(_collection)).setMintPrice(mintPrice);
         IOpenMarketable(payable(_collection)).setDefaultRoyalty(_minter, fee);
 
         (uint256 tokenID,) = mintTest(_collection, _owner);
@@ -158,7 +158,7 @@ abstract contract OpenMarketableTest is Test, IOpenReceiverInfos {
             IERC2981(_collection).royaltyInfo(tokenID, tokenPrice);
         assertEq(receiver, _minter);
 
-        uint256 maxPrice = defaultPrice > tokenPrice ? defaultPrice : tokenPrice;
+        uint256 maxPrice = mintPrice > tokenPrice ? mintPrice : tokenPrice;
         assertEq(royalties, (maxPrice * fee) / _maxFee);
     }
 

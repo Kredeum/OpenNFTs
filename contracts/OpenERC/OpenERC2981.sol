@@ -29,7 +29,7 @@ import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenReceiverInfos.sol";
 
 abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
-    uint256 internal _defaultPrice;
+    uint256 internal _mintPrice;
     ReceiverInfos internal _defaultRoyalty;
     mapping(uint256 => ReceiverInfos) internal _tokenRoyalty;
 
@@ -64,12 +64,12 @@ abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
         /// MINIMAL royaltyAmount
         if (royalty.minimum > 0) {
             /// with zero price, token owner can bypass royalties...
-            /// SO set a minimumRoyaltyAmount calculated on defaultPrice (than can only be modified by collection owner)
-            /// BUT collection owner can higher too much defaultPrice making fees too high
+            /// SO set a minimumRoyaltyAmount calculated on mintPrice (than can only be modified by collection owner)
+            /// BUT collection owner can higher too much mintPrice making fees too high
             /// SO moreover store a minimumRoyaltyAmount per token defined during mint, or last transfer
 
             /// MIN(royalty.minimum, defaultRoyaltyAmount)
-            uint256 defaultRoyaltyAmount = _calculateAmount(_defaultPrice, royalty.fee);
+            uint256 defaultRoyaltyAmount = _calculateAmount(_mintPrice, royalty.fee);
             uint256 minimumRoyaltyAmount =
                 royalty.minimum < defaultRoyaltyAmount ? royalty.minimum : defaultRoyaltyAmount;
 

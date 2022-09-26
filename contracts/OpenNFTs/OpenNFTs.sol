@@ -105,7 +105,7 @@ abstract contract OpenNFTs is
         string memory name_,
         string memory symbol_,
         address owner_,
-        uint256 defaultPrice_,
+        uint256 mintPrice_,
         address receiver_,
         uint96 fee_,
         address treasury_,
@@ -117,9 +117,7 @@ abstract contract OpenNFTs is
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);
         OpenERC173._initialize(owner_);
-        OpenMarketable._initialize(
-            defaultPrice_, receiver_, fee_, treasury_, treasuryFee_, minimum_
-        );
+        OpenMarketable._initialize(mintPrice_, receiver_, fee_, treasury_, treasuryFee_, minimum_);
     }
 
     /// @notice _mint

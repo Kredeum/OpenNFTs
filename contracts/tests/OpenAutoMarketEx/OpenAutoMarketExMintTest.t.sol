@@ -52,11 +52,11 @@ abstract contract OpenAutoMarketExMintTest is Test {
         assertEq(royalties, 0.02 ether);
     }
 
-    function testOpenAutoMarketExSetDefaultPrice() public {
+    function testOpenAutoMarketExSetMintPrice() public {
         changePrank(_owner);
-        IOpenMarketable(_collection).setDefaultPrice(1 ether);
+        IOpenMarketable(_collection).setMintPrice(1 ether);
 
-        assertEq(IOpenMarketable(_collection).getDefaultPrice(), 1 ether);
+        assertEq(IOpenMarketable(_collection).getMintPrice(), 1 ether);
     }
 
     function testOpenAutoMarketExSetTokenPrice() public {
@@ -64,7 +64,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
 
         changePrank(_owner);
         IOpenMarketable(_collection).setTokenPrice(tokenID, 2 ether);
-        IOpenMarketable(_collection).setDefaultPrice(1 ether);
+        IOpenMarketable(_collection).setMintPrice(1 ether);
 
         assertEq(IOpenMarketable(_collection).getTokenPrice(tokenID), 2 ether);
     }
@@ -73,7 +73,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
     function testOpenAutoMarketExBuyMint() public {
         changePrank(_owner);
         IOpenMarketable(_collection).setDefaultRoyalty(_tester, 100);
-        IOpenMarketable(_collection).setDefaultPrice(1 ether);
+        IOpenMarketable(_collection).setMintPrice(1 ether);
 
         deal(_buyer, 10 ether);
         changePrank(_buyer);
