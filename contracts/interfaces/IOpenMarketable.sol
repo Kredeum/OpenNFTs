@@ -42,6 +42,8 @@ interface IOpenMarketable is IOpenReceiverInfos {
 
     function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee) external;
 
+    function minimal() external view returns (bool);
+
     function getMintPrice() external view returns (uint256 price);
 
     function getDefaultRoyalty() external view returns (ReceiverInfos memory receiver);

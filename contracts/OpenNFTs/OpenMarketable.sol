@@ -44,7 +44,7 @@ abstract contract OpenMarketable is
 {
     mapping(uint256 => uint256) internal _tokenPrice;
 
-    bool private _minimum;
+    bool public minimal;
 
     ReceiverInfos internal _treasury;
 
@@ -150,12 +150,12 @@ abstract contract OpenMarketable is
         uint96 fee_,
         address treasury_,
         uint96 treasuryFee_,
-        bool minimum_
+        bool minimal_
     ) internal {
         _mintPrice = mintPrice_;
         _defaultRoyalty = ReceiverInfos(receiver_, fee_, 0);
         _treasury = ReceiverInfos(treasury_, treasuryFee_, 0);
-        _minimum = minimum_;
+        minimal = minimal_;
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID)
@@ -200,7 +200,7 @@ abstract contract OpenMarketable is
         internal
         lessThanMaxFee(fee)
     {
-        uint256 minimum = _minimum ? _calculateAmount(_mintPrice, fee) : 0;
+        uint256 minimum = minimal ? _calculateAmount(_mintPrice, fee) : 0;
 
         _tokenRoyalty[tokenID] = ReceiverInfos(receiver, fee, minimum);
 

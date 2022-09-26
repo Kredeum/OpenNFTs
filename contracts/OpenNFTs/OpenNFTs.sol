@@ -110,14 +110,14 @@ abstract contract OpenNFTs is
         uint96 fee_,
         address treasury_,
         uint96 treasuryFee_,
-        bool minimum_
+        bool minimal_
     ) internal {
         tokenIdNext = 1;
 
         OpenCloneable._initialize("OpenNFTs", 4);
         OpenERC721Metadata._initialize(name_, symbol_);
         OpenERC173._initialize(owner_);
-        OpenMarketable._initialize(mintPrice_, receiver_, fee_, treasury_, treasuryFee_, minimum_);
+        OpenMarketable._initialize(mintPrice_, receiver_, fee_, treasury_, treasuryFee_, minimal_);
     }
 
     /// @notice _mint

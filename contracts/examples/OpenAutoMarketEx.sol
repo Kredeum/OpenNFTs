@@ -42,12 +42,12 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 
-    function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimum)
+    function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimal)
         public
         override (IOpenAutoMarketEx)
     {
         OpenERC173._initialize(owner);
-        OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee, minimum);
+        OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee, minimal);
     }
 
     function supportsInterface(bytes4 interfaceId)
