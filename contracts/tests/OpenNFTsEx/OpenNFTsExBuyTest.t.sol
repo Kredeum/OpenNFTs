@@ -46,6 +46,8 @@ abstract contract OpenNFTsExBuyTest is Test {
         IOpenNFTsEx(_collection).buy{value: 1.5 ether}(_tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
 
+        // emit log_named_decimal_uint("testBuyOk _buyer.balance", _buyer.balance, 18);
+
         assertEq(_buyer.balance, 9 ether);
         assertEq(_collection.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);

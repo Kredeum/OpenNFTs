@@ -165,7 +165,7 @@ abstract contract OpenMarketable is
     {
         _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
-        _pay(tokenID, _mintPrice, to, owner());
+        if (to != owner()) _pay(tokenID, _mintPrice, to, owner());
 
         super._mint(to, tokenURI, tokenID);
     }
@@ -236,6 +236,7 @@ abstract contract OpenMarketable is
         private
         reEntryGuard
     {
+        require(msg.value >= price, "Not enough funds");
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
 
@@ -245,46 +246,37 @@ abstract contract OpenMarketable is
         uint256 paid;
         uint256 unspent = msg.value;
 
-        if (!(price == 0 || buyer == seller)) {
-            require(msg.value >= price, "Not enough funds");
+        (receiver, royalties) = royaltyInfo(tokenID, price);
+        if (receiver == address(0)) royalties = 0;
 
-            if (msg.value != 0) {
-                fee = _calculateAmount(price, _treasury.fee);
+        if (royalties > 0 || price > 0) {
+            fee = _calculateAmount(price, _treasury.fee);
+            require(msg.value >= royalties + fee, "Not enough funds");
 
-                (receiver, royalties) = royaltyInfo(tokenID, price);
-                if (receiver == address(0)) {
-                    royalties = 0;
-                }
+            /// Transfer royalties to receiver
+            if (royalties > 0) {
+                unspent = unspent - royalties;
+                payable(receiver).transfer(royalties);
+            }
 
-                require(royalties + fee <= price, "Invalid royalties");
+            /// Transfer fee to protocol treasury
+            if (fee > 0) {
+                unspent = unspent - fee;
+                payable(_treasury.account).transfer(fee);
+            }
 
-                /// Transfer amount to be paid to seller, the previous owner
+            /// Transfer amount to be paid to seller
+            if (price > royalties + fee) {
                 paid = price - (royalties + fee);
-                if (paid > 0) {
-                    unspent = unspent - paid;
-                    payable(seller).transfer(paid);
-                }
-
-                /// Transfer royalties to receiver
-                if (royalties > 0) {
-                    unspent = unspent - royalties;
-                    payable(receiver).transfer(royalties);
-                }
-
-                /// Transfer fee to treasury
-                if (fee > 0) {
-                    unspent = unspent - fee;
-                    payable(_treasury.account).transfer(fee);
-                }
+                unspent = unspent - paid;
+                payable(seller).transfer(paid);
             }
         }
 
         assert(paid + royalties + fee + unspent == msg.value);
 
-        /// Transfer back unspent funds to buyer
-        if (unspent > 0) {
-            payable(buyer).transfer(unspent);
-        }
+        /// Transfer back unspent funds to sender
+        if (unspent > 0) payable(buyer).transfer(unspent);
 
         emit Pay(tokenID, price, seller, paid, receiver, royalties, fee, buyer, unspent);
     }
