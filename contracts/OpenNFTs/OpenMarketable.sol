@@ -253,6 +253,13 @@ abstract contract OpenMarketable is
             fee = _calculateAmount(price, _treasury.fee);
             require(msg.value >= royalties + fee, "Not enough funds");
 
+            /// Transfer amount to be paid to seller
+            if (price > royalties + fee) {
+                paid = price - (royalties + fee);
+                unspent = unspent - paid;
+                payable(seller).transfer(paid);
+            }
+
             /// Transfer royalties to receiver
             if (royalties > 0) {
                 unspent = unspent - royalties;
@@ -263,13 +270,6 @@ abstract contract OpenMarketable is
             if (fee > 0) {
                 unspent = unspent - fee;
                 payable(_treasury.account).transfer(fee);
-            }
-
-            /// Transfer amount to be paid to seller
-            if (price > royalties + fee) {
-                paid = price - (royalties + fee);
-                unspent = unspent - paid;
-                payable(seller).transfer(paid);
             }
         }
 
