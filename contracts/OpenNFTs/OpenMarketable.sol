@@ -48,16 +48,16 @@ abstract contract OpenMarketable is
 
     ReceiverInfos internal _treasury;
 
-    receive() external payable override (IOpenMarketable) {}
+    receive() external payable override(IOpenMarketable) {}
 
     /// @notice withdraw eth
-    function withdraw() external override (IOpenMarketable) onlyOwner {
+    function withdraw() external override(IOpenMarketable) onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
     }
 
     /// @notice SET default mint price
     /// @param price : default price in wei
-    function setMintPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
+    function setMintPrice(uint256 price) public override(IOpenMarketable) onlyOwner {
         _setMintPrice(price);
     }
 
@@ -66,7 +66,7 @@ abstract contract OpenMarketable is
     /// @param fee : fee Numerator, less than 10000
     function setDefaultRoyalty(address receiver, uint96 fee)
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         onlyOwner
     {
         _setDefaultRoyalty(receiver, fee);
@@ -77,7 +77,7 @@ abstract contract OpenMarketable is
     /// @param price : token price in wei
     function setTokenPrice(uint256 tokenID, uint256 price)
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         onlyTokenOwnerOrApproved(tokenID)
     {
         _setTokenPrice(tokenID, price, address(this), Approve.All);
@@ -87,9 +87,13 @@ abstract contract OpenMarketable is
     /// @param tokenID : token ID
     /// @param receiver : address of the royalty receiver, or address(0) to reset
     /// @param fee : fee Numerator, less than 10_000
-    function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
+    function setTokenRoyalty(
+        uint256 tokenID,
+        address receiver,
+        uint96 fee
+    )
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         existsToken(tokenID)
         onlyOwner
         onlyTokenOwnerOrApproved(tokenID)
@@ -97,14 +101,14 @@ abstract contract OpenMarketable is
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function getMintPrice() public view override (IOpenMarketable) returns (uint256) {
+    function getMintPrice() public view override(IOpenMarketable) returns (uint256) {
         return _mintPrice;
     }
 
     function getTokenPrice(uint256 tokenID)
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (uint256)
     {
         return _tokenPrice[tokenID];
@@ -115,7 +119,7 @@ abstract contract OpenMarketable is
     function getDefaultRoyalty()
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (ReceiverInfos memory receiver)
     {
         receiver = _defaultRoyalty;
@@ -127,7 +131,7 @@ abstract contract OpenMarketable is
     function getTokenRoyalty(uint256 tokenID)
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (ReceiverInfos memory receiver)
     {
         receiver = _tokenRoyalty[tokenID];
@@ -137,11 +141,12 @@ abstract contract OpenMarketable is
         public
         view
         virtual
-        override (OpenERC721, OpenERC173, OpenERC2981)
+        override(OpenERC721, OpenERC173, OpenERC2981)
         returns (bool)
     {
-        return interfaceId == type(IOpenMarketable).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenMarketable).interfaceId ||
+            super.supportsInterface(interfaceId);
     }
 
     function _initialize(
@@ -152,17 +157,17 @@ abstract contract OpenMarketable is
         uint96 treasuryFee_,
         bool minimal_
     ) internal {
-        _mintPrice = mintPrice_;
-        _defaultRoyalty = ReceiverInfos(receiver_, fee_, 0);
-        _treasury = ReceiverInfos(treasury_, treasuryFee_, 0);
         minimal = minimal_;
+        _mintPrice = mintPrice_;
+        _defaultRoyalty = _createReceiverInfos(receiver_, fee_);
+        _treasury = _createReceiverInfos(treasury_, treasuryFee_);
     }
 
-    function _mint(address to, string memory tokenURI, uint256 tokenID)
-        internal
-        virtual
-        override (OpenERC721)
-    {
+    function _mint(
+        address to,
+        string memory tokenURI,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
         _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
         if (to != owner()) _pay(tokenID, _mintPrice, to, owner());
@@ -170,18 +175,18 @@ abstract contract OpenMarketable is
         super._mint(to, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         delete _tokenRoyalty[tokenID];
         delete _tokenPrice[tokenID];
 
         super._burn(tokenID);
     }
 
-    function _transferFromBefore(address from, address to, uint256 tokenID)
-        internal
-        virtual
-        override (OpenERC721)
-    {
+    function _transferFromBefore(
+        address from,
+        address to,
+        uint256 tokenID
+    ) internal virtual override(OpenERC721) {
         /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
         _pay(tokenID, _tokenPrice[tokenID], to, ownerOf(tokenID));
 
@@ -191,18 +196,17 @@ abstract contract OpenMarketable is
     }
 
     function _setDefaultRoyalty(address receiver, uint96 fee) internal lessThanMaxFee(fee) {
-        _defaultRoyalty = ReceiverInfos(receiver, fee, 0);
+        _defaultRoyalty = _createReceiverInfos(receiver, fee);
 
         emit SetDefaultRoyalty(receiver, fee);
     }
 
-    function _setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
-        internal
-        lessThanMaxFee(fee)
-    {
-        uint256 minimum = minimal ? _calculateAmount(_mintPrice, fee) : 0;
-
-        _tokenRoyalty[tokenID] = ReceiverInfos(receiver, fee, minimum);
+    function _setTokenRoyalty(
+        uint256 tokenID,
+        address receiver,
+        uint96 fee
+    ) internal lessThanMaxFee(fee) {
+        _tokenRoyalty[tokenID] = _createReceiverInfos(receiver, fee);
 
         emit SetTokenRoyalty(tokenID, receiver, fee);
     }
@@ -210,11 +214,12 @@ abstract contract OpenMarketable is
     /// @notice SET token price
     /// @param tokenID : token ID
     /// @param price : token price in wei
-    function _setTokenPrice(uint256 tokenID, uint256 price, address approved, Approve approveType)
-        internal
-        onlyTokenOwnerOrApproved(tokenID)
-        notTooExpensive(price)
-    {
+    function _setTokenPrice(
+        uint256 tokenID,
+        uint256 price,
+        address approved,
+        Approve approveType
+    ) internal onlyTokenOwnerOrApproved(tokenID) notTooExpensive(price) {
         _tokenPrice[tokenID] = price;
 
         emit SetTokenPrice(tokenID, price);
@@ -228,14 +233,25 @@ abstract contract OpenMarketable is
 
     function _setMintPrice(uint256 price) internal notTooExpensive(price) {
         _mintPrice = price;
+        _setDefaultRoyalty(_defaultRoyalty.account, _defaultRoyalty.fee);
 
         emit SetMintPrice(price);
     }
 
-    function _pay(uint256 tokenID, uint256 price, address buyer, address seller)
-        private
-        reEntryGuard
+    function _createReceiverInfos(address receiver, uint96 fee)
+        internal
+        view
+        returns (ReceiverInfos memory)
     {
+        return ReceiverInfos(receiver, fee, minimal ? _calculateAmount(_mintPrice, fee) : 0);
+    }
+
+    function _pay(
+        uint256 tokenID,
+        uint256 price,
+        address buyer,
+        address seller
+    ) private reEntryGuard {
         require(msg.value >= price, "Not enough funds");
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
