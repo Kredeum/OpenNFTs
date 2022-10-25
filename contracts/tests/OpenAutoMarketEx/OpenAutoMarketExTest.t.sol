@@ -17,6 +17,7 @@ pragma solidity 0.8.9;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
+import "OpenNFTs/contracts/tests/OpenAutoMarketEx/OpenAutoMarketExHackTest.t.sol";
 import "OpenNFTs/contracts/tests/OpenAutoMarketEx/OpenAutoMarketExMintTest.t.sol";
 
 import "OpenNFTs/contracts/tests/units/ERC165Test.t.sol";
@@ -36,10 +37,13 @@ contract OpenAutoMarketExTest is
     ERC721TransferableTest,
     ERC2981Test,
     OpenMarketableTest,
+    OpenAutoMarketExHackTest,
     OpenAutoMarketExMintTest
 {
     string private constant _TOKEN_URI =
         "ipfs://bafkreidfhassyaujwpbarjwtrc6vgn2iwfjmukw3v7hvgggvwlvdngzllm";
+
+    receive() external payable {}
 
     function constructorTest(address owner)
         public
@@ -50,6 +54,7 @@ contract OpenAutoMarketExTest is
             ERC721TransferableTest,
             ERC2981Test,
             OpenMarketableTest,
+            OpenAutoMarketExHackTest,
             OpenAutoMarketExMintTest
         )
         returns (address)
@@ -67,6 +72,7 @@ contract OpenAutoMarketExTest is
             ERC721TransferableTest,
             ERC2981Test,
             OpenMarketableTest,
+            OpenAutoMarketExHackTest,
             OpenAutoMarketExMintTest
         )
         returns (uint256 tokenID, string memory tokenURI)
@@ -102,6 +108,7 @@ contract OpenAutoMarketExTest is
         setUpERC2981();
         setUpMarketable();
         setUpERC721Transferable();
+        setUpOpenAutoMarketExHack();
         setUpOpenAutoMarketExMint();
     }
 }

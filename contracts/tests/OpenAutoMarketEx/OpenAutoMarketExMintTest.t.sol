@@ -14,8 +14,6 @@ abstract contract OpenAutoMarketExMintTest is Test {
     address private _tester = makeAddr("tester");
     bool[] private _options = new bool[](2);
 
-    receive() external payable {}
-
     function constructorTest(address owner_) public virtual returns (address);
 
     function mintTest(address collection_, address minter_)

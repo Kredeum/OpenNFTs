@@ -1,7 +1,7 @@
 {
-  "name": "OpenNFTs",
-  "version": "0.8.22",
-  "description": "OpenNFTs is a library of smarcontract components, enabling the creation of various NFT Collection templates.",
+  "name": "opennfts",
+  "version": "0.9.0",
+  "description": "OpenNFTs library of smarcontract components, enabling the creation of various NFT Collection templates.",
   "directories": {
     "lib": "lib"
   },
