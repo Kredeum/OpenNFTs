@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 interface IOpenAutoMarketEx {
     function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimal)

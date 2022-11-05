@@ -14,7 +14,7 @@
 //
 //   OpenGuard
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 abstract contract OpenGuard {
     bool private _locked;

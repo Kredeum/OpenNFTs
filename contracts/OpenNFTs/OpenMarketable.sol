@@ -27,7 +27,7 @@
 //        |
 //  OpenMarketable —— IOpenMarketable - OpenGuard
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC173.sol";
@@ -140,8 +140,8 @@ abstract contract OpenMarketable is
         override (OpenERC721, OpenERC173, OpenERC2981)
         returns (bool)
     {
-        return interfaceId == type(IOpenMarketable).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenMarketable).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function _initialize(

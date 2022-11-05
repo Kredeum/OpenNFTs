@@ -8,7 +8,7 @@
 //        |
 //  OpenResolverEx —— IOpenResolverEx
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenResolver/OpenResolver.sol";
 import "OpenNFTs/contracts/examples/IOpenResolverEx.sol";
@@ -51,7 +51,7 @@ contract OpenResolverEx is IOpenResolverEx, OpenResolver {
         override (OpenResolver)
         returns (bool)
     {
-        return interfaceId == type(IOpenResolverEx).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenResolverEx).interfaceId || super.supportsInterface(interfaceId);
     }
 }

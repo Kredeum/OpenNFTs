@@ -19,7 +19,7 @@
 //        |
 //  OpenCloneable —— IOpenCloneable
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
@@ -51,8 +51,8 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
         override (OpenERC165)
         returns (bool)
     {
-        return interfaceId == type(IOpenCloneable).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenCloneable).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function _initialize(string memory template_, uint256 version_) internal {

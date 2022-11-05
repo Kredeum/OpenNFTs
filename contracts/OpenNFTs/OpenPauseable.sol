@@ -21,7 +21,7 @@
 //        |
 //  OpenPauseable –– IOpenPauseable
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IOpenPauseable.sol";
@@ -49,8 +49,8 @@ abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
         override (OpenERC173)
         returns (bool)
     {
-        return interfaceId == type(IOpenPauseable).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenPauseable).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function _setPaused(bool paused_) private {

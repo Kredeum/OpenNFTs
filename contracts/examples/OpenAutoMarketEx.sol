@@ -14,7 +14,7 @@
 //        |
 //  OpenAutoMarketEx —— IOpenAutoMarketEx
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenNFTs/OpenMarketable.sol";
 import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";

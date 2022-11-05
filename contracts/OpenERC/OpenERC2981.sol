@@ -22,7 +22,7 @@
 //       |
 //  OpenERC2981 —— IERC2981 —— IOpenReceiverInfos
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";

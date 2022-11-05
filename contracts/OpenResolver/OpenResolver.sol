@@ -27,7 +27,7 @@
 //        |
 //  OpenResolver —— IOpenResolver
 //
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/OpenResolver/OpenRegistry.sol";
 import "OpenNFTs/contracts/OpenResolver/OpenGetter.sol";
@@ -47,8 +47,8 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         override (OpenRegistry, OpenGetter)
         returns (bool)
     {
-        return interfaceId == type(IOpenResolver).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenResolver).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function getCollectionsInfos(

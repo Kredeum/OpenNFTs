@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (token/ERC1155/IERC1155TokenReceiver.sol)
 
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 interface IERC1155TokenReceiver {
     function onERC1155BatchReceived(

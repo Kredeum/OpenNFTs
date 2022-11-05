@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MITs
-pragma solidity 0.8.9;
+pragma solidity ^0.8.17;
 
 import "OpenNFTs/contracts/tests/units/ERC165Test.t.sol";
 import "OpenNFTs/contracts/tests/units/ERC721Test.t.sol";
