@@ -8,6 +8,7 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERCNftInfos.sol";
 import "OpenNFTs/contracts/interfaces/IOpenGetter.sol";
 import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
+import {ERC1155Ex} from "OpenNFTs/contracts/tests/ERC1155Ex/ERC1155Ex.sol";
 
 abstract contract OpenGetterTest is Test, IERCNftInfos {
     address private _resolver;
@@ -42,6 +43,25 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         _tokenID0 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
         _tokenID1 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
         _tokenID2 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
+    }
+
+    function testERC1155() public {
+        ERC1155Ex eRC1155Ex = new ERC1155Ex();
+
+        eRC1155Ex.balanceOf(address(this), 0);
+
+        vm.expectRevert("ERC1155: address zero is not a valid owner");
+        eRC1155Ex.balanceOf(address(0), 0);
+    }
+
+    function testERC1155OpenGetter() public {
+        ERC1155Ex eRC1155Ex = new ERC1155Ex();
+        eRC1155Ex.mint(10);
+
+        NftInfos memory nftInfos =
+            IOpenGetter(_resolver).getNftInfos(address(eRC1155Ex), 0, msg.sender);
+        assertEq(nftInfos.tokenID, 0);
+        assertEq(nftInfos.owner, address(0)); // no owner for ERC1155
     }
 
     function testOpenGetterGetNftInfos() public {

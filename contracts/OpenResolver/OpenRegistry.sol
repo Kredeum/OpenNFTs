@@ -79,8 +79,8 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
         override (OpenERC173)
         returns (bool)
     {
-        return interfaceId == type(IOpenRegistry).interfaceId
-            || super.supportsInterface(interfaceId);
+        return
+            interfaceId == type(IOpenRegistry).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function _setRegisterer(address registerer_) internal {

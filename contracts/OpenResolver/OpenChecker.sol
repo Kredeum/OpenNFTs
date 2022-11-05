@@ -25,7 +25,6 @@ import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IOpenChecker.sol";
 
 abstract contract OpenChecker is IOpenChecker, OpenERC165 {
-    /// _ercInterfaceIds : ERC interfacesIds
     /// 0xffffffff :  O Invalid
     /// 0x01ffc9a7 :  1 ERC165
     /// 0x80ac58cd :  2 ERC721
@@ -50,6 +49,10 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         bytes4(0x7f5828d0),
         bytes4(0x2a55205a)
     ];
+    uint8 private constant _INVALID = 0;
+    uint8 private constant _ERC165 = 1;
+    uint8 private constant _ERC721 = 2;
+    uint8 private constant _ERC1155 = 6;
 
     modifier onlyContract(address account) {
         require(account.code.length > 0, "Not smartcontract");
@@ -79,8 +82,8 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     {
         bool[] memory checks = checkErcInterfaces(smartcontract);
 
-        // ERC165 and (ERC721 or ERC1155)
-        return !checks[0] && checks[1] && (checks[2] || checks[6]);
+        // (!INVALID and ERC165) and (ERC721 or ERC1155)
+        return !checks[_INVALID] && checks[_ERC165] && (checks[_ERC721] || checks[_ERC1155]);
     }
 
     function supportsInterface(bytes4 interfaceId)

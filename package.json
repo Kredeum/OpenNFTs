@@ -1,6 +1,6 @@
 {
   "name": "opennfts",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "OpenNFTs library of smarcontract components, enabling the creation of various NFT Collection templates.",
   "directories": {
     "lib": "lib"

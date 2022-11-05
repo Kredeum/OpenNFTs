@@ -30,6 +30,16 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 
 abstract contract OpenGetter is IOpenGetter, OpenChecker {
+    uint8 private constant _INVALID = 0;
+    uint8 private constant _ERC165 = 1;
+    uint8 private constant _ERC721 = 2;
+    uint8 private constant _ERC721_ENUMERABLE = 2;
+    uint8 private constant _ERC1155 = 6;
+    bytes4 private constant _ERC721_ID = 0x80ac58cd;
+    bytes4 private constant _ERC1155_ID = 0xd9b67a26;
+    bytes4 private constant _ERC721_METADATA_ID = 0x5b5e139f;
+    bytes4 private constant _ERC1155_METADATA_URI_ID = 0x0e89341c;
+
     function supportsInterface(bytes4 interfaceId)
         public
         view
@@ -73,7 +83,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         bool[] memory supported = checkErcInterfaces(collection);
 
         // IF ERC721 & ERC721Enumerable supported
-        if (supported[2] && supported[4]) {
+        if (supported[_ERC721] && supported[_ERC721_ENUMERABLE]) {
             if (account == address(0)) {
                 total = IERC721Enumerable(collection).totalSupply();
 
@@ -120,16 +130,20 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         returns (NftInfos memory nftInfos)
     {
         nftInfos.tokenID = tokenID;
-        nftInfos.approved = IERC721(collection).getApproved(tokenID);
-        nftInfos.owner = IERC721(collection).ownerOf(tokenID);
 
-        if (IERC165(collection).supportsInterface(0x5b5e139f)) {
-            // ERC721Metadata
-            nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
-        } else if (IERC165(collection).supportsInterface(0x0e89341c)) {
-            // ERC1155MetadataURI
-            nftInfos.tokenURI = IERC1155MetadataURI(collection).uri(tokenID);
-            nftInfos.balanceOf = IERC1155(collection).balanceOf(account, tokenID);
+        if (IERC165(collection).supportsInterface(_ERC721_ID)) {
+            nftInfos.approved = IERC721(collection).getApproved(tokenID);
+            nftInfos.owner = IERC721(collection).ownerOf(tokenID);
+            if (IERC165(collection).supportsInterface(_ERC721_METADATA_ID)) {
+                nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
+            }
+        } else if (IERC165(collection).supportsInterface(_ERC1155_ID)) {
+            if (account != address(0)) {
+                nftInfos.balanceOf = IERC1155(collection).balanceOf(account, tokenID);
+            }
+            if (IERC165(collection).supportsInterface(_ERC1155_METADATA_URI_ID)) {
+                nftInfos.tokenURI = IERC1155MetadataURI(collection).uri(tokenID);
+            }
         }
     }
 
@@ -143,10 +157,10 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         collectionInfos.supported = supported;
 
         // ERC165 must be supported
-        require(!supported[0] && supported[1], "Not ERC165");
+        require(!supported[_INVALID] && supported[_ERC165], "Not ERC165");
 
         // ERC721 or ERC1155 must be supported
-        require(supported[2] || supported[6], "Not NFT smartcontract");
+        require(supported[_ERC721] || supported[_ERC1155], "Not NFT smartcontract");
 
         collectionInfos.collection = collection;
 
