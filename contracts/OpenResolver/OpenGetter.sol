@@ -68,8 +68,9 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         override (IOpenGetter)
         returns (NftInfos[] memory nftsInfos)
     {
-        nftsInfos = new NftInfos[](tokenIDs.length);
-        for (uint256 i; i < tokenIDs.length; i++) {
+        uint256 len = tokenIDs.length;
+        nftsInfos = new NftInfos[](len);
+        for (uint256 i; i < len; i++) {
             nftsInfos[i] = _getNftInfos(collection, tokenIDs[i], account);
         }
     }

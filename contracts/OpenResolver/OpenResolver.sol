@@ -56,8 +56,9 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         address account,
         bytes4[] memory interfaceIds
     ) public view override (IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
-        collectionsInfos = new CollectionInfos[](collections.length);
-        for (uint256 i = 0; i < collections.length; i++) {
+        uint256 len = collections.length;
+        collectionsInfos = new CollectionInfos[](len);
+        for (uint256 i = 0; i < len; i++) {
             collectionsInfos[i] = _getCollectionInfos(collections[i], account, interfaceIds);
         }
     }
@@ -70,17 +71,18 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         CollectionInfos[] memory collectionsInfosAll =
             getCollectionsInfos(getAddresses(), account, interfaceIds);
 
-        uint256 len;
-        for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
+        uint256 count;
+        uint256 len = collectionsInfosAll.length;
+        for (uint256 i = 0; i < len; i++) {
             if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) {
-                len++;
+                count++;
             }
         }
 
-        collectionsInfos = new CollectionInfos[](len);
+        collectionsInfos = new CollectionInfos[](count);
 
         uint256 j;
-        for (uint256 i = 0; i < collectionsInfosAll.length; i++) {
+        for (uint256 i = 0; i < len; i++) {
             if (collectionsInfosAll[i].balanceOf > 0 || collectionsInfosAll[i].owner == account) {
                 collectionsInfos[j++] = collectionsInfosAll[i];
             }
