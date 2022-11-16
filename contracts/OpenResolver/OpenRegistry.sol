@@ -47,7 +47,8 @@ abstract contract OpenRegistry is IOpenRegistry, OpenERC173 {
     }
 
     function addAddresses(address[] memory addrs) external override (IOpenRegistry) {
-        for (uint256 i = 0; i < addrs.length; i++) {
+        uint256 len = addrs.length;
+        for (uint256 i = 0; i < len; i++) {
             _addAddress(addrs[i]);
         }
     }

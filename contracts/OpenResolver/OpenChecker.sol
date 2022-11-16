@@ -65,9 +65,10 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         override (IOpenChecker)
         returns (bool[] memory checks)
     {
-        checks = new bool[](smartcontracts.length);
+        uint256 len = smartcontracts.length;
+        checks = new bool[](len);
 
-        for (uint256 i = 0; i < smartcontracts.length; i++) {
+        for (uint256 i = 0; i < len; i++) {
             checks[i] = isCollection(smartcontracts[i]);
         }
     }
@@ -112,18 +113,20 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         onlyContract(smartcontract)
         returns (bool[] memory interfaceIdsChecks)
     {
+        uint256 len1 = _ercInterfaceIds.length;
+        uint256 len2 = interfaceIds.length;
+        uint256 len = (erc ? len1 : 0) + len2;
         uint256 i;
-        uint256 len = (erc ? _ercInterfaceIds.length : 0) + interfaceIds.length;
 
         interfaceIdsChecks = new bool[](len);
 
         if (erc) {
-            for (uint256 j = 0; j < _ercInterfaceIds.length; j++) {
+            for (uint256 j = 0; j < len1; j++) {
                 interfaceIdsChecks[i++] =
                     IERC165(smartcontract).supportsInterface(_ercInterfaceIds[j]);
             }
         }
-        for (uint256 k = 0; k < interfaceIds.length; k++) {
+        for (uint256 k = 0; k < len2; k++) {
             interfaceIdsChecks[i++] = IERC165(smartcontract).supportsInterface(interfaceIds[k]);
         }
     }
