@@ -63,19 +63,21 @@ abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
 
         /// MINIMAL royaltyAmount
         if (royalty.minimum > 0) {
-            /// with zero price, token owner can bypass royalties...
-            /// SO set a minimumRoyaltyAmount calculated on mintPrice (than can only be modified by collection owner)
+            /// With zero price, token owner can bypass royalties...
+            /// SO a defaultRoyaltyAmount is calculated with _mintPrice as a base
+            /// (can only be modified by collection owner)
+            uint256 defaultRoyaltyAmount = _calculateAmount(_mintPrice, royalty.fee);
+
             /// BUT collection owner can higher too much mintPrice making fees too high
-            /// SO moreover store a minimumRoyaltyAmount per token defined during mint, or last transfer
+            /// SO a royalty.minimum if calculated for each token on minting (and on setTokenRoyalty)
 
             /// MIN(royalty.minimum, defaultRoyaltyAmount)
-            uint256 defaultRoyaltyAmount = _calculateAmount(_mintPrice, royalty.fee);
             uint256 minimumRoyaltyAmount =
                 royalty.minimum < defaultRoyaltyAmount ? royalty.minimum : defaultRoyaltyAmount;
 
-            /// MAX(normalRoyaltyAmount, minimumRoyaltyAmount)
+            /// MAX(royaltyAmount, minimumRoyaltyAmount)
             royaltyAmount =
-                royaltyAmount < minimumRoyaltyAmount ? minimumRoyaltyAmount : royaltyAmount;
+                royaltyAmount > minimumRoyaltyAmount ? royaltyAmount : minimumRoyaltyAmount;
         }
 
         return (royalty.account, royaltyAmount);
