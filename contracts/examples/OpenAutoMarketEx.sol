@@ -22,10 +22,6 @@ import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
 contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     uint256 private _tokenID;
 
-    function getEthBalance(address account) external view returns (uint256) {
-        return account.balance;
-    }
-
     function mint(string memory tokenURI)
         external
         payable
@@ -44,6 +40,15 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         require(_tokenPrice[tokenID] > 0, "Not on sale");
 
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
+    }
+
+    function getEthBalance(address account)
+        external
+        view
+        override (IOpenAutoMarketEx)
+        returns (uint256)
+    {
+        return account.balance;
     }
 
     function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimal)

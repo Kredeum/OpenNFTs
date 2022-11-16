@@ -20,10 +20,10 @@
   },
   "homepage": "https://github.com/Kredeum/OpenNFTs#readme",
   "scripts": {
-    "forge-update": "git submodule update --recursive && forge update",
+    "format": "forge fmt",
+    "forge-update": "git submodule update --recursive && forge update ",
     "all": "npm run clean && npm run format && npm run check && npm run build && npm run test",
     "clean": "forge clean",
-    "format": "forge fmt",
     "check": "solhint contracts/**/*.sol",
     "build": "forge build",
     "test": "forge test"

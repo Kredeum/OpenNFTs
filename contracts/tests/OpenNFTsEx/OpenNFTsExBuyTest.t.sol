@@ -42,7 +42,6 @@ abstract contract OpenNFTsExBuyTest is Test {
 
         changePrank(_buyer);
         deal(_buyer, amount);
-        uint256 balOwner = _owner.balance;
 
         assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
         IOpenNFTsEx(_collection).buy{value: amount}(_tokenID0);

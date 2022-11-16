@@ -60,6 +60,7 @@ abstract contract SolmateERC20 {
         bytes32 r,
         bytes32 s
     ) public virtual {
+        // solhint-disable-next-line not-rely-on-time
         require(deadline >= block.timestamp, "PERMIT_DEADLINE_EXPIRED");
         unchecked {
             address recoveredAddress = ecrecover(
