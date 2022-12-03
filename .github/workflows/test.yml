@@ -1,0 +1,24 @@
+name: OpenNFTs TEST
+
+on: ["push", "pull_request"]
+
+jobs:
+  check:
+    name: Foundry project
+    runs-on: ubuntu-22.04
+    steps:
+      - name: CHECKOUT
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: INSTALL
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: BUILD
+        run: forge build
+
+      - name: TEST
+        run: forge test -vvv
