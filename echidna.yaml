@@ -1,7 +1,8 @@
-coverage: false
-# corpusDir: echidna-corpus
+coverage: true
+corpusDir: corpus
+
 seqLen: 3
-testLimit: 50000
+testLimit: 5000
 shrinkLimit: 1000
 
 cryticArgs: ["--solc-remaps", "OpenNFTs/contracts/=contracts/"]

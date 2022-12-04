@@ -18,7 +18,11 @@ contract OpenAutoMarketExFuzz is OpenAutoMarketEx {
         return _owner == owner();
     }
 
-    function echidna_balance() public view returns (bool) {
-        return balanceOf(_other) < 1;
-    }
+    // function transferOwner() public {
+    //     _mint(_echidna, "1", 1);
+    //     safeTransferFrom(_echidna, _other, 1);
+    // }
+    // function echidna_balance() public view returns (bool) {
+    //     return balanceOf(_other) < 1;
+    // }
 }
