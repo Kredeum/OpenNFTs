@@ -22,6 +22,10 @@ import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
 contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     uint256 private _tokenID;
 
+    function getEthBalance(address account) external view returns (uint256) {
+        return account.balance;
+    }
+
     function mint(string memory tokenURI)
         external
         payable

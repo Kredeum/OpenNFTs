@@ -31,6 +31,24 @@ abstract contract OpenNFTsExBuyTest is Test {
         (_tokenID0,) = mintTest(_collection, _owner);
     }
 
+    function testBuyOk2(uint256 amount) public {
+        vm.assume(amount < 10 * 36);
+
+        changePrank(_owner);
+        IERC721(_collection).setApprovalForAll(_collection, true);
+
+        IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
+        IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, amount);
+
+        changePrank(_buyer);
+        deal(_buyer, amount);
+        uint256 balOwner = _owner.balance;
+
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
+        IOpenNFTsEx(_collection).buy{value: amount}(_tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
+    }
+
     function testBuyOk() public {
         changePrank(_owner);
         IERC721(_collection).setApprovalForAll(_collection, true);
