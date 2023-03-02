@@ -28,8 +28,8 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         override(IOpenAutoMarketEx)
         returns (uint256 tokenID)
     {
-        tokenID = _tokenID++;
-        OpenMarketable._mint(msg.sender, tokenURI, tokenID);
+        tokenID = ++_tokenID;
+        _mint(msg.sender, tokenURI, tokenID);
     }
 
     function burn(uint256 tokenID) external override(IOpenAutoMarketEx) {
@@ -56,7 +56,7 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
         override(IOpenAutoMarketEx)
     {
         OpenERC173._initialize(owner);
-        OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee, minimal);
+        _initialize(0, address(0), 0, treasury, treasuryFee, minimal);
     }
 
     function supportsInterface(bytes4 interfaceId)

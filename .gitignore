@@ -5,3 +5,4 @@ node_modules
 crytic-export
 corpus
 .certora*
+.zip*

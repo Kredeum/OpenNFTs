@@ -3,16 +3,17 @@ pragma solidity ^0.8.17;
 
 import "forge-std/Test.sol";
 
-import "OpenNFTs/contracts/interfaces/IAll.sol";
-import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
+import {OpenAutoMarketEx} from "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
 
 abstract contract OpenAutoMarketExMintTest is Test {
-    address payable private _collection;
     address private _owner = makeAddr("owner");
     address private _minter = makeAddr("minter");
     address private _buyer = makeAddr("buyer");
     address private _tester = makeAddr("tester");
     bool[] private _options = new bool[](2);
+
+    address payable private _collectionAddress;
+    OpenAutoMarketEx private _collection;
 
     function constructorTest(address owner_) public virtual returns (address);
 
@@ -22,29 +23,36 @@ abstract contract OpenAutoMarketExMintTest is Test {
         returns (uint256 tokenID_, string memory tokenURI_);
 
     function setUpOpenAutoMarketExMint() public {
-        _collection = payable(constructorTest(_owner));
+        address addr = constructorTest(_owner);
+        _collection = OpenAutoMarketEx(payable(addr));
+        _collectionAddress = payable(addr);
+    }
+
+    function testOpenAutoMarketExMint() public {
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
+        assertTrue(tokenID == 1);
     }
 
     function testOpenAutoMarketExSetDefaultRoyalty() public {
-        (uint256 tokenID,) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
         changePrank(_owner);
-        IOpenMarketable(_collection).setDefaultRoyalty(_minter, 100);
+        _collection.setDefaultRoyalty(_minter, 100);
 
-        (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(tokenID, 1 ether);
+        (address receiver, uint256 royalties) = _collection.royaltyInfo(tokenID, 1 ether);
 
         assertEq(receiver, _minter);
         assertEq(royalties, 0.01 ether);
     }
 
     function testOpenAutoMarketExSetTokenRoyalty() public {
-        (uint256 tokenID,) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
         changePrank(_owner);
-        IOpenMarketable(_collection).setTokenRoyalty(tokenID, _owner, 200);
-        IOpenMarketable(_collection).setDefaultRoyalty(_minter, 100);
+        _collection.setTokenRoyalty(tokenID, _owner, 200);
+        _collection.setDefaultRoyalty(_minter, 100);
 
-        (address receiver, uint256 royalties) = IERC2981(_collection).royaltyInfo(tokenID, 1 ether);
+        (address receiver, uint256 royalties) = _collection.royaltyInfo(tokenID, 1 ether);
 
         assertEq(receiver, _owner);
         assertEq(royalties, 0.02 ether);
@@ -52,31 +60,31 @@ abstract contract OpenAutoMarketExMintTest is Test {
 
     function testOpenAutoMarketExSetMintPrice() public {
         changePrank(_owner);
-        IOpenMarketable(_collection).setMintPrice(1 ether);
+        _collection.setMintPrice(1 ether);
 
-        assertEq(IOpenMarketable(_collection).getMintPrice(), 1 ether);
+        assertEq(_collection.getMintPrice(), 1 ether);
     }
 
     function testOpenAutoMarketExSetTokenPrice() public {
-        (uint256 tokenID,) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
         changePrank(_owner);
-        IOpenMarketable(_collection).setTokenPrice(tokenID, 2 ether);
-        IOpenMarketable(_collection).setMintPrice(1 ether);
+        _collection.setTokenPrice(tokenID, 2 ether);
+        _collection.setMintPrice(1 ether);
 
-        assertEq(IOpenMarketable(_collection).getTokenPrice(tokenID), 2 ether);
+        assertEq(_collection.getTokenPrice(tokenID), 2 ether);
     }
 
     // Primary market, token not minted yet, pay token via OpenAutoMarketEx "mint" function
     function testOpenAutoMarketExBuyMint() public {
         changePrank(_owner);
-        IOpenMarketable(_collection).setDefaultRoyalty(_tester, 100);
-        IOpenMarketable(_collection).setMintPrice(1 ether);
+        _collection.setDefaultRoyalty(_tester, 100);
+        _collection.setMintPrice(1 ether);
 
         deal(_buyer, 10 ether);
         changePrank(_buyer);
-        uint256 tokenID = IOpenAutoMarketEx(_collection).mint{value: 1.5 ether}("");
-        assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
+        uint256 tokenID = _collection.mint{value: 1.5 ether}("");
+        assertEq(_collection.ownerOf(tokenID), _buyer);
         assertEq(_buyer.balance, 9 ether);
         assertEq(_tester.balance, 0.01 ether);
         assertEq(_owner.balance, 0.981 ether);
@@ -84,24 +92,24 @@ abstract contract OpenAutoMarketExMintTest is Test {
     }
 
     // Secondary market, token already minted, pay token via OpenAutoMarketEx "buy" function
-    function testOpenAutoMarketExBuy() public {
-        (uint256 tokenID,) = mintTest(_collection, _owner);
+    function testOpenAutoMarketExBuy2() public {
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
         changePrank(_owner);
-        IERC721(_collection).setApprovalForAll(_collection, true);
-        IOpenMarketable(_collection).setTokenRoyalty(tokenID, _tester, 100);
-        IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
+        _collection.setApprovalForAll(_collectionAddress, true);
+        _collection.setTokenRoyalty(tokenID, _tester, 100);
+        _collection.setTokenPrice(tokenID, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
         uint256 balMinter = _owner.balance;
 
-        assertEq(IERC721(_collection).ownerOf(tokenID), _owner);
-        IOpenAutoMarketEx(_collection).buy{value: 1.5 ether}(tokenID);
-        assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
+        assertEq(_collection.ownerOf(tokenID), _owner);
+        _collection.buy{value: 1.5 ether}(tokenID);
+        assertEq(_collection.ownerOf(tokenID), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
-        assertEq(_collection.balance, 0 ether);
+        assertEq(_collectionAddress.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
         assertEq(_owner.balance, balMinter + 0.981 ether);
         assertEq(makeAddr("treasury").balance, 0.009 ether);
@@ -110,12 +118,12 @@ abstract contract OpenAutoMarketExMintTest is Test {
     // Secondary market, token already minted, pay token via ERC721 "safeTransferFrom" function (after approval)
     // can be done by any smartcontract : for example can be used by OpenSea if following ERC2981
     function testOpenAutoMarketExBuyViaSafeTransferFrom() public {
-        (uint256 tokenID,) = mintTest(_collection, _owner);
+        (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
         changePrank(_owner);
-        IERC721(_collection).setApprovalForAll(address(this), true);
-        IOpenMarketable(_collection).setTokenRoyalty(tokenID, _tester, 100);
-        IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
+        _collection.setApprovalForAll(address(this), true);
+        _collection.setTokenRoyalty(tokenID, _tester, 100);
+        _collection.setTokenPrice(tokenID, 1 ether);
 
         changePrank(_buyer);
         deal(_buyer, 10 ether);
@@ -124,12 +132,12 @@ abstract contract OpenAutoMarketExMintTest is Test {
         require(sent, "Failed to send Ether");
 
         changePrank(address(this));
-        assertEq(IERC721(_collection).ownerOf(tokenID), _owner);
-        IERC721(_collection).safeTransferFrom{value: 1.5 ether}(_owner, _buyer, tokenID);
-        assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
+        assertEq(_collection.ownerOf(tokenID), _owner);
+        _collection.safeTransferFrom{value: 1.5 ether}(_owner, _buyer, tokenID);
+        assertEq(_collection.ownerOf(tokenID), _buyer);
 
         assertEq(_buyer.balance, 9 ether);
-        assertEq(_collection.balance, 0 ether);
+        assertEq(_collectionAddress.balance, 0 ether);
         assertEq(_tester.balance, 0.01 ether);
         assertEq(_owner.balance, balMinter + 0.981 ether);
         assertEq(makeAddr("treasury").balance, 0.009 ether);

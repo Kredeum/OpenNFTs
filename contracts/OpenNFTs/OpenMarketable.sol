@@ -51,8 +51,8 @@ abstract contract OpenMarketable is
     receive() external payable override(IOpenMarketable) {}
 
     /// @notice withdraw eth
-    function withdraw() external override(IOpenMarketable) onlyOwner {
-        payable(msg.sender).transfer(address(this).balance);
+    function withdraw() external override(IOpenMarketable) onlyOwner returns (uint256) {
+        return _withdraw();
     }
 
     /// @notice SET default mint price
@@ -165,7 +165,7 @@ abstract contract OpenMarketable is
     {
         _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
-        if (to != owner()) _pay(tokenID, _mintPrice, to, owner());
+        _pay(tokenID, _mintPrice, to, owner());
 
         super._mint(to, tokenURI, tokenID);
     }
@@ -231,6 +231,18 @@ abstract contract OpenMarketable is
         emit SetMintPrice(price);
     }
 
+    function _transferValue(address to, uint256 value) internal virtual returns (uint256) {
+        bool success;
+        if (value > 0) {
+            (success,) = to.call{value: value, gas: 2300}("");
+        }
+        return success ? value : 0;
+    }
+
+    function _withdraw() internal virtual returns (uint256) {
+        return _transferValue(msg.sender, address(this).balance);
+    }
+
     function _createReceiverInfos(address receiver, uint96 fee)
         internal
         view
@@ -239,19 +251,10 @@ abstract contract OpenMarketable is
         return ReceiverInfos(receiver, fee, minimal ? _calculateAmount(_mintPrice, fee) : 0);
     }
 
-    function _transferValue(address to, uint256 value) private returns (uint256) {
-        bool success;
-        if (value > 0) {
-            (success,) = to.call{value: value, gas: 2300}("");
-        }
-        return success ? value : 0;
-    }
-
     function _pay(uint256 tokenID, uint256 price, address buyer, address seller)
         private
         reEntryGuard
     {
-        require(msg.value >= price, "Not enough funds");
         require(buyer != address(0), "Invalid buyer");
         require(seller != address(0), "Invalid seller");
 
@@ -264,25 +267,35 @@ abstract contract OpenMarketable is
         (receiver, royalties) = royaltyInfo(tokenID, price);
         if (receiver == address(0)) royalties = 0;
 
-        if (price > 0 || royalties > 0) {
+        // no payment (and no fee) if buyer is seller
+        // no payment (and no fee) if price and royalties are null
+        if (buyer != seller && (price + royalties > 0)) {
             fee = _calculateAmount(price, _treasury.fee);
-            require(msg.value >= royalties + fee, "Not enough funds");
 
-            /// Transfer amount to be paid to seller
+            /// Pay seller
             if (price > royalties + fee) {
+                /// when price is sufficient, royalties and fees are deducted from price
+                require(msg.value >= price, "Not enough funds");
                 paid = _transferValue(seller, price - (royalties + fee));
+            } else {
+                /// when price is zero (or too low), royalties and fees are added to price
+                /// this is to enforce royalty payment
+                require(msg.value >= price + royalties + fee, "Not enough funds");
+                paid = _transferValue(seller, price);
             }
 
             /// Transfer royalties to receiver
-            royalties = _transferValue(receiver, royalties);
+            paid += _transferValue(receiver, royalties);
 
             /// Transfer fee to protocol treasury
-            fee = _transferValue(_treasury.account, fee);
+            paid += _transferValue(_treasury.account, fee);
         }
-        unspent = msg.value - (paid + royalties + fee);
+        unspent = msg.value - paid;
 
         /// Transfer back unspent funds to buyer
-        unspent = _transferValue(buyer, unspent);
+        paid += _transferValue(buyer, unspent);
+
+        assert(paid == msg.value);
 
         emit Pay(tokenID, price, seller, paid, receiver, royalties, fee, buyer, unspent);
     }

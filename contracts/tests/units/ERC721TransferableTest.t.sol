@@ -7,7 +7,25 @@ import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC721Events.sol";
 
-import "OpenNFTs/contracts/OpenERC/OpenERC721TokenReceiver.sol";
+contract ERC721TokenReceiver {
+    function onERC721Received(address, address, uint256, bytes calldata)
+        external
+        pure
+        returns (bytes4)
+    {
+        return bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+    }
+}
+
+contract ERC721TokenReceiverNot {
+    function onERC721Received(address, address, uint256, bytes calldata)
+        external
+        pure
+        returns (bytes4)
+    {
+        return 0x0;
+    }
+}
 
 abstract contract ERC721TransferableTest is Test, IERC721Events {
     address private _collection;
@@ -77,13 +95,6 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         assertEq(IERC721(_collection).ownerOf(tokenID), to);
     }
 
-    function testERC721TransferFromNotERC721TokenReceiver() public {
-        changePrank(_minter);
-
-        IERC721(_collection).transferFrom(_minter, address(_collection), _tokenID0);
-        assertEq(IERC721(_collection).ownerOf(_tokenID0), address(_collection));
-    }
-
     function testERC721TransferFrom() public {
         changePrank(_minter);
 
@@ -105,7 +116,7 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
         assertEq(IERC721(_collection).ownerOf(tokenID), to);
     }
 
-    function testERC721transferFromToContract() public {
+    function testFailERC721transferFromToThisContract() public {
         changePrank(_minter);
         IERC721(_collection).transferFrom(_minter, address(this), _tokenID0);
         assertEq(IERC721(_collection).ownerOf(_tokenID0), address(this));
@@ -117,11 +128,27 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
     }
 
     function testERC721SafeTransferFromToReceiverContract() public {
-        OpenERC721TokenReceiver receiverContract = new OpenERC721TokenReceiver();
+        address receiverContract = address(new ERC721TokenReceiver());
 
         changePrank(_minter);
-        IERC721(_collection).safeTransferFrom(_minter, address(receiverContract), _tokenID0);
-        assertEq(IERC721(_collection).ownerOf(_tokenID0), address(receiverContract));
+        IERC721(_collection).safeTransferFrom(_minter, receiverContract, _tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContract);
+    }
+
+    function testERC721TransferFromToReceiverContract() public {
+        address receiverContract = address(new ERC721TokenReceiver());
+
+        changePrank(_minter);
+        IERC721(_collection).transferFrom(_minter, receiverContract, _tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContract);
+    }
+
+    function testFailERC721TransferFromToNotReceiverContract() public {
+        address receiverContractNot = address(new ERC721TokenReceiverNot());
+
+        changePrank(_minter);
+        IERC721(_collection).transferFrom(_minter, receiverContractNot, _tokenID0);
+        assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContractNot);
     }
 
     function testERC721Approve() public {
