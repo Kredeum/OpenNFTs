@@ -135,12 +135,12 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function _mint(address to, string memory, uint256 tokenID) internal virtual {
         require(to != address(0), "Mint to zero address");
         require(_owners[tokenID] == address(0), "Token already minted");
+        require(_isERC721Receiver(address(0), to, tokenID, ""), "Not ERC721Received");
 
         _balances[to] += 1;
         _owners[tokenID] = to;
 
         emit Transfer(address(0), to, tokenID);
-        require(_isERC721Receiver(address(0), to, tokenID, ""), "Not ERC721Received");
     }
 
     function _burn(uint256 tokenID) internal virtual {
@@ -171,9 +171,9 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function _safeTransferFrom(address from, address to, uint256 tokenID, bytes memory data)
         private
     {
-        _transferFrom(from, to, tokenID);
-
         require(_isERC721Receiver(from, to, tokenID, data), "Not ERC721Receiver");
+
+        _transferFrom(from, to, tokenID);
     }
 
     function _transferFrom(address from, address to, uint256 tokenID)

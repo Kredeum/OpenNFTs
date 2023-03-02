@@ -64,12 +64,22 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
         assertEq(nftInfos.owner, address(0)); // no owner for ERC1155
     }
 
-    function testOpenGetterGetNftInfos() public {
+    function testOpenGetterGetNftInfos1() public {
         NftInfos memory nftInfos =
             IOpenGetter(_resolver).getNftInfos(address(_collection), _tokenID0, _random);
         assertEq(nftInfos.tokenID, _tokenID0);
         assertEq(nftInfos.tokenURI, _TOKEN_URI);
         assertEq(nftInfos.owner, _owner);
+        assertEq(nftInfos.approved, address(0));
+    }
+
+    // invalid tokenID to not revert
+    function testOpenGetterGetNftInfos2() public  {
+        NftInfos memory nftInfos =
+            IOpenGetter(_resolver).getNftInfos(address(_collection), 9, _random);
+        assertEq(nftInfos.tokenID, 9);
+        assertEq(nftInfos.tokenURI, "");
+        assertEq(nftInfos.owner, address(0));
         assertEq(nftInfos.approved, address(0));
     }
 

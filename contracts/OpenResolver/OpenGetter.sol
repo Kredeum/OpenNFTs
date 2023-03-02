@@ -44,7 +44,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         public
         view
         virtual
-        override (OpenChecker)
+        override(OpenChecker)
         returns (bool)
     {
         return interfaceId == type(IOpenGetter).interfaceId || super.supportsInterface(interfaceId);
@@ -53,7 +53,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function getCollectionInfos(address collection, address account)
         public
         view
-        override (IOpenGetter)
+        override(IOpenGetter)
         returns (
             // override(IOpenGetter)
             CollectionInfos memory collectionInfos
@@ -65,7 +65,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function getNftsInfos(address collection, uint256[] memory tokenIDs, address account)
         public
         view
-        override (IOpenGetter)
+        override(IOpenGetter)
         returns (NftInfos[] memory nftsInfos)
     {
         uint256 len = tokenIDs.length;
@@ -78,7 +78,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function getNftsInfos(address collection, address account, uint256 limit, uint256 offset)
         public
         view
-        override (IOpenGetter)
+        override(IOpenGetter)
         returns (NftInfos[] memory nftsInfos, uint256 count, uint256 total)
     {
         bool[] memory supported = checkErcInterfaces(collection);
@@ -118,7 +118,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     function getNftInfos(address collection, uint256 tokenID, address account)
         public
         view
-        override (IOpenGetter)
+        override(IOpenGetter)
         returns (NftInfos memory nftInfos)
     {
         return _getNftInfos(collection, tokenID, account);
@@ -133,10 +133,17 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
         nftInfos.tokenID = tokenID;
 
         if (IERC165(collection).supportsInterface(_ERC721_ID)) {
-            nftInfos.approved = IERC721(collection).getApproved(tokenID);
-            nftInfos.owner = IERC721(collection).ownerOf(tokenID);
-            if (IERC165(collection).supportsInterface(_ERC721_METADATA_ID)) {
-                nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
+            try IERC721(collection).ownerOf(tokenID) returns (address owner) {
+                nftInfos.owner = owner;
+            } catch {}
+
+            // tokenID exists <=> owner != 0
+            if (nftInfos.owner != address(0))
+            {
+                nftInfos.approved = IERC721(collection).getApproved(tokenID);
+                if (IERC165(collection).supportsInterface(_ERC721_METADATA_ID)) {
+                    nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);
+                }
             }
         } else if (IERC165(collection).supportsInterface(_ERC1155_ID)) {
             if (account != address(0)) {
