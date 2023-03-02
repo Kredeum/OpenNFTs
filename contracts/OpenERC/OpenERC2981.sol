@@ -49,7 +49,7 @@ abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
     function royaltyInfo(uint256 tokenID, uint256 price)
         public
         view
-        override (IERC2981)
+        override(IERC2981)
         notTooExpensive(price)
         returns (address receiver, uint256 royaltyAmount)
     {
@@ -86,7 +86,7 @@ abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
         public
         view
         virtual
-        override (OpenERC165)
+        override(OpenERC165)
         returns (bool)
     {
         return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);

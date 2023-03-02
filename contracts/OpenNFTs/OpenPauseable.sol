@@ -34,11 +34,11 @@ abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
         _;
     }
 
-    function togglePause() external override (IOpenPauseable) onlyOwner {
+    function togglePause() external override(IOpenPauseable) onlyOwner {
         _setPaused(!_paused);
     }
 
-    function paused() external view override (IOpenPauseable) returns (bool) {
+    function paused() external view override(IOpenPauseable) returns (bool) {
         return _paused;
     }
 
@@ -46,7 +46,7 @@ abstract contract OpenPauseable is IOpenPauseable, OpenERC173 {
         public
         view
         virtual
-        override (OpenERC173)
+        override(OpenERC173)
         returns (bool)
     {
         return

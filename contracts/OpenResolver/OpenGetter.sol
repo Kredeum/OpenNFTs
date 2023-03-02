@@ -138,8 +138,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
             } catch {}
 
             // tokenID exists <=> owner != 0
-            if (nftInfos.owner != address(0))
-            {
+            if (nftInfos.owner != address(0)) {
                 nftInfos.approved = IERC721(collection).getApproved(tokenID);
                 if (IERC165(collection).supportsInterface(_ERC721_METADATA_ID)) {
                     nftInfos.tokenURI = IERC721Metadata(collection).tokenURI(tokenID);

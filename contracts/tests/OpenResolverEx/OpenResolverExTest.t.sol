@@ -20,7 +20,7 @@ contract OpenResolverExTest is
 {
     function constructorTest(address owner)
         public
-        override (OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)
+        override(OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)
         returns (address)
     {
         changePrank(owner);

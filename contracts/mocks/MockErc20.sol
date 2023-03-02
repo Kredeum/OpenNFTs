@@ -13,11 +13,11 @@ contract MockERC20 is SolmateERC20, IMockERC20 {
         SolmateERC20(name_, symbol_, decimals_)
     {}
 
-    function mint(address to, uint256 value) public virtual override (IMockERC20) {
+    function mint(address to, uint256 value) public virtual override(IMockERC20) {
         _mint(to, value);
     }
 
-    function burn(address from, uint256 value) public virtual override (IMockERC20) {
+    function burn(address from, uint256 value) public virtual override(IMockERC20) {
         _burn(from, value);
     }
 }

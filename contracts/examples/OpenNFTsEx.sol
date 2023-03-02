@@ -52,18 +52,18 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
     /// @notice override onlyMinter:
     /// @notice either everybody in open collection,
     /// @notice either only owner in specific collection
-    modifier onlyMinter() override (OpenNFTs) {
+    modifier onlyMinter() override(OpenNFTs) {
         require(open || (owner() == msg.sender), "Not minter");
         _;
     }
 
-    function buy(uint256 tokenID) external payable override (IOpenNFTsEx) {
+    function buy(uint256 tokenID) external payable override(IOpenNFTsEx) {
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
     }
 
     function mint(string memory tokenURI)
         external
-        override (IOpenNFTsEx)
+        override(IOpenNFTsEx)
         onlyMinter
         onlyWhenNotPaused
         returns (uint256)
@@ -78,7 +78,7 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         address treasury_,
         uint96 treasuryFee_,
         bool[] memory options_
-    ) public override (IOpenNFTsEx) {
+    ) public override(IOpenNFTsEx) {
         open = options_[0];
         OpenNFTs._initialize(
             name_, symbol_, owner_, 0, address(0), 0, treasury_, treasuryFee_, options_[1]
@@ -90,13 +90,13 @@ contract OpenNFTsEx is IOpenNFTsEx, OpenNFTs {
         string memory symbol_,
         address owner_,
         bytes memory params_
-    ) public override (OpenCloneable) {
+    ) public override(OpenCloneable) {
         (address payable treasury_, uint96 treasuryFee_, bool[] memory options_) =
             abi.decode(params_, (address, uint96, bool[]));
         initialize(name_, symbol_, owner_, treasury_, treasuryFee_, options_);
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override (OpenNFTs) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override(OpenNFTs) returns (bool) {
         return interfaceId == type(IOpenNFTsEx).interfaceId || super.supportsInterface(interfaceId);
     }
 }

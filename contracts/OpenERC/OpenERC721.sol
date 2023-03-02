@@ -54,7 +54,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function transferFrom(address from, address to, uint256 tokenID)
         external
         payable
-        override (IERC721)
+        override(IERC721)
     {
         _transferFrom(from, to, tokenID);
     }
@@ -62,19 +62,19 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function safeTransferFrom(address from, address to, uint256 tokenID, bytes memory data)
         external
         payable
-        override (IERC721)
+        override(IERC721)
     {
         _safeTransferFrom(from, to, tokenID, data);
     }
 
-    function approve(address spender, uint256 tokenID) public override (IERC721) {
+    function approve(address spender, uint256 tokenID) public override(IERC721) {
         require(_isOwnerOrOperator(msg.sender, tokenID), "Not token owner nor operator");
 
         _tokenApprovals[tokenID] = spender;
         emit Approval(ownerOf(tokenID), spender, tokenID);
     }
 
-    function setApprovalForAll(address operator, bool approved) public override (IERC721) {
+    function setApprovalForAll(address operator, bool approved) public override(IERC721) {
         _operatorApprovals[msg.sender][operator] = approved;
         emit ApprovalForAll(msg.sender, operator, approved);
     }
@@ -82,7 +82,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function safeTransferFrom(address from, address to, uint256 tokenID)
         public
         payable
-        override (IERC721)
+        override(IERC721)
     {
         _safeTransferFrom(from, to, tokenID, "");
     }
@@ -91,14 +91,14 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
         public
         view
         virtual
-        override (OpenERC165)
+        override(OpenERC165)
         returns (bool)
     {
         return interfaceId == 0x80ac58cd // = type(IERC721).interfaceId
             || super.supportsInterface(interfaceId);
     }
 
-    function balanceOf(address owner) public view override (IERC721) returns (uint256) {
+    function balanceOf(address owner) public view override(IERC721) returns (uint256) {
         require(owner != address(0), "Invalid zero address");
         return _balances[owner];
     }
@@ -106,7 +106,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function ownerOf(uint256 tokenID)
         public
         view
-        override (IERC721)
+        override(IERC721)
         existsToken(tokenID)
         returns (address)
     {
@@ -116,7 +116,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function getApproved(uint256 tokenID)
         public
         view
-        override (IERC721)
+        override(IERC721)
         existsToken(tokenID)
         returns (address)
     {
@@ -126,7 +126,7 @@ abstract contract OpenERC721 is IERC721, OpenERC165 {
     function isApprovedForAll(address owner, address operator)
         public
         view
-        override (IERC721)
+        override(IERC721)
         returns (bool)
     {
         return _operatorApprovals[owner][operator];

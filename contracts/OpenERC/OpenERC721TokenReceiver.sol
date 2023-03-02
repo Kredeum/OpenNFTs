@@ -33,7 +33,7 @@ contract OpenERC721TokenReceiver is IERC721TokenReceiver {
     function onERC721Received(address, address, uint256, bytes calldata)
         external
         virtual
-        override (IERC721TokenReceiver)
+        override(IERC721TokenReceiver)
         returns (bytes4)
     {
         return OpenERC721TokenReceiver.onERC721Received.selector;

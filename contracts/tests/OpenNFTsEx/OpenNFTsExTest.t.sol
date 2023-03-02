@@ -36,7 +36,7 @@ contract OpenNFTsExTest is
 {
     function constructorTest(address owner)
         public
-        override (
+        override(
             ERC721TransferableTest,
             ERC173Test,
             ERC2981Test,
@@ -56,7 +56,7 @@ contract OpenNFTsExTest is
 
     function constructorTest(address owner, bool init)
         public
-        override (OpenNFTsExInitializeTest)
+        override(OpenNFTsExInitializeTest)
         returns (address)
     {
         changePrank(owner);
@@ -76,7 +76,7 @@ contract OpenNFTsExTest is
 
     function mintTest(address collection, address minter)
         public
-        override (
+        override(
             OpenNFTsExBuyTest,
             OpenNFTsTest,
             OpenNFTsBurnTest,
@@ -94,7 +94,7 @@ contract OpenNFTsExTest is
 
     function burnTest(address collection, uint256 tokenID)
         public
-        override (OpenNFTsTest, OpenNFTsBurnTest)
+        override(OpenNFTsTest, OpenNFTsBurnTest)
     {
         changePrank(OpenNFTsEx(payable(collection)).ownerOf(tokenID));
         OpenNFTsEx(payable(collection)).burn(tokenID);
@@ -106,7 +106,7 @@ contract OpenNFTsExTest is
 
     function setRoyaltyTest(address collection, address receiver, uint96 fee)
         public
-        override (ERC2981Test, OpenMarketableTest)
+        override(ERC2981Test, OpenMarketableTest)
         returns (uint256 tokenID)
     {
         changePrank(OpenNFTsEx(payable(collection)).owner());

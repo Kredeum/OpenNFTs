@@ -50,7 +50,7 @@ abstract contract OpenCloner is IOpenCloner, OpenERC165 {
         public
         view
         virtual
-        override (OpenERC165)
+        override(OpenERC165)
         returns (bool)
     {
         return interfaceId == type(IOpenCloner).interfaceId || super.supportsInterface(interfaceId);

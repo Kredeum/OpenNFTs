@@ -69,7 +69,7 @@ contract OpenBoundEx is
 
     function mint(uint256 cid)
         external
-        override (IOpenBoundEx)
+        override(IOpenBoundEx)
         onlyWhenNotPaused
         returns (uint256 tokenID)
     {
@@ -78,14 +78,14 @@ contract OpenBoundEx is
 
     function claim(uint256 tokenID, uint256 cid)
         external
-        override (IOpenBoundEx)
+        override(IOpenBoundEx)
         onlyWhenNotPaused
     {
         require(tokenID == _tokenID(msg.sender, cid), "Not owner");
         OpenBoundEx._mint(msg.sender, cid);
     }
 
-    function burn(uint256 tokenID) external override (IOpenBoundEx) {
+    function burn(uint256 tokenID) external override(IOpenBoundEx) {
         address from = ownerOf(tokenID);
         require(from == msg.sender, "Not owner");
 
@@ -95,13 +95,13 @@ contract OpenBoundEx is
     function getMyTokenID(uint256 cid)
         external
         view
-        override (IOpenBoundEx)
+        override(IOpenBoundEx)
         returns (uint256 myTokenID)
     {
         myTokenID = _tokenID(msg.sender, cid);
     }
 
-    function getCID(uint256 tokenID) external view override (IOpenBoundEx) returns (uint256 cid) {
+    function getCID(uint256 tokenID) external view override(IOpenBoundEx) returns (uint256 cid) {
         cid = _cidOfToken[tokenID];
     }
 
@@ -109,7 +109,7 @@ contract OpenBoundEx is
     function totalSupply()
         external
         view
-        override (IERC721Enumerable)
+        override(IERC721Enumerable)
         returns (uint256 tokensLength)
     {
         tokensLength = _tokens.length;
@@ -118,7 +118,7 @@ contract OpenBoundEx is
     function tokenOfOwnerByIndex(address tokenOwner, uint256 index)
         external
         view
-        override (IERC721Enumerable)
+        override(IERC721Enumerable)
         returns (uint256 tokenID)
     {
         require(index == 0 && balanceOf(tokenOwner) == 1, "Invalid index");
@@ -129,7 +129,7 @@ contract OpenBoundEx is
     function tokenByIndex(uint256 index)
         external
         view
-        override (IERC721Enumerable)
+        override(IERC721Enumerable)
         returns (uint256 tokenID)
     {
         require(index < _tokens.length, "Invalid index");
@@ -141,7 +141,7 @@ contract OpenBoundEx is
     function tokenURI(uint256 tokenID)
         external
         view
-        override (IERC721Metadata)
+        override(IERC721Metadata)
         existsToken(tokenID)
         returns (string memory)
     {
@@ -151,7 +151,7 @@ contract OpenBoundEx is
     function getTokenID(address addr, uint256 cid)
         external
         pure
-        override (IOpenBoundEx)
+        override(IOpenBoundEx)
         returns (uint256 tokenID)
     {
         tokenID = _tokenID(addr, cid);
@@ -163,7 +163,7 @@ contract OpenBoundEx is
         string memory symbol_,
         address owner_,
         uint256 maxSupply_
-    ) public override (IOpenBoundEx) {
+    ) public override(IOpenBoundEx) {
         OpenCloneable._initialize("OpenBound", 1);
         OpenERC173._initialize(owner_);
 
@@ -177,7 +177,7 @@ contract OpenBoundEx is
         string memory symbol_,
         address owner_,
         bytes memory params_
-    ) public override (OpenCloneable) {
+    ) public override(OpenCloneable) {
         initialize(name_, symbol_, owner_, abi.decode(params_, (uint256)));
     }
 
@@ -185,7 +185,7 @@ contract OpenBoundEx is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override (OpenPauseable, OpenCloneable, OpenERC5192, OpenChecker)
+        override(OpenPauseable, OpenCloneable, OpenERC5192, OpenChecker)
         returns (bool)
     {
         return interfaceId == type(IOpenBoundEx).interfaceId
@@ -210,12 +210,12 @@ contract OpenBoundEx is
 
     function _mint(address to, string memory newTokenURI, uint256 tokenID)
         internal
-        override (OpenERC5192)
+        override(OpenERC5192)
     {
         super._mint(to, newTokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal override (OpenERC721) {
+    function _burn(uint256 tokenID) internal override(OpenERC721) {
         address from = ownerOf(tokenID);
         uint256 index = _tokenIndexOfOwner[from];
         uint256 lastIndex = _tokens.length - 1;
@@ -237,7 +237,7 @@ contract OpenBoundEx is
         address from,
         address to,
         uint256 // tokenId
-    ) internal pure override (OpenERC721) {
+    ) internal pure override(OpenERC721) {
         require(from == address(0) || to == address(0), "Non transferable NFT");
     }
 

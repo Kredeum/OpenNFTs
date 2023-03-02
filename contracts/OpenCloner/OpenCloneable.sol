@@ -29,7 +29,7 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
     string public template;
     uint256 public version;
 
-    function parent() external view override (IOpenCloneable) returns (address parent_) {
+    function parent() external view override(IOpenCloneable) returns (address parent_) {
         // eip1167 deployed code = 45 bytes = 10 bytes + 20 bytes address + 15 bytes
         // extract bytes 10 to 30: shift 2 bytes (16 bits) then truncate to address 20 bytes (uint160)
         return (address(this).code.length == 45)
@@ -42,13 +42,13 @@ abstract contract OpenCloneable is IOpenCloneable, OpenERC165 {
         string memory symbol,
         address owner,
         bytes memory params
-    ) public virtual override (IOpenCloneable);
+    ) public virtual override(IOpenCloneable);
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
         virtual
-        override (OpenERC165)
+        override(OpenERC165)
         returns (bool)
     {
         return

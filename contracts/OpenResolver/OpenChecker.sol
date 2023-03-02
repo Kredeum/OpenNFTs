@@ -62,7 +62,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function isCollections(address[] memory smartcontracts)
         public
         view
-        override (IOpenChecker)
+        override(IOpenChecker)
         returns (bool[] memory checks)
     {
         uint256 len = smartcontracts.length;
@@ -77,7 +77,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function isCollection(address smartcontract)
         public
         view
-        override (IOpenChecker)
+        override(IOpenChecker)
         onlyContract(smartcontract)
         returns (bool)
     {
@@ -91,7 +91,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
         public
         view
         virtual
-        override (OpenERC165)
+        override(OpenERC165)
         returns (bool)
     {
         return interfaceId == type(IOpenChecker).interfaceId || super.supportsInterface(interfaceId);
@@ -100,7 +100,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function checkErcInterfaces(address smartcontract)
         public
         view
-        override (IOpenChecker)
+        override(IOpenChecker)
         returns (bool[] memory)
     {
         return checkSupportedInterfaces(smartcontract, true, new bytes4[](0));
@@ -109,7 +109,7 @@ abstract contract OpenChecker is IOpenChecker, OpenERC165 {
     function checkSupportedInterfaces(address smartcontract, bool erc, bytes4[] memory interfaceIds)
         public
         view
-        override (IOpenChecker)
+        override(IOpenChecker)
         onlyContract(smartcontract)
         returns (bool[] memory interfaceIdsChecks)
     {

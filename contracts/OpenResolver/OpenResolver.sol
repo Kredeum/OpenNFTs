@@ -35,7 +35,7 @@ import "OpenNFTs/contracts/interfaces/IOpenResolver.sol";
 
 abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
     /// @notice isValid, by default all addresses valid
-    modifier onlyValid(address addr) override (OpenRegistry) {
+    modifier onlyValid(address addr) override(OpenRegistry) {
         require(isCollection(addr), "Not Collection");
         _;
     }
@@ -44,7 +44,7 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         public
         view
         virtual
-        override (OpenRegistry, OpenGetter)
+        override(OpenRegistry, OpenGetter)
         returns (bool)
     {
         return
@@ -55,7 +55,7 @@ abstract contract OpenResolver is IOpenResolver, OpenRegistry, OpenGetter {
         address[] memory collections,
         address account,
         bytes4[] memory interfaceIds
-    ) public view override (IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
+    ) public view override(IOpenResolver) returns (CollectionInfos[] memory collectionsInfos) {
         uint256 len = collections.length;
         collectionsInfos = new CollectionInfos[](len);
         for (uint256 i = 0; i < len; i++) {

@@ -31,20 +31,20 @@ abstract contract OpenERC5192 is IERC5192, OpenERC721 {
         public
         view
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
         returns (bool)
     {
         return interfaceId == 0xb45a3c0e || super.supportsInterface(interfaceId);
     }
 
-    function locked(uint256) public pure override (IERC5192) returns (bool) {
+    function locked(uint256) public pure override(IERC5192) returns (bool) {
         return true;
     }
 
     function _mint(address to, string memory tokenURI, uint256 tokenID)
         internal
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
     {
         super._mint(to, tokenURI, tokenID);
 

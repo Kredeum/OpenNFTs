@@ -13,7 +13,7 @@ import "OpenNFTs/contracts/OpenCloner/OpenCloner.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 
 contract OpenClonerEx is OpenCloner {
-    function clone(address template_) public override (OpenCloner) returns (address clone_) {
+    function clone(address template_) public override(OpenCloner) returns (address clone_) {
         clone_ = super.clone(template_);
 
         address payable treasury = payable(address(0x7));
@@ -31,7 +31,7 @@ contract OpenClonerEx is OpenCloner {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override (OpenCloner)
+        override(OpenCloner)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

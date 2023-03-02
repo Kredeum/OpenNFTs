@@ -9,7 +9,7 @@ interface ITransferValue {
 contract TransferValue is ITransferValue {
     function transferValue(address to, uint256 value)
         external
-        override (ITransferValue)
+        override(ITransferValue)
         returns (uint256)
     {
         bool success;
@@ -22,7 +22,7 @@ contract TransferValue is ITransferValue {
     function getEthBalance(address account)
         external
         view
-        override (ITransferValue)
+        override(ITransferValue)
         returns (uint256)
     {
         return account.balance;

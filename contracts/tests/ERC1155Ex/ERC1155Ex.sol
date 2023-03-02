@@ -12,7 +12,7 @@ contract ERC1155Ex is IERC1155Ex, ERC1155 {
 
     constructor() ERC1155("https://erc1155ex.test") {}
 
-    function mint(uint256 amount) public override (IERC1155Ex) {
+    function mint(uint256 amount) public override(IERC1155Ex) {
         _mint(msg.sender, ++id, amount, "");
     }
 }

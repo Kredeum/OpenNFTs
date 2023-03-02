@@ -8,7 +8,7 @@ interface IMockReceive {
 contract MockReceive is IMockReceive {
     event Received(address, uint256);
 
-    receive() external payable override (IMockReceive) {
+    receive() external payable override(IMockReceive) {
         emit Received(msg.sender, msg.value);
     }
 }

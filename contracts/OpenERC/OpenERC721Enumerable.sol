@@ -47,21 +47,21 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     function tokenOfOwnerByIndex(address owner, uint256 index)
         external
         view
-        override (IERC721Enumerable)
+        override(IERC721Enumerable)
         returns (uint256)
     {
         require(index < OpenERC721.balanceOf(owner), "Invalid index!");
         return _ownedTokens[owner][index];
     }
 
-    function totalSupply() external view override (IERC721Enumerable) returns (uint256) {
+    function totalSupply() external view override(IERC721Enumerable) returns (uint256) {
         return _allTokens.length;
     }
 
     function tokenByIndex(uint256 index)
         external
         view
-        override (IERC721Enumerable)
+        override(IERC721Enumerable)
         returns (uint256)
     {
         require(index < _allTokens.length, "Invalid index!");
@@ -72,7 +72,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         public
         view
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
         returns (bool)
     {
         return interfaceId == 0x780e9d63 || super.supportsInterface(interfaceId);
@@ -81,7 +81,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     function _mint(address to, string memory tokenURI, uint256 tokenID)
         internal
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
     {
         _addOwnedToken(to, tokenID);
 
@@ -91,7 +91,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
         super._mint(to, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         address from = ownerOf(tokenID);
 
         _removeOwnedToken(from, tokenID);
@@ -112,7 +112,7 @@ abstract contract OpenERC721Enumerable is IERC721Enumerable, OpenERC721 {
     function _transferFromBefore(address from, address to, uint256 tokenID)
         internal
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
     {
         _removeOwnedToken(from, tokenID);
         _addOwnedToken(to, tokenID);

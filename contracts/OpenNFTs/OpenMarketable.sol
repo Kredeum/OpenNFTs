@@ -48,16 +48,16 @@ abstract contract OpenMarketable is
 
     ReceiverInfos internal _treasury;
 
-    receive() external payable override (IOpenMarketable) {}
+    receive() external payable override(IOpenMarketable) {}
 
     /// @notice withdraw eth
-    function withdraw() external override (IOpenMarketable) onlyOwner {
+    function withdraw() external override(IOpenMarketable) onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
     }
 
     /// @notice SET default mint price
     /// @param price : default price in wei
-    function setMintPrice(uint256 price) public override (IOpenMarketable) onlyOwner {
+    function setMintPrice(uint256 price) public override(IOpenMarketable) onlyOwner {
         _setMintPrice(price);
     }
 
@@ -66,7 +66,7 @@ abstract contract OpenMarketable is
     /// @param fee : fee Numerator, less than 10000
     function setDefaultRoyalty(address receiver, uint96 fee)
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         onlyOwner
     {
         _setDefaultRoyalty(receiver, fee);
@@ -77,7 +77,7 @@ abstract contract OpenMarketable is
     /// @param price : token price in wei
     function setTokenPrice(uint256 tokenID, uint256 price)
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         onlyTokenOwnerOrApproved(tokenID)
     {
         _setTokenPrice(tokenID, price, address(this), Approve.All);
@@ -89,7 +89,7 @@ abstract contract OpenMarketable is
     /// @param fee : fee Numerator, less than 10_000
     function setTokenRoyalty(uint256 tokenID, address receiver, uint96 fee)
         public
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         existsToken(tokenID)
         onlyOwner
         onlyTokenOwnerOrApproved(tokenID)
@@ -97,14 +97,14 @@ abstract contract OpenMarketable is
         _setTokenRoyalty(tokenID, receiver, fee);
     }
 
-    function getMintPrice() public view override (IOpenMarketable) returns (uint256) {
+    function getMintPrice() public view override(IOpenMarketable) returns (uint256) {
         return _mintPrice;
     }
 
     function getTokenPrice(uint256 tokenID)
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (uint256)
     {
         return _tokenPrice[tokenID];
@@ -115,7 +115,7 @@ abstract contract OpenMarketable is
     function getDefaultRoyalty()
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (ReceiverInfos memory receiver)
     {
         receiver = _defaultRoyalty;
@@ -127,7 +127,7 @@ abstract contract OpenMarketable is
     function getTokenRoyalty(uint256 tokenID)
         public
         view
-        override (IOpenMarketable)
+        override(IOpenMarketable)
         returns (ReceiverInfos memory receiver)
     {
         receiver = _tokenRoyalty[tokenID];
@@ -137,7 +137,7 @@ abstract contract OpenMarketable is
         public
         view
         virtual
-        override (OpenERC721, OpenERC173, OpenERC2981)
+        override(OpenERC721, OpenERC173, OpenERC2981)
         returns (bool)
     {
         return
@@ -161,7 +161,7 @@ abstract contract OpenMarketable is
     function _mint(address to, string memory tokenURI, uint256 tokenID)
         internal
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
     {
         _setTokenRoyalty(tokenID, _defaultRoyalty.account, _defaultRoyalty.fee);
 
@@ -170,7 +170,7 @@ abstract contract OpenMarketable is
         super._mint(to, tokenURI, tokenID);
     }
 
-    function _burn(uint256 tokenID) internal virtual override (OpenERC721) {
+    function _burn(uint256 tokenID) internal virtual override(OpenERC721) {
         delete _tokenRoyalty[tokenID];
         delete _tokenPrice[tokenID];
 
@@ -180,7 +180,7 @@ abstract contract OpenMarketable is
     function _transferFromBefore(address from, address to, uint256 tokenID)
         internal
         virtual
-        override (OpenERC721)
+        override(OpenERC721)
     {
         /// Transfer: pay token price (including royalties) to previous token owner (and royalty receiver)
         _pay(tokenID, _tokenPrice[tokenID], to, ownerOf(tokenID));

@@ -25,18 +25,18 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     function mint(string memory tokenURI)
         external
         payable
-        override (IOpenAutoMarketEx)
+        override(IOpenAutoMarketEx)
         returns (uint256 tokenID)
     {
         tokenID = _tokenID++;
         OpenMarketable._mint(msg.sender, tokenURI, tokenID);
     }
 
-    function burn(uint256 tokenID) external override (IOpenAutoMarketEx) {
+    function burn(uint256 tokenID) external override(IOpenAutoMarketEx) {
         super._burn(tokenID);
     }
 
-    function buy(uint256 tokenID) external payable override (IOpenAutoMarketEx) {
+    function buy(uint256 tokenID) external payable override(IOpenAutoMarketEx) {
         require(_tokenPrice[tokenID] > 0, "Not on sale");
 
         this.safeTransferFrom{value: msg.value}(ownerOf(tokenID), msg.sender, tokenID);
@@ -45,7 +45,7 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     function getEthBalance(address account)
         external
         view
-        override (IOpenAutoMarketEx)
+        override(IOpenAutoMarketEx)
         returns (uint256)
     {
         return account.balance;
@@ -53,7 +53,7 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
 
     function initialize(address owner, address payable treasury, uint96 treasuryFee, bool minimal)
         public
-        override (IOpenAutoMarketEx)
+        override(IOpenAutoMarketEx)
     {
         OpenERC173._initialize(owner);
         OpenMarketable._initialize(0, address(0), 0, treasury, treasuryFee, minimal);
@@ -62,7 +62,7 @@ contract OpenAutoMarketEx is IOpenAutoMarketEx, OpenMarketable {
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override (OpenMarketable)
+        override(OpenMarketable)
         returns (bool)
     {
         return interfaceId == type(IOpenAutoMarketEx).interfaceId

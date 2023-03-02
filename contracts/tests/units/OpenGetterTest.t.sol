@@ -74,7 +74,7 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     }
 
     // invalid tokenID to not revert
-    function testOpenGetterGetNftInfos2() public  {
+    function testOpenGetterGetNftInfos2() public {
         NftInfos memory nftInfos =
             IOpenGetter(_resolver).getNftInfos(address(_collection), 9, _random);
         assertEq(nftInfos.tokenID, 9);

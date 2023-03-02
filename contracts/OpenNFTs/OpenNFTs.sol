@@ -64,17 +64,13 @@ abstract contract OpenNFTs is
 
     /// @notice burn NFT
     /// @param tokenID tokenID of NFT to burn
-    function burn(uint256 tokenID)
-        external
-        override (IOpenNFTs)
-        onlyTokenOwnerOrApproved(tokenID)
-    {
+    function burn(uint256 tokenID) external override(IOpenNFTs) onlyTokenOwnerOrApproved(tokenID) {
         _burn(tokenID);
     }
 
     function mint(address minter, string memory tokenURI)
         public
-        override (IOpenNFTs)
+        override(IOpenNFTs)
         onlyMinter
         returns (uint256 tokenID)
     {
@@ -88,9 +84,7 @@ abstract contract OpenNFTs is
         public
         view
         virtual
-        override (
-            OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable
-        )
+        override(OpenMarketable, OpenERC721Metadata, OpenERC721Enumerable, OpenCloneable, OpenPauseable)
         returns (bool)
     {
         return interfaceId == type(IOpenNFTs).interfaceId || super.supportsInterface(interfaceId);
@@ -126,21 +120,21 @@ abstract contract OpenNFTs is
     /// @param tokenID token ID
     function _mint(address minter, string memory tokenURI, uint256 tokenID)
         internal
-        override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
+        override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
     {
         super._mint(minter, tokenURI, tokenID);
     }
 
     function _burn(uint256 tokenID)
         internal
-        override (OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
+        override(OpenERC721Enumerable, OpenERC721Metadata, OpenMarketable)
     {
         super._burn(tokenID);
     }
 
     function _transferFromBefore(address from, address to, uint256 tokenID)
         internal
-        override (OpenERC721, OpenMarketable, OpenERC721Enumerable)
+        override(OpenERC721, OpenMarketable, OpenERC721Enumerable)
     {
         super._transferFromBefore(from, to, tokenID);
     }

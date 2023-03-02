@@ -22,7 +22,7 @@ contract OpenBoundExTest is
 
     function constructorTest(address owner)
         public
-        override (
+        override(
             OpenNFTsTest,
             ERC173Test,
             ERC721NonTransferableTest,
@@ -43,7 +43,7 @@ contract OpenBoundExTest is
 
     function mintTest(address collection, address minter)
         public
-        override (OpenNFTsTest, OpenPauseableTest, ERC721NonTransferableTest)
+        override(OpenNFTsTest, OpenPauseableTest, ERC721NonTransferableTest)
         returns (uint256, string memory)
     {
         changePrank(minter);
@@ -54,7 +54,7 @@ contract OpenBoundExTest is
 
     function burnTest(address collection, uint256 tokenID)
         public
-        override (OpenNFTsTest, ERC721NonTransferableTest)
+        override(OpenNFTsTest, ERC721NonTransferableTest)
     {
         changePrank(OpenBoundEx(payable(collection)).ownerOf(tokenID));
         OpenBoundEx(payable(collection)).burn(tokenID);
