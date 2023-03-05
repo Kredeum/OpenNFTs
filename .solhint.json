@@ -43,6 +43,7 @@
       "warn",
       15
     ],
+    "no-global-import":"off",
     "modifier-name-mixedcase": "error",
     "multiple-sends": "error",
     "no-complex-fallback": "error",
