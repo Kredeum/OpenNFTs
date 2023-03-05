@@ -30,8 +30,6 @@ interface IOpenMarketable is IOpenReceiverInfos {
         uint256 unspent
     );
 
-    receive() external payable;
-
     function withdraw() external returns (uint256);
 
     function setMintPrice(uint256 price) external;

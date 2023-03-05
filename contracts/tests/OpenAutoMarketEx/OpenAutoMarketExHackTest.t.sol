@@ -6,7 +6,15 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/interfaces/IAll.sol";
 import "OpenNFTs/contracts/examples/IOpenAutoMarketEx.sol";
 
-contract DumbReceiver {}
+contract DumbReceiver {
+    function onERC721Received(address, address, uint256, bytes calldata)
+        external
+        pure
+        returns (bytes4)
+    {
+        return this.onERC721Received.selector;
+    }
+}
 
 abstract contract OpenAutoMarketExHackTest is Test {
     address payable private _collection;
@@ -29,23 +37,17 @@ abstract contract OpenAutoMarketExHackTest is Test {
 
     function testOpenAutoMarketExHackTransfer() public {
         DumbReceiver dumbReceiver = new DumbReceiver();
+        deal(address(dumbReceiver), 2 ether);
+        assertTrue(address(dumbReceiver).balance == 2 ether);
 
         (uint256 tokenID,) = mintTest(_collection, _owner);
-
-        changePrank(_owner);
-        IERC721(_collection).setApprovalForAll(address(this), true);
-        IOpenMarketable(_collection).setTokenRoyalty(tokenID, address(dumbReceiver), 100);
         IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
 
-        changePrank(_buyer);
-        deal(_buyer, 10 ether);
-        (bool sent,) = payable(address(this)).call{value: 1.5 ether}("");
-        require(sent, "Failed to send Ether");
+        changePrank(address(dumbReceiver));
+        IOpenAutoMarketEx(_collection).buy{value: 1.5 ether}(tokenID);
+        assertTrue(IERC721(_collection).ownerOf(tokenID) == address(dumbReceiver));
 
-        changePrank(address(this));
-
-        assertEq(IERC721(_collection).ownerOf(tokenID), _owner);
-        IERC721(_collection).safeTransferFrom{value: 1.5 ether}(_owner, _buyer, tokenID);
-        assertEq(IERC721(_collection).ownerOf(tokenID), _buyer);
+        // some ETH stuck in collection smartcontract
+        assertTrue(_collection.balance == 0.5 ether);
     }
 }

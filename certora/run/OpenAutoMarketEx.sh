@@ -7,10 +7,10 @@ then
   certoraRun                                                            \
   certora/src/OpenAutoMarketExHarness.sol                               \
   certora/src/Receiver.sol                                              \
-  --verify OpenAutoMarketExHarness:certora/specs/OpenAutoMarketEx.spec  \
-	--optimistic_loop                                                     \
+  --verify OpenAutoMarketExHarness:certora/specs/OpenAutoMarketEx.spec   \
+	--optimistic_loop                                                       \
   --msg OpenAutoMarketEx                                                \
-  --rule_sanity                                                         \
+  --rule_sanity                                                          \
   --packages                                                            \
   OpenNFTs/contracts=contracts                                          \
   $([ $# -ge 1 ] && echo --rule $@)                                     \

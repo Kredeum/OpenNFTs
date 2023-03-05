@@ -10,6 +10,4 @@ interface IOpenAutoMarketEx {
     function mint(string memory tokenURI) external payable returns (uint256);
 
     function burn(uint256 tokenID) external;
-
-    function getEthBalance(address account) external returns (uint256);
 }

@@ -48,8 +48,6 @@ abstract contract OpenMarketable is
 
     ReceiverInfos internal _treasury;
 
-    receive() external payable override(IOpenMarketable) {}
-
     /// @notice withdraw eth
     function withdraw() external override(IOpenMarketable) onlyOwner returns (uint256) {
         return _withdraw();
@@ -294,8 +292,6 @@ abstract contract OpenMarketable is
 
         /// Transfer back unspent funds to buyer
         paid += _transferValue(buyer, unspent);
-
-        assert(paid == msg.value);
 
         emit Pay(tokenID, price, seller, paid, receiver, royalties, fee, buyer, unspent);
     }
