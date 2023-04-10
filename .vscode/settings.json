@@ -1,7 +1,7 @@
 {
   "solidity.packageDefaultDependenciesContractsDirectory": "contracts",
   "solidity.packageDefaultDependenciesDirectory": "lib",
-  "solidity.compileUsingRemoteVersion": "v0.8.18",
+  "solidity.compileUsingRemoteVersion": "v0.8.19+commit.7dd6d404",
   "favorites.resources": [
     {
       "filePath": "package.json",
@@ -19,5 +19,6 @@
       "filePath": "certora",
       "group": "Default"
     }
-  ]
+  ],
+  "solidity.defaultCompiler": "remote"
 }

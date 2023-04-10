@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 
 interface IOpenRegistry {
-    function setRegisterer(address registerer) external;
+  function setRegisterer(address registerer) external;
 
-    function removeAddress(address addr) external;
+  function removeAddress(address addr) external;
 
-    function addAddress(address addr) external;
+  function addAddress(address addr) external;
 
-    function addAddresses(address[] memory addrs) external;
+  function addAddresses(address[] memory addrs) external;
 
-    function getAddresses() external view returns (address[] memory);
+  function getAddresses() external view returns (address[] memory);
 
-    function registerer() external view returns (address);
+  function registerer() external view returns (address);
 
-    function countAddresses() external view returns (uint256);
+  function countAddresses() external view returns (uint256);
 
-    function isRegistered(address addr) external view returns (bool registered);
+  function isRegistered(address addr) external view returns (bool registered);
 }

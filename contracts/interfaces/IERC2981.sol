@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 
 interface IERC2981 {
-    function royaltyInfo(uint256 tokenID, uint256 salePrice)
-        external
-        view
-        returns (address receiver, uint256 royaltyAmount);
+  function royaltyInfo(uint256 tokenID, uint256 salePrice)
+    external
+    view
+    returns (address receiver, uint256 royaltyAmount);
 }

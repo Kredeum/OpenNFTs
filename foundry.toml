@@ -1,11 +1,15 @@
 [profile.default]
-src = 'contracts'
+src = 'src'
+test = 'tests'
+script = 'script'
 out = 'out'
+libs = ['lib']
+solc_version = '0.8.19'
 # auto_detect_solc=true
-solc_version='0.8.17'
 
 [fmt]
 line_length = 100
+tab_width = 2
 bracket_spacing = false
 number_underscore = "thousands"
 

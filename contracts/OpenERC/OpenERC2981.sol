@@ -5,94 +5,80 @@
 //
 // Derived from OpenZeppelin Contracts (token/common/ERC2981.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/common/ERC2981.sol
-//
-//       ___           ___         ___           ___              ___           ___                     ___
-//      /  /\         /  /\       /  /\         /__/\            /__/\         /  /\        ___        /  /\
-//     /  /::\       /  /::\     /  /:/_        \  \:\           \  \:\       /  /:/_      /  /\      /  /:/_
-//    /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\           \  \:\     /  /:/ /\    /  /:/     /  /:/ /\
-//   /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\      _____\__\:\   /  /:/ /:/   /  /:/     /  /:/ /::\
-//  /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\    /__/::::::::\ /__/:/ /:/   /  /::\    /__/:/ /:/\:\
-//  \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/    \  \:\~~\~~\/ \  \:\/:/   /__/:/\:\   \  \:\/:/~/:/
-//   \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~      \  \:\  ~~~   \  \::/    \__\/  \:\   \  \::/ /:/
-//    \  \:\/:/     \  \:\      \  \:\/:/     \  \:\           \  \:\        \  \:\         \  \:\   \__\/ /:/
-//     \  \::/       \  \:\      \  \::/       \  \:\           \  \:\        \  \:\         \__\/     /__/:/
-//      \__\/         \__\/       \__\/         \__\/            \__\/         \__\/                   \__\/
-//
 //  OpenERC165
 //       |
 //  OpenERC2981 —— IERC2981 —— IOpenReceiverInfos
 //
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenReceiverInfos.sol";
 
 abstract contract OpenERC2981 is IERC2981, IOpenReceiverInfos, OpenERC165 {
-    uint256 internal _mintPrice;
-    ReceiverInfos internal _defaultRoyalty;
-    mapping(uint256 => ReceiverInfos) internal _tokenRoyalty;
+  uint256 internal _mintPrice;
+  ReceiverInfos internal _defaultRoyalty;
+  mapping(uint256 => ReceiverInfos) internal _tokenRoyalty;
 
-    uint96 internal constant _MAX_FEE = 10_000;
+  uint96 internal constant _MAX_FEE = 10_000;
 
-    modifier notTooExpensive(uint256 price) {
-        /// otherwise may overflow
-        require(price < 2 ** 128, "Too expensive");
-        _;
+  modifier notTooExpensive(uint256 price) {
+    /// otherwise may overflow
+    require(price < 2 ** 128, "Too expensive");
+    _;
+  }
+
+  modifier lessThanMaxFee(uint256 fee) {
+    require(fee <= _MAX_FEE, "Royalty fee exceed price");
+    _;
+  }
+
+  function royaltyInfo(uint256 tokenID, uint256 price)
+    public
+    view
+    override(IERC2981)
+    notTooExpensive(price)
+    returns (address receiver, uint256 royaltyAmount)
+  {
+    ReceiverInfos memory royalty = _tokenRoyalty[tokenID];
+
+    if (royalty.account == address(0)) {
+      royalty = _defaultRoyalty;
     }
 
-    modifier lessThanMaxFee(uint256 fee) {
-        require(fee <= _MAX_FEE, "Royalty fee exceed price");
-        _;
+    royaltyAmount = _calculateAmount(price, royalty.fee);
+
+    /// MINIMAL royaltyAmount
+    if (royalty.minimum > 0) {
+      /// With zero price, token owner can bypass royalties...
+      /// SO a defaultRoyaltyAmount is calculated with _mintPrice as a base
+      /// (can only be modified by collection owner)
+      /// BUT collection owner can higher too much mintPrice making fees too high
+      /// SO a royalty.minimum if calculated for each token on minting (and on setTokenRoyalty)
+
+      /// MIN(royalty.minimum, defaultRoyaltyAmount)
+      uint256 defaultRoyaltyAmount = _calculateAmount(_mintPrice, royalty.fee);
+      uint256 minimumRoyaltyAmount =
+        royalty.minimum < defaultRoyaltyAmount ? royalty.minimum : defaultRoyaltyAmount;
+
+      /// MAX(normalRoyaltyAmount, minimumRoyaltyAmount)
+      royaltyAmount = royaltyAmount < minimumRoyaltyAmount ? minimumRoyaltyAmount : royaltyAmount;
     }
 
-    function royaltyInfo(uint256 tokenID, uint256 price)
-        public
-        view
-        override(IERC2981)
-        notTooExpensive(price)
-        returns (address receiver, uint256 royaltyAmount)
-    {
-        ReceiverInfos memory royalty = _tokenRoyalty[tokenID];
+    return (royalty.account, royaltyAmount);
+  }
 
-        if (royalty.account == address(0)) {
-            royalty = _defaultRoyalty;
-        }
+  function supportsInterface(bytes4 interfaceId)
+    public
+    view
+    virtual
+    override(OpenERC165)
+    returns (bool)
+  {
+    return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
+  }
 
-        royaltyAmount = _calculateAmount(price, royalty.fee);
-
-        /// MINIMAL royaltyAmount
-        if (royalty.minimum > 0) {
-            /// With zero price, token owner can bypass royalties...
-            /// SO a defaultRoyaltyAmount is calculated with _mintPrice as a base
-            /// (can only be modified by collection owner)
-            /// BUT collection owner can higher too much mintPrice making fees too high
-            /// SO a royalty.minimum if calculated for each token on minting (and on setTokenRoyalty)
-
-            /// MIN(royalty.minimum, defaultRoyaltyAmount)
-            uint256 defaultRoyaltyAmount = _calculateAmount(_mintPrice, royalty.fee);
-            uint256 minimumRoyaltyAmount =
-                royalty.minimum < defaultRoyaltyAmount ? royalty.minimum : defaultRoyaltyAmount;
-
-            /// MAX(normalRoyaltyAmount, minimumRoyaltyAmount)
-            royaltyAmount =
-                royaltyAmount < minimumRoyaltyAmount ? minimumRoyaltyAmount : royaltyAmount;
-        }
-
-        return (royalty.account, royaltyAmount);
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(OpenERC165)
-        returns (bool)
-    {
-        return interfaceId == 0x2a55205a || super.supportsInterface(interfaceId);
-    }
-
-    function _calculateAmount(uint256 price, uint96 fee) internal pure returns (uint256) {
-        return (price * fee) / _MAX_FEE;
-    }
+  function _calculateAmount(uint256 price, uint96 fee) internal pure returns (uint256) {
+    return (price * fee) / _MAX_FEE;
+  }
 }
