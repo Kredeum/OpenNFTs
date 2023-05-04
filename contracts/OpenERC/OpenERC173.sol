@@ -5,6 +5,7 @@
 //
 // Derived from OpenZeppelin Contracts (access/Ownable.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/access/Ownable.sol
+//
 //  OpenERC165
 //       |
 //  OpenERC173 —— IERC173

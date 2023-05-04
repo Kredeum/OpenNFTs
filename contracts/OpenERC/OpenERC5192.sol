@@ -2,6 +2,7 @@
 //
 // EIP-5192: Minimal Soulbound NFTs Standard
 // https://eips.ethereum.org/EIPS/eip-5192
+//
 //  OpenERC165
 //       |
 //  OpenERC721

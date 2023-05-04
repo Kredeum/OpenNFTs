@@ -5,6 +5,7 @@
 //
 // Derived from OpenZeppelin Contracts (utils/introspection/ERC165.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/utils/introspection/ERC165.sol
+//
 //  OpenERC165 —— IERC165
 //
 pragma solidity ^0.8.19;

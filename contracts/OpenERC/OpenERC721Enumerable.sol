@@ -6,6 +6,7 @@
 // Derived from OpenZeppelin Contracts (token/ERC721/extensions/ERC721Enumerable.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/...
 // ...contracts/token/ERC721/extensions/ERC721Enumerable.sol
+//
 //      OpenERC165
 //           |
 //      OpenERC721

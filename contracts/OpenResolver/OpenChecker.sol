@@ -2,6 +2,7 @@
 //
 // Derived from OpenZeppelin Contracts (utils/introspection/ERC165Ckecker.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/introspection/ERC165Checker.sol
+//
 //   OpenERC165
 //        |
 //  OpenChecker —— IOpenChecker

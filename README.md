@@ -1,15 +1,15 @@
 ```
-      ___           ___         ___           ___        
-     /  /\         /  /\       /  /\         /__/\       
-    /  /::\       /  /::\     /  /:/_        \  \:\     
-   /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\     
-  /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\    
- /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\   
- \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/   
-  \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~    
-   \  \:\/:/     \  \:\      \  \:\/:/     \  \:\        
-    \  \::/       \  \:\      \  \::/       \  \:\       
-     \__\/         \__\/       \__\/         \__\/      
+      ___           ___         ___           ___
+     /  /\         /  /\       /  /\         /__/\
+    /  /::\       /  /::\     /  /:/_        \  \:\
+   /  /:/\:\     /  /:/\:\   /  /:/ /\        \  \:\
+  /  /:/  \:\   /  /:/~/:/  /  /:/ /:/_   _____\__\:\
+ /__/:/ \__\:\ /__/:/ /:/  /__/:/ /:/ /\ /__/::::::::\
+ \  \:\ /  /:/ \  \:\/:/   \  \:\/:/ /:/ \  \:\~~\~~\/
+  \  \:\  /:/   \  \::/     \  \::/ /:/   \  \:\  ~~~
+   \  \:\/:/     \  \:\      \  \:\/:/     \  \:\
+    \  \::/       \  \:\      \  \::/       \  \:\
+     \__\/         \__\/       \__\/         \__\/
       ___           ___                     ___
      /__/\         /  /\        ___        /  /\
      \  \:\       /  /:/_      /  /\      /  /:/_
@@ -90,7 +90,7 @@ EIP-2981) with no need of a centralized MarketPlace
 #### OpenResolve
 OpenResolve extension pack, to read whatever NFTs infos : free, no gas required !
 -   OpenChecker.sol : Checkable extension, to check multiple ERC165 extensions
--   OpenGetter.sol : Get infos from whatever NFT Collection and list of minted NFTs  
+-   OpenGetter.sol : Get infos from whatever NFT Collection and list of minted NFTs
 -   OpenRegistry.sol : Register your favorite NFT Collections, to be queried multiple times
 -   OpenResolver.sol : Resolve all the infos from a set of Collections
 
@@ -98,7 +98,7 @@ OpenResolve extension pack, to read whatever NFTs infos : free, no gas required 
 OpenClone extension pack, via the use of EIP-1167 "Minimal Proxy"
 -   OpenCloner.sol : inherited by factory cloner
 -   OpenCloneable.sol : inherited by template smartcontracts to be cloned
- 
+
 ### Examples
 
 Here are some smartcontracts given as example on howto "compose" components to make usable NFT Collections:
@@ -131,7 +131,7 @@ We are welcoming any help via PR to develop new components. Like, for example,
 ERC1155 support or a OpenMuliMintable component (enabling minting of multiple NFTs in a single transaction).
 
 OpenNFTs is not "gas optimized", so deploy it carefully on Ethereum mainnet. That's why it's more dedicated to
-templates, to be cloned mutliple times, than for a unique NFT Collection deployment. 
+templates, to be cloned mutliple times, than for a unique NFT Collection deployment.
 
 *You can also use [Kredeum Dapp](https://beta.kredeum.com) to create NFT Collection without any coding.*
 
@@ -143,7 +143,6 @@ This OpenSource project has been developped with the help of :
 -   [ETH Global](https://ethglobal.com/): via various Hackathons and prices
 -   [Polygon](https://polygon.technology/funds/): via a grant on the multichain NFT feature
 -   [GitCoin and all donators](https://gitcoin.co/grants/4186/kredeum-decentralized-nfts-factory): via Grant Rounds 12 to 15
--   [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts): _OpenNFTs is heavily
-    inspired by the more generic OpenZeppelin contracts_
+-   [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts): _OpenNFTs is heavily inspired by the more generic OpenZeppelin contracts_
 
 Thanks to all of them.

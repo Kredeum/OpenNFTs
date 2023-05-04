@@ -2,6 +2,7 @@
 //
 // Derived from Kredeum NFTs
 // https://github.com/Kredeum/kredeum
+//
 //   OpenERC165
 //        |
 //  OpenCloneable —— IOpenCloneable

@@ -2,6 +2,7 @@
 //
 // Derived from OpenZeppelin Contracts (token/common/ERC2981.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/Pausable.sol
+//
 //   OpenERC165
 //        |
 //   OpenERC173

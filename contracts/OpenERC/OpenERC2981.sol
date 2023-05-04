@@ -5,6 +5,7 @@
 //
 // Derived from OpenZeppelin Contracts (token/common/ERC2981.sol)
 // https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts/token/common/ERC2981.sol
+//
 //  OpenERC165
 //       |
 //  OpenERC2981 —— IERC2981 —— IOpenReceiverInfos
