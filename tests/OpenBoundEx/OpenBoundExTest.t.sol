@@ -27,11 +27,11 @@ contract OpenBoundExTest is
     )
     returns (address)
   {
-    changePrank(owner);
     bool[] memory options = new bool[](2);
     options[0] = true;
 
     OpenBoundEx collection = new OpenBoundEx();
+    vm.prank(owner);
     collection.initialize("OpenBoundEx", "BOUND", owner, 0);
 
     return address(collection);
@@ -42,7 +42,7 @@ contract OpenBoundExTest is
     override(OpenNFTsTest, OpenPauseableTest, ERC721NonTransferableTest)
     returns (uint256, string memory)
   {
-    changePrank(minter);
+    vm.prank(minter);
     uint256 tokenID = OpenBoundEx(payable(collection)).mint(_cid++);
     string memory tokenURI = OpenBoundEx(payable(collection)).tokenURI(tokenID);
     return (tokenID, tokenURI);
@@ -52,7 +52,7 @@ contract OpenBoundExTest is
     public
     override(OpenNFTsTest, ERC721NonTransferableTest)
   {
-    changePrank(OpenBoundEx(payable(collection)).ownerOf(tokenID));
+    vm.prank(OpenBoundEx(payable(collection)).ownerOf(tokenID));
     OpenBoundEx(payable(collection)).burn(tokenID);
   }
 

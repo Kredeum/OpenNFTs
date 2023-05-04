@@ -52,44 +52,47 @@ abstract contract ERC721Test is Test, IERC721Events {
   }
 
   function testFailERC721NotOnlyTokenOwner() public {
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
   }
 
   function testFailERC721ApproveChange() public {
-    changePrank(_minter);
+    vm.startPrank(_minter);
     IERC721(_collection).approve(_tester, _tokenID0);
     IERC721(_collection).approve(address(0), _tokenID0);
+    vm.stopPrank();
 
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _buyer, _tokenID0);
   }
 
   function testERC721GetApproved() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).approve(_tester, _tokenID0);
 
     assertEq(IERC721(_collection).getApproved(_tokenID0), _tester);
   }
 
   function testFailERC721GetApproved() public {
-    changePrank(_minter);
+    vm.startPrank(_minter);
     IERC721(_collection).approve(_tester, _tokenID0);
     IERC721(_collection).approve(_buyer, _tokenID0);
+    vm.stopPrank();
 
     assertEq(IERC721(_collection).getApproved(_tokenID0), _tester);
   }
 
   function testERC721IsApprovedForAll() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).setApprovalForAll(_tester, true);
     assertTrue(IERC721(_collection).isApprovedForAll(_minter, _tester));
   }
 
   function testERC721IsNotApprovedForAll() public {
-    changePrank(_minter);
+    vm.startPrank(_minter);
     IERC721(_collection).setApprovalForAll(_tester, true);
     IERC721(_collection).setApprovalForAll(_tester, false);
+    vm.stopPrank();
 
     assertFalse(IERC721(_collection).isApprovedForAll(_minter, _tester));
   }

@@ -36,7 +36,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
   function testOpenAutoMarketExSetDefaultRoyalty() public {
     (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
-    changePrank(_owner);
+    vm.prank(_owner);
     _collection.setDefaultRoyalty(_minter, 100);
 
     (address receiver, uint256 royalties) = _collection.royaltyInfo(tokenID, 1 ether);
@@ -48,9 +48,10 @@ abstract contract OpenAutoMarketExMintTest is Test {
   function testOpenAutoMarketExSetTokenRoyalty() public {
     (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
     _collection.setTokenRoyalty(tokenID, _owner, 200);
     _collection.setDefaultRoyalty(_minter, 100);
+    vm.stopPrank();
 
     (address receiver, uint256 royalties) = _collection.royaltyInfo(tokenID, 1 ether);
 
@@ -59,7 +60,7 @@ abstract contract OpenAutoMarketExMintTest is Test {
   }
 
   function testOpenAutoMarketExSetMintPrice() public {
-    changePrank(_owner);
+    vm.prank(_owner);
     _collection.setMintPrice(1 ether);
 
     assertEq(_collection.getMintPrice(), 1 ether);
@@ -68,43 +69,47 @@ abstract contract OpenAutoMarketExMintTest is Test {
   function testOpenAutoMarketExSetTokenPrice() public {
     (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
     _collection.setTokenPrice(tokenID, 2 ether);
     _collection.setMintPrice(1 ether);
+    vm.stopPrank();
 
     assertEq(_collection.getTokenPrice(tokenID), 2 ether);
   }
 
   // Primary market, token not minted yet, pay token via OpenAutoMarketEx "mint" function
   function testOpenAutoMarketExBuyMint() public {
-    changePrank(_owner);
+    vm.startPrank(_owner);
     _collection.setDefaultRoyalty(_tester, 100);
     _collection.setMintPrice(1 ether);
+    vm.stopPrank();
 
     deal(_buyer, 10 ether);
-    changePrank(_buyer);
+    vm.prank(_buyer);
     uint256 tokenID = _collection.mint{value: 1.5 ether}("");
     assertEq(_collection.ownerOf(tokenID), _buyer);
     assertEq(_buyer.balance, 9 ether);
     assertEq(_tester.balance, 0.01 ether);
     assertEq(_owner.balance, 0.981 ether);
     assertEq(makeAddr("treasury").balance, 0.009 ether);
+
   }
 
   // Secondary market, token already minted, pay token via OpenAutoMarketEx "buy" function
   function testOpenAutoMarketExBuy2() public {
     (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
     _collection.setApprovalForAll(_collectionAddress, true);
     _collection.setTokenRoyalty(tokenID, _tester, 100);
     _collection.setTokenPrice(tokenID, 1 ether);
+    vm.stopPrank();
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
     uint256 balMinter = _owner.balance;
 
     assertEq(_collection.ownerOf(tokenID), _owner);
+    vm.prank(_buyer);
     _collection.buy{value: 1.5 ether}(tokenID);
     assertEq(_collection.ownerOf(tokenID), _buyer);
 
@@ -120,19 +125,20 @@ abstract contract OpenAutoMarketExMintTest is Test {
   function testOpenAutoMarketExBuyViaSafeTransferFrom() public {
     (uint256 tokenID,) = mintTest(_collectionAddress, _owner);
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
     _collection.setApprovalForAll(address(this), true);
     _collection.setTokenRoyalty(tokenID, _tester, 100);
     _collection.setTokenPrice(tokenID, 1 ether);
+    vm.stopPrank();
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
     uint256 balMinter = _owner.balance;
+    vm.prank(_buyer);
     (bool sent,) = payable(address(this)).call{value: 1.5 ether}("");
     require(sent, "Failed to send Ether");
 
-    changePrank(address(this));
     assertEq(_collection.ownerOf(tokenID), _owner);
+    vm.prank(address(this));
     _collection.safeTransferFrom{value: 1.5 ether}(_owner, _buyer, tokenID);
     assertEq(_collection.ownerOf(tokenID), _buyer);
 

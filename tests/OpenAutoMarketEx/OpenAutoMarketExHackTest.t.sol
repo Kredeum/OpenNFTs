@@ -41,9 +41,10 @@ abstract contract OpenAutoMarketExHackTest is Test {
     assertTrue(address(dumbReceiver).balance == 2 ether);
 
     (uint256 tokenID,) = mintTest(_collection, _owner);
+    vm.prank(_owner);
     IOpenMarketable(_collection).setTokenPrice(tokenID, 1 ether);
 
-    changePrank(address(dumbReceiver));
+    vm.prank(address(dumbReceiver));
     IOpenAutoMarketEx(_collection).buy{value: 1.5 ether}(tokenID);
     assertTrue(IERC721(_collection).ownerOf(tokenID) == address(dumbReceiver));
 

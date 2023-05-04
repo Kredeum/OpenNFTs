@@ -23,9 +23,9 @@ contract OpenResolverExTest is
     override(OpenResolverTest, OpenGetterTest, OpenCheckerTest, OpenRegistryTest)
     returns (address)
   {
-    changePrank(owner);
-
     OpenResolverEx collection = new OpenResolverEx();
+
+    vm.prank(owner);
     collection.initialize(owner, owner);
 
     return address(collection);

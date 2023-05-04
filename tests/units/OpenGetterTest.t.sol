@@ -33,6 +33,7 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
   function setUpOpenGetter() public {
     _resolver = constructorTest(_owner);
 
+    vm.startPrank(_owner);
     bool[] memory options = new bool[](2);
     options[0] = true;
     _collection = address(new OpenNFTsEx());
@@ -41,6 +42,7 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     _tokenID0 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
     _tokenID1 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
     _tokenID2 = IOpenNFTsEx(_collection).mint(_TOKEN_URI);
+    vm.stopPrank();
   }
 
   function testERC1155() public {
@@ -54,6 +56,8 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
 
   function testERC1155OpenGetter() public {
     ERC1155Ex eRC1155Ex = new ERC1155Ex();
+
+    vm.prank(_owner);
     eRC1155Ex.mint(10);
 
     NftInfos memory nftInfos = IOpenGetter(_resolver).getNftInfos(address(eRC1155Ex), 0, msg.sender);
@@ -132,7 +136,7 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
   }
 
   function testOpenGetterGetCollectionInfosApprovedForAll2() public {
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).setApprovalForAll(_collection, true);
 
     CollectionInfos memory collectionInfos =

@@ -24,9 +24,10 @@ contract OpenClonerExTest is Test {
   }
 
   function testOne() public {
-    changePrank(_owner);
 
+    vm.prank(_owner);
     address clone = _cloner.clone(address(_collection));
+
     address parent = IOpenCloneable(clone).parent();
     assertEq(parent, address(_collection));
 

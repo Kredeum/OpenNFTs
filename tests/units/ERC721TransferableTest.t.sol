@@ -51,32 +51,32 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
   }
 
   function testERC721SafeTransferFrom() public {
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
   }
 
   function testERC721SafeTransferFromWithData() public {
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
   }
 
   function testERC721SafeTransferFromEmit() public {
-    changePrank(_minter);
-
     vm.expectEmit(true, true, true, false);
     emit Transfer(_minter, _tester, _tokenID0);
+
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
   }
 
   function testERC721SafeTransferFromWithDataEmit() public {
-    changePrank(_minter);
-
     vm.expectEmit(true, true, true, false);
     emit Transfer(_minter, _tester, _tokenID0);
+
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
   }
 
@@ -91,14 +91,16 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     vm.expectEmit(true, true, true, false);
     emit Transfer(from, to, tokenID);
+
+    vm.prank(from);
     IERC721(_collection).safeTransferFrom(from, to, tokenID);
     assertEq(IERC721(_collection).ownerOf(tokenID), to);
   }
 
   function testERC721TransferFrom() public {
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, _tester, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
   }
 
@@ -112,91 +114,100 @@ abstract contract ERC721TransferableTest is Test, IERC721Events {
 
     vm.expectEmit(true, true, true, false);
     emit Transfer(from, to, tokenID);
+
+    vm.prank(from);
     IERC721(_collection).transferFrom(from, to, tokenID);
+
     assertEq(IERC721(_collection).ownerOf(tokenID), to);
   }
 
   function testERC721transferFromToThisContract() public {
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, address(this), _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), address(this));
   }
 
   function testFailERC721SafeTransferFromToNotReceiverContract() public {
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, address(this), _tokenID0);
   }
 
   function testERC721TransferFromToReceiverContract() public {
     address receiverContract = address(new ERC721TokenReceiver());
 
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, receiverContract, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContract);
   }
 
   function testERC721SafeTransferFromToReceiverContract() public {
     address receiverContract = address(new ERC721TokenReceiver());
 
-    changePrank(_minter);
-
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, receiverContract, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContract);
   }
 
   function testERC721TransferFromToNotReceiverContract() public {
-    changePrank(_minter);
     address receiverContractNot = address(new ERC721TokenReceiverNot());
 
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, receiverContractNot, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), receiverContractNot);
   }
 
   function testERC721SafeTransferFromToNotReceiverContract() public {
-    changePrank(_minter);
     address receiverContractNot = address(new ERC721TokenReceiverNot());
 
     vm.expectRevert("Not ERC721Receiver");
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, receiverContractNot, _tokenID0);
   }
 
   function testERC721Approve() public {
-    changePrank(_minter);
     vm.expectEmit(true, true, true, false);
     emit Approval(_minter, _tester, _tokenID0);
+
+    vm.prank(_minter);
     IERC721(_collection).approve(_tester, _tokenID0);
 
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _buyer, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
   }
 
   function testERC721SetApprovalForAll() public {
-    changePrank(_minter);
     vm.expectEmit(true, true, true, false);
     emit ApprovalForAll(_minter, _tester, true);
+
+    vm.prank(_minter);
     IERC721(_collection).setApprovalForAll(_tester, true);
 
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _buyer, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
   }
 
   function testFailERC721TransferFromToZeroAddress() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, address(0), _tokenID0);
   }
 
   function testFailERC721TransferFromFromZeroAddress() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(address(0), _tester, _tokenID0);
   }
 
   function testERC721TransferFromToSameAddress() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
+
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _tester);
   }
 }

@@ -48,7 +48,7 @@ abstract contract OpenResolverTest is Test {
     bool[] memory options = new bool[](2);
     options[0] = true;
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
 
     OpenNFTsEx openNFTsEx = new OpenNFTsEx();
     openNFTsEx.initialize("OpenNFTsEx", "NFT", _owner, payable(address(0x7)), 0, options);
@@ -60,9 +60,9 @@ abstract contract OpenResolverTest is Test {
 
     console.log("msg.sender", msg.sender);
     console.log("_owner", _owner);
-    changePrank(_owner);
     IOpenRegistry(_collection).addAddresses(addrs);
-
+    vm.stopPrank();
+    
     assertEq(IOpenRegistry(_collection).countAddresses(), 2);
     assertEq(IOpenRegistry(_collection).getAddresses(), addrs);
 

@@ -59,8 +59,8 @@ contract OpenAutoMarketExTest is
     )
     returns (address)
   {
-    changePrank(owner);
     OpenAutoMarketEx collection = new OpenAutoMarketEx();
+    vm.prank(owner);
     collection.initialize(owner, payable(makeAddr("treasury")), 90, true);
     return address(collection);
   }
@@ -77,13 +77,13 @@ contract OpenAutoMarketExTest is
     )
     returns (uint256 tokenID, string memory tokenURI)
   {
-    changePrank(minter);
     tokenURI = _TOKEN_URI;
+    vm.prank(minter);
     tokenID = OpenAutoMarketEx(payable(collection)).mint(tokenURI);
   }
 
   function burnTest(address collection, uint256 tokenID) public override(ERC721Test) {
-    changePrank(OpenAutoMarketEx(payable(collection)).ownerOf(tokenID));
+    vm.prank(OpenAutoMarketEx(payable(collection)).ownerOf(tokenID));
     OpenAutoMarketEx(payable(collection)).burn(tokenID);
   }
 
@@ -96,9 +96,10 @@ contract OpenAutoMarketExTest is
     override(ERC2981Test, OpenMarketableTest)
     returns (uint256 tokenID)
   {
-    changePrank(OpenAutoMarketEx(payable(collection)).owner());
+    vm.startPrank(OpenAutoMarketEx(payable(collection)).owner());
     (tokenID,) = (OpenAutoMarketEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
     OpenAutoMarketEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
+    vm.stopPrank();
   }
 
   function setUp() public override(ITest) {

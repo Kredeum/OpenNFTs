@@ -39,6 +39,7 @@ contract OpenAutoMarketExFromOutside is Test {
     vm.startPrank(_random);
     uint256 tokenID1 = openAutoMarketEx.mint("1");
     openAutoMarketEx.transferFrom(_random, _other, tokenID1);
+    vm.stopPrank();
 
     assertEq(openAutoMarketEx.balanceOf(_other), 1);
   }

@@ -27,20 +27,20 @@ abstract contract ERC173Test is Test {
   }
 
   function testERC173TransferOwnership() public {
-    changePrank(_owner);
+    vm.prank(_owner);
     IERC173(_collection).transferOwnership(_tester);
     assertEq(IERC173(_collection).owner(), _tester);
   }
 
   function testFailERC173NotTransferOwnership() public {
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC173(_collection).transferOwnership(_minter);
   }
 
   function testERC173EmitTransferOwnership() public {
-    changePrank(_owner);
     vm.expectEmit(true, true, false, false);
     emit OwnershipTransferred(_owner, _tester);
+    vm.prank(_owner);
     IERC173(_collection).transferOwnership(_tester);
   }
 

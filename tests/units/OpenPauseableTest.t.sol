@@ -30,22 +30,24 @@ abstract contract OpenPauseableTest is Test {
   }
 
   function testPausableTogglePause() public {
-    changePrank(_owner);
+    vm.startPrank(_owner);
 
     IOpenPauseable(_collection).togglePause();
     assertEq(IOpenPauseable(_collection).paused(), true);
 
     IOpenPauseable(_collection).togglePause();
     assertEq(IOpenPauseable(_collection).paused(), false);
+
+    vm.stopPrank();
   }
 
   function testFailPausableTogglePauseNotOwner() public {
-    changePrank(_tester);
+    vm.prank(_tester);
     IOpenPauseable(_collection).togglePause();
   }
 
   function testFailPausableOnlyWhenNotPaused() public {
-    changePrank(_owner);
+    vm.prank(_owner);
     IOpenPauseable(_collection).togglePause();
     assertEq(IOpenPauseable(_collection).paused(), true);
 
@@ -53,15 +55,18 @@ abstract contract OpenPauseableTest is Test {
   }
 
   function testPausableEmitSetPause() public {
-    changePrank(_owner);
+    vm.startPrank(_owner);
 
     vm.expectEmit(true, true, false, false);
     emit SetPaused(true, _owner);
+
     IOpenPauseable(_collection).togglePause();
 
     vm.expectEmit(true, true, false, false);
     emit SetPaused(false, _owner);
     IOpenPauseable(_collection).togglePause();
+
+    vm.stopPrank();
   }
 
   function testPausableSupportsInterface() public {

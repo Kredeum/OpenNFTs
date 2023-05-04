@@ -35,12 +35,12 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
   }
 
   function testFailERC721SafeTransferFrom() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0);
   }
 
   function testFailERC721SafeTransferFromWithData() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, _tester, _tokenID0, "data");
   }
 
@@ -56,17 +56,17 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
   }
 
   function testFailERC721SafeTransferFromNotERC721TokenReceiver() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).safeTransferFrom(_minter, address(_collection), _tokenID0);
   }
 
   function testFailERC721TransferFromNotERC721TokenReceiver() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, address(_collection), _tokenID0);
   }
 
   function testFailERC721TransferFrom() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).transferFrom(_minter, _tester, _tokenID0);
   }
 
@@ -82,18 +82,18 @@ abstract contract ERC721NonTransferableTest is Test, IERC721Events {
   }
 
   function testFailERC721Approve() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).approve(_tester, _tokenID0);
 
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _buyer, _tokenID0);
   }
 
   function testFailERC721SetApprovalForAll() public {
-    changePrank(_minter);
+    vm.prank(_minter);
     IERC721(_collection).setApprovalForAll(_tester, true);
 
-    changePrank(_tester);
+    vm.prank(_tester);
     IERC721(_collection).safeTransferFrom(_minter, _buyer, _tokenID0);
   }
 }

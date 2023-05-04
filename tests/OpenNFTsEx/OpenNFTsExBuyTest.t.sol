@@ -34,32 +34,32 @@ abstract contract OpenNFTsExBuyTest is Test {
   function testBuyOk2(uint256 amount) public {
     vm.assume(amount < 10 * 36);
 
-    changePrank(_owner);
+    vm.startPrank(_owner);
     IERC721(_collection).setApprovalForAll(_collection, true);
-
     IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
     IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, amount);
+    vm.stopPrank();
 
-    changePrank(_buyer);
     deal(_buyer, amount);
 
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
+    vm.prank(_buyer);
     IOpenNFTsEx(_collection).buy{value: amount}(_tokenID0);
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
   }
 
   function testBuyOk() public {
-    changePrank(_owner);
+    vm.startPrank(_owner);
     IERC721(_collection).setApprovalForAll(_collection, true);
-
     IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
     IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
+    vm.stopPrank();
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
     uint256 balOwner = _owner.balance;
 
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _owner);
+    vm.prank(_buyer);
     IOpenNFTsEx(_collection).buy{value: 1.5 ether}(_tokenID0);
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _buyer);
 
@@ -75,30 +75,31 @@ abstract contract OpenNFTsExBuyTest is Test {
     IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
     IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
 
+    vm.startPrank(_buyer);
     IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
     IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
+    vm.stopPrank();
   }
 
   function testFailBuyNotEnoughFunds() public {
     IOpenMarketable(payable(_collection)).setTokenRoyalty(_tokenID0, _tester, 100);
     IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 1 ether);
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
 
+    vm.prank(_buyer);
     IOpenNFTsEx(_collection).buy{value: 0.5 ether}(_tokenID0);
   }
 
   function testFailBuyNotToSell() public {
     IOpenMarketable(payable(_collection)).setTokenPrice(_tokenID0, 0);
 
-    changePrank(_buyer);
     deal(_buyer, 10 ether);
 
     assertEq(IERC721(_collection).ownerOf(_tokenID0), _minter);
+    vm.prank(_buyer);
     IOpenNFTsEx(_collection).buy{value: 1 ether}(_tokenID0);
   }
 }

@@ -59,13 +59,13 @@ contract OpenNFTsExTest is
     override(OpenNFTsExInitializeTest)
     returns (address)
   {
-    changePrank(owner);
     bool[] memory options = new bool[](2);
     options[0] = true; // open
     options[1] = true; // minimal
 
     OpenNFTsEx collection = new OpenNFTsEx();
     if (init) {
+      vm.prank(owner);
       collection.initialize("OpenERC721Test", "OPTEST", owner, payable(address(0x7)), 0, options);
     }
 
@@ -86,7 +86,7 @@ contract OpenNFTsExTest is
     )
     returns (uint256, string memory)
   {
-    changePrank(minter);
+    vm.prank(minter);
     return (OpenNFTsEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
   }
 
@@ -94,7 +94,7 @@ contract OpenNFTsExTest is
     public
     override(OpenNFTsTest, OpenNFTsBurnTest)
   {
-    changePrank(OpenNFTsEx(payable(collection)).ownerOf(tokenID));
+    vm.prank(OpenNFTsEx(payable(collection)).ownerOf(tokenID));
     OpenNFTsEx(payable(collection)).burn(tokenID);
   }
 
@@ -107,9 +107,10 @@ contract OpenNFTsExTest is
     override(ERC2981Test, OpenMarketableTest)
     returns (uint256 tokenID)
   {
-    changePrank(OpenNFTsEx(payable(collection)).owner());
+    vm.startPrank(OpenNFTsEx(payable(collection)).owner());
     (tokenID,) = (OpenNFTsEx(payable(collection)).mint(_TOKEN_URI), _TOKEN_URI);
     OpenNFTsEx(payable(collection)).setTokenRoyalty(tokenID, receiver, fee);
+    vm.stopPrank();
   }
 
   function setUp() public {

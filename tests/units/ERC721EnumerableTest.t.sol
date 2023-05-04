@@ -61,7 +61,6 @@ abstract contract ERC721EnumerableTest is Test {
     console.log("_tokenID0", _tokenID0);
     assertEq(IERC721Enumerable(_collection).tokenOfOwnerByIndex(_minter, 0), _tokenID0);
 
-    changePrank(_tester);
     (uint256 tokenID,) = mintTest(_collection, _tester);
     console.log("tokenID", tokenID);
 

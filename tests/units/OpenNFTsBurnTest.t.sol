@@ -49,7 +49,6 @@ abstract contract OpenNFTsBurnTest is Test {
   }
 
   function testBurnSecondOne() public {
-    changePrank(_tester);
     (uint256 tokenID,) = mintTest(_collection, _tester);
 
     assertEq(IERC721Enumerable(_collection).totalSupply(), 2);
@@ -66,14 +65,12 @@ abstract contract OpenNFTsBurnTest is Test {
   }
 
   function testFailBurnSecondOneTokenByIndex() public {
-    changePrank(_tester);
     (uint256 tokenID,) = mintTest(_collection, _tester);
     burnTest(_collection, tokenID);
     IERC721Enumerable(_collection).tokenByIndex(1);
   }
 
   function testFailBurnSecondOneTokennOfOwnerByIndex() public {
-    changePrank(_tester);
     (uint256 tokenID,) = mintTest(_collection, _tester);
     burnTest(_collection, tokenID);
     IERC721Enumerable(_collection).tokenOfOwnerByIndex(_tester, 0);
@@ -102,7 +99,7 @@ abstract contract OpenNFTsBurnTest is Test {
 
       uint256 randomTokenID1 = IERC721Enumerable(_collection).tokenByIndex(rand3);
       address owner1 = IERC721(_collection).ownerOf(randomTokenID1);
-      changePrank(owner1);
+      vm.prank(owner1);
       IERC721(_collection).transferFrom(owner1, address2, randomTokenID1);
 
       uint256 randomTokenID2 = IERC721Enumerable(_collection).tokenByIndex(uint256(rand3));

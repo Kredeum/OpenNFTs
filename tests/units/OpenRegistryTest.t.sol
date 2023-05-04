@@ -25,22 +25,23 @@ abstract contract OpenRegistryTest is Test {
     bool[] memory options = new bool[](2);
     options[0] = true;
     _collection = address(new OpenNFTsEx());
+
+    vm.prank(_owner);
     IOpenNFTsEx(_collection).initialize("ERC721", "NFT", _owner, payable(address(0x7)), 0, options);
   }
 
   function testOpenRegistryAddAddress() public {
-    changePrank(_owner);
-
     address[] memory addrs = new address[](1);
     addrs[0] = _collection;
 
     assertEq(IOpenRegistry(_resolver).countAddresses(), 0);
+    vm.prank(_owner);
     IOpenRegistry(_resolver).addAddresses(addrs);
     assertEq(IOpenRegistry(_resolver).countAddresses(), 1);
   }
 
   function testOpenRegistryBurnAddress() public {
-    changePrank(_owner);
+    vm.startPrank(_owner);
 
     address[] memory addrs = new address[](3);
     addrs[0] = address(new OpenNFTsEx());
@@ -62,6 +63,8 @@ abstract contract OpenRegistryTest is Test {
     assertEq(IOpenRegistry(_resolver).countAddresses(), 1);
     IOpenRegistry(_resolver).removeAddress(addrs[1]);
     assertEq(IOpenRegistry(_resolver).countAddresses(), 0);
+
+    vm.stopPrank();
   }
 
   function testOpenRegistrySupportsInterface() public {
