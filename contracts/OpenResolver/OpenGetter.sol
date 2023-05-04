@@ -151,7 +151,8 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
     collectionInfos.supported = supported;
 
     // ERC165 must be supported
-    require(!supported[_INVALID] && supported[_ERC165], "Not ERC165");
+    // somme NFT smartcontract don't support ERC165
+    // require(!supported[_INVALID] && supported[_ERC165], "Not ERC165");
 
     // ERC721 or ERC1155 must be supported
     require(supported[_ERC721] || supported[_ERC1155], "Not NFT smartcontract");
