@@ -34,7 +34,7 @@ abstract contract OpenMarketable is
 
   bool public minimal;
 
-  ReceiverInfos internal _treasury;
+  ReceiverInfos public treasury;
 
   /// @notice withdraw eth
   function withdraw() external override(IOpenMarketable) onlyOwner returns (uint256) {
@@ -135,7 +135,7 @@ abstract contract OpenMarketable is
     minimal = minimal_;
     _mintPrice = mintPrice_;
     _defaultRoyalty = _createReceiverInfos(receiver_, fee_);
-    _treasury = _createReceiverInfos(treasury_, treasuryFee_);
+    treasury = _createReceiverInfos(treasury_, treasuryFee_);
   }
 
   function _mint(address to, string memory tokenURI, uint256 tokenID)
@@ -247,7 +247,7 @@ abstract contract OpenMarketable is
     // no payment (and no fee) if buyer is seller
     // no payment (and no fee) if price and royalties are null
     if (buyer != seller && (price + royalties > 0)) {
-      fee = _calculateAmount(price, _treasury.fee);
+      fee = _calculateAmount(price, treasury.fee);
 
       /// Pay seller
       if (price > royalties + fee) {
@@ -265,7 +265,7 @@ abstract contract OpenMarketable is
       paid += _transferValue(receiver, royalties);
 
       /// Transfer fee to protocol treasury
-      paid += _transferValue(_treasury.account, fee);
+      paid += _transferValue(treasury.account, fee);
     }
     unspent = msg.value - paid;
 

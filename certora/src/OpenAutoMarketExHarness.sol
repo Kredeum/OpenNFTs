@@ -10,7 +10,7 @@ contract OpenAutoMarketExHarness is OpenAutoMarketEx {
   }
 
   function getTreasury() public view returns (address) {
-    return _treasury.account;
+    return treasury.account;
   }
 
   function getReceiver(uint256 tokenID) public view returns (address receiver) {
