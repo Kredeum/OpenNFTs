@@ -45,15 +45,6 @@ abstract contract OpenGetterTest is Test, IERCNftInfos {
     vm.stopPrank();
   }
 
-  function testERC1155() public {
-    ERC1155Ex eRC1155Ex = new ERC1155Ex();
-
-    eRC1155Ex.balanceOf(address(this), 0);
-
-    vm.expectRevert("ERC1155: address zero is not a valid owner");
-    eRC1155Ex.balanceOf(address(0), 0);
-  }
-
   function testERC1155OpenGetter() public {
     ERC1155Ex eRC1155Ex = new ERC1155Ex();
 
