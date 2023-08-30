@@ -20,7 +20,7 @@ abstract contract OpenGetter is IOpenGetter, OpenChecker {
   uint8 private constant _INVALID = 0;
   uint8 private constant _ERC165 = 1;
   uint8 private constant _ERC721 = 2;
-  uint8 private constant _ERC721_ENUMERABLE = 2;
+  uint8 private constant _ERC721_ENUMERABLE = 4;
   uint8 private constant _ERC1155 = 6;
   bytes4 private constant _ERC721_ID = 0x80ac58cd;
   bytes4 private constant _ERC1155_ID = 0xd9b67a26;
