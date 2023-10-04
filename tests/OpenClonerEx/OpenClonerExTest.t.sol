@@ -24,7 +24,6 @@ contract OpenClonerExTest is Test {
   }
 
   function testOne() public {
-
     vm.prank(_owner);
     address clone = _cloner.clone(address(_collection));
 

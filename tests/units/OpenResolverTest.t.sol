@@ -62,7 +62,7 @@ abstract contract OpenResolverTest is Test {
     console.log("_owner", _owner);
     IOpenRegistry(_collection).addAddresses(addrs);
     vm.stopPrank();
-    
+
     assertEq(IOpenRegistry(_collection).countAddresses(), 2);
     assertEq(IOpenRegistry(_collection).getAddresses(), addrs);
 

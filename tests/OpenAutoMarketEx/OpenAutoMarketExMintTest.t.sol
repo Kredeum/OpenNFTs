@@ -92,7 +92,6 @@ abstract contract OpenAutoMarketExMintTest is Test {
     assertEq(_tester.balance, 0.01 ether);
     assertEq(_owner.balance, 0.981 ether);
     assertEq(makeAddr("treasury").balance, 0.009 ether);
-
   }
 
   // Secondary market, token already minted, pay token via OpenAutoMarketEx "buy" function
