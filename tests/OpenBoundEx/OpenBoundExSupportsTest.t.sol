@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import "OpenNFTs/tests/interfaces/IAll.sol";
 import "OpenNFTs/tests/interfaces/IOpenBoundEx.sol";
-import "OpenNFTs/tests/examples/OpenResolverEx.sol";
+import "OpenNFTs/contracts/examples/OpenResolverEx.sol";
 
 abstract contract OpenBoundExSupportsTest is Test {
   OpenResolverEx private _resolver;

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {OpenAutoMarketEx} from "OpenNFTs/tests/examples/OpenAutoMarketEx.sol";
+import {OpenAutoMarketEx} from "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
 import {Receiver} from "./Receiver.sol";
 
 contract OpenAutoMarketExHarness is OpenAutoMarketEx {

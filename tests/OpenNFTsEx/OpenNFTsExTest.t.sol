@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 
-import "OpenNFTs/tests/examples/OpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
 
 import "OpenNFTs/tests/OpenNFTsEx/OpenNFTsExInitializeTest.t.sol";
 import "OpenNFTs/tests/OpenNFTsEx/OpenNFTsExCloneTest.t.sol";

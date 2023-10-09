@@ -6,7 +6,7 @@ import "forge-std/Test.sol";
 import "OpenNFTs/tests/interfaces/IAll.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 import "OpenNFTs/tests/interfaces/IOpenNFTsEx.sol";
-import "OpenNFTs/tests/examples/OpenResolverEx.sol";
+import "OpenNFTs/contracts/examples/OpenResolverEx.sol";
 
 abstract contract OpenNFTsExSupportsTest is Test {
   OpenResolverEx private _resolver;

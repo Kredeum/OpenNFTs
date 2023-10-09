@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MITs
 pragma solidity ^0.8.0;
 
-import "OpenNFTs/tests/examples/OpenAutoMarketEx.sol";
+import "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
 
 contract OpenAutoMarketExFuzz is OpenAutoMarketEx {
   address private _other = address(1);

@@ -7,8 +7,8 @@ import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERCNftInfos.sol";
 import "OpenNFTs/contracts/interfaces/IOpenGetter.sol";
-import "OpenNFTs/tests/examples/OpenNFTsEx.sol";
-import {ERC1155Ex} from "OpenNFTs/tests/ERC1155Ex/ERC1155Ex.sol";
+import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
+import {ERC1155Ex} from "OpenNFTs/tests/mocks/MockERC1155.sol";
 
 abstract contract OpenGetterTest is Test, IERCNftInfos {
   address private _resolver;

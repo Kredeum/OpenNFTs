@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import {ERC1155} from "tests/mocks/SolmateERC1155.sol";
 
 interface IERC1155Ex {
   function mint(uint256) external;
@@ -10,7 +10,11 @@ interface IERC1155Ex {
 contract ERC1155Ex is IERC1155Ex, ERC1155 {
   uint256 id;
 
-  constructor() ERC1155("https://erc1155ex.test") {}
+  constructor() ERC1155() {}
+
+  function uri(uint256) public pure override(ERC1155) returns (string memory) {
+    return "";
+  }
 
   function mint(uint256 amount) public override(IERC1155Ex) {
     _mint(msg.sender, ++id, amount, "");

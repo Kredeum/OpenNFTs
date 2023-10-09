@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Test.sol";
 
-import {OpenAutoMarketEx} from "OpenNFTs/tests/examples/OpenAutoMarketEx.sol";
+import {OpenAutoMarketEx} from "OpenNFTs/contracts/examples/OpenAutoMarketEx.sol";
 
 abstract contract OpenAutoMarketExMintTest is Test {
   address private _owner = makeAddr("owner");

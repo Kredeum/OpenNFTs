@@ -4,8 +4,8 @@ pragma solidity ^0.8.0;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/tests/interfaces/IAll.sol";
-import "OpenNFTs/tests/examples/OpenNFTsEx.sol";
-import "OpenNFTs/tests/examples/OpenClonerEx.sol";
+import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/OpenClonerEx.sol";
 
 abstract contract OpenNFTsExCloneTest is Test {
   OpenClonerEx private _cloner;

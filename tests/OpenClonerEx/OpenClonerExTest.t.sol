@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 
 import "OpenNFTs/tests/interfaces/ITest.sol";
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
-import "OpenNFTs/tests/examples/OpenClonerEx.sol";
-import "OpenNFTs/tests/examples/OpenNFTsEx.sol";
+import "OpenNFTs/contracts/examples/OpenClonerEx.sol";
+import "OpenNFTs/contracts/examples/OpenNFTsEx.sol";
 
 contract OpenClonerExTest is Test {
   OpenNFTsEx private _collection;
