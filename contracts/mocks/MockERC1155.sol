@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ERC1155} from "tests/mocks/SolmateERC1155.sol";
+import {ERC1155} from "contracts/mocks/SolmateERC1155.sol";
 
 interface IERC1155Ex {
   function mint(uint256) external;

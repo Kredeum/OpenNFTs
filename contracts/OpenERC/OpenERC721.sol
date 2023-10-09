@@ -12,9 +12,9 @@
 //
 pragma solidity ^0.8.0;
 
-import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
-import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721TokenReceiver.sol";
+import {OpenERC165} from "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
+import {IERC721} from "OpenNFTs/contracts/interfaces/IERC721.sol";
+import {IERC721TokenReceiver} from "OpenNFTs/contracts/interfaces/IERC721TokenReceiver.sol";
 
 abstract contract OpenERC721 is IERC721, OpenERC165 {
   // Mapping from token ID to owner address

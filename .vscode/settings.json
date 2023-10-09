@@ -1,7 +1,4 @@
 {
-  "solidity.packageDefaultDependenciesContractsDirectory": "contracts",
-  "solidity.packageDefaultDependenciesDirectory": "lib",
-  "solidity.compileUsingRemoteVersion": "v0.8.19+commit.7dd6d404",
   "favorites.resources": [
     {
       "filePath": "package.json",
@@ -20,5 +17,11 @@
       "group": "Default"
     }
   ],
-  "solidity.defaultCompiler": "remote"
+  "solidity.compileUsingRemoteVersion": "v0.8.19+commit.7dd6d404",
+  "solidity.defaultCompiler": "remote",
+  "solidity.formatter": "forge",
+  "solidity.packageDefaultDependenciesContractsDirectory": "contracts",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "workbench.colorTheme": "Abyss",
+  "solidity.linter": "solhint"
 }

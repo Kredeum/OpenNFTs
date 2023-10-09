@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity >=0.8.0;
 
-import {SolmateERC20} from "tests/mocks/SolmateERC20.sol";
+import {SolmateERC20} from "contracts/mocks/SolmateERC20.sol";
+
+// import {console} from "forge-std/console.sol";
 
 interface IMockERC20 {
   function mint(address to, uint256 value) external;
@@ -20,4 +22,8 @@ contract MockERC20 is SolmateERC20, IMockERC20 {
   function burn(address from, uint256 value) public virtual override(IMockERC20) {
     _burn(from, value);
   }
+
+  // function transfer(address to, uint256 amount) public override returns (bool) {
+  //   return super.transfer(to, amount);
+  // }
 }
