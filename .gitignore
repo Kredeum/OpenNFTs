@@ -6,3 +6,5 @@ crytic-export
 corpus
 .certora*
 .zip*
+broadcast
+addresses.json

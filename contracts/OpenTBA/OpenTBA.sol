@@ -3,5 +3,6 @@
 //
 pragma solidity ^0.8.0;
 
-abstract contract OpenTBA {
-}
+import {SimpleERC6551Account} from "@erc6551/examples/simple/SimpleERC6551Account.sol";
+
+ contract OpenTBA is SimpleERC6551Account {}

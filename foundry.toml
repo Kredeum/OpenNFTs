@@ -7,6 +7,15 @@ libs = ['lib']
 solc_version = '0.8.19'
 # auto_detect_solc=true
 
+# to write to addresses.json
+fs_permissions = [
+  { access = "read-write", path = "./addresses.json" },
+  { access = "read-write", path = "./out" },
+]
+
+[rpc_endpoints]
+local = "http://127.0.0.1:8545"
+
 [fmt]
 line_length = 100
 tab_width = 2
