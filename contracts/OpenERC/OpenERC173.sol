@@ -10,7 +10,7 @@
 //       |
 //  OpenERC173 —— IERC173
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";

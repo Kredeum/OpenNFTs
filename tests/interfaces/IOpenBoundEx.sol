@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 interface IOpenBoundEx {
   function initialize(string memory name, string memory symbol, address owner, uint256 maxSupply)

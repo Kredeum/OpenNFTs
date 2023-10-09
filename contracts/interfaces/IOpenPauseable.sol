@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 interface IOpenPauseable {
   event SetPaused(bool indexed paused, address indexed account);

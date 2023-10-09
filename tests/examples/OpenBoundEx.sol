@@ -17,7 +17,7 @@
 //      |
 //  OpenBound --- IOpenBoundEx --- IERC721Enumerable --- IERC721Metadata
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 import "OpenNFTs/contracts/OpenNFTs/OpenPauseable.sol";

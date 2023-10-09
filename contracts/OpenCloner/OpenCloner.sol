@@ -10,7 +10,7 @@
 //        |
 //   OpenCloner —— IOpenCloner
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/interfaces/IOpenCloner.sol";
 import "OpenNFTs/contracts/OpenERC/OpenERC165.sol";

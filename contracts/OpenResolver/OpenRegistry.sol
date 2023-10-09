@@ -9,7 +9,7 @@
 //        |
 //  OpenRegistry —— IOpenRegistry
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC173.sol";
 import "OpenNFTs/contracts/interfaces/IOpenRegistry.sol";

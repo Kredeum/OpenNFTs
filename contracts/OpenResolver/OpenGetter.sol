@@ -4,7 +4,7 @@
 //        |
 //  OpenGetter —— IOpenGetter
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenResolver/OpenChecker.sol";
 import "OpenNFTs/contracts/interfaces/IOpenGetter.sol";

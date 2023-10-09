@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 //   OpenGuard
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 abstract contract OpenGuard {
   bool private _locked;

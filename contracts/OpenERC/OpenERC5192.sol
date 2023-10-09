@@ -9,7 +9,7 @@
 //       |
 //  OpenERC5192 —— IERC5192
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC5192.sol";

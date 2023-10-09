@@ -26,7 +26,7 @@
 //       |
 //   OpenNFTsEx —— IOpenNFTsEx
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenNFTs/OpenNFTs.sol";
 

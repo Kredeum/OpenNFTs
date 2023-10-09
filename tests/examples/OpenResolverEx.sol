@@ -8,7 +8,7 @@
 //        |
 //  OpenResolverEx —— IOpenResolverEx
 //
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
 
 import "OpenNFTs/contracts/OpenResolver/OpenResolver.sol";
 
