@@ -6,8 +6,8 @@ import "forge-std/Test.sol";
 import "OpenNFTs/contracts/interfaces/IERC173.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IOpenMarketable.sol";
 
 abstract contract OpenNFTsSetupTest is Test {

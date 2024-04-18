@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/interfaces/IERC2981.sol";
 import "OpenNFTs/contracts/interfaces/IOpenNFTs.sol";
 import "OpenNFTs/tests/interfaces/IOpenNFTsEx.sol";

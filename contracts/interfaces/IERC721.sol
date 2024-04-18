@@ -26,3 +26,31 @@ interface IERC721 {
 
   function isApprovedForAll(address owner, address operator) external view returns (bool);
 }
+
+interface IERC721Enumerable {
+  function totalSupply() external view returns (uint256);
+
+  function tokenOfOwnerByIndex(address owner, uint256 index) external view returns (uint256);
+
+  function tokenByIndex(uint256 index) external view returns (uint256);
+}
+
+interface IERC721Events {
+  event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+  event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
+  event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+}
+
+interface IERC721Metadata {
+  function name() external view returns (string memory);
+
+  function symbol() external view returns (string memory);
+
+  function tokenURI(uint256 tokenId) external view returns (string memory);
+}
+
+interface IERC721TokenReceiver {
+  function onERC721Received(address operator, address from, uint256 tokenId, bytes calldata data)
+    external
+    returns (bytes4);
+}

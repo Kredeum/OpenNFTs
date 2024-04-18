@@ -26,8 +26,8 @@ import "OpenNFTs/contracts/OpenERC/OpenERC5192.sol";
 
 import "OpenNFTs/contracts/interfaces/IOpenCloneable.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Enumerable.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Metadata.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
 import "OpenNFTs/contracts/libraries/Bafkrey.sol";
 
 import "OpenNFTs/tests/interfaces/IOpenBoundEx.sol";

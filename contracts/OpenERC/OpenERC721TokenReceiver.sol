@@ -15,7 +15,7 @@
 pragma solidity ^0.8.19;
 
 import "OpenNFTs/contracts/OpenERC/OpenERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721TokenReceiver.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
 
 contract OpenERC721TokenReceiver is IERC721TokenReceiver {
   function onERC721Received(address, address, uint256, bytes calldata)

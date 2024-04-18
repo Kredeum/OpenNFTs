@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 
 import "OpenNFTs/contracts/interfaces/IERC165.sol";
 import "OpenNFTs/contracts/interfaces/IERC721.sol";
-import "OpenNFTs/contracts/interfaces/IERC721Events.sol";
+import "OpenNFTs/contracts/interfaces/IERC721.sol";
 
 contract ERC721TokenReceiver {
   function onERC721Received(address, address, uint256, bytes calldata)
