@@ -1,17 +1,18 @@
-using Receiver as receiver
+using Receiver as receiver;
 
 methods {
-  owner             ()                              returns address   envfree
-  getEthBalance     (address)                       returns uint256   envfree
-  getTreasury       ()                              returns address   envfree
-  getReceiver       (uint256)                       returns address   envfree
+  function owner             ()                                 external returns address   envfree;
+  function getEthBalance     (address)                          external returns uint256   envfree;
+  function getTreasury       ()                                 external returns address   envfree;
+  function getReceiver       (uint256)                          external returns address   envfree;
 
-  getTokenPrice     (uint256)                       returns uint256   envfree
-  ownerOf           (uint256)                                        envfree
-  buy               (uint256)
+  function getTokenPrice     (uint256)                          external returns uint256   envfree;
+  function ownerOf           (uint256)                          external returns address   envfree;
+  function buy               (uint256)                          external                          ;
+  function withdraw          ()                                 external returns uint256          ;
 
-  sendTo            ()                              returns bool              => DISPATCHER(true)
-  onERC721Received  (address,address,uint256,bytes) returns bytes4            => DISPATCHER(true)
+  function _.sendTo            ()                               external                          ;
+  function _.onERC721Received  (address,address,uint256,bytes)  external                          ;
 }
 
 /**
@@ -31,21 +32,21 @@ rule balChanges(method f, env e, calldataarg args){
   // foundry counter example in OpenAutoMarketExHackTest.sol
   // if buyer can't receive ether, unspent ETH is stuck in contract...
   // No ETH balance change in NFT collection (except withdraw)
-  assert ( random == currentContract ) &&  ( f.selector != withdraw().selector )
+  assert ( random == currentContract ) &&  ( f.selector != sig:withdraw().selector )
     =>  balRandomAfter == balRandomBefore;
 
   // Only buyer (i.e. sender) or collection (on withdraw) may have ETH balance decreased
   assert balRandomAfter < balRandomBefore
     =>  random == e.msg.sender
-    ||  ( ( random == currentContract ) && ( f.selector == withdraw().selector ) );
+    ||  ( ( random == currentContract ) && ( f.selector == sig:withdraw().selector ) );
 
   // Only buy, withdraw and transfer functions may change some ETH balances
   assert balRandomAfter != balRandomBefore =>
-       f.selector == buy(uint256).selector
-    || f.selector == withdraw().selector
-    || f.selector == transferFrom(address,address,uint256).selector
-    || f.selector == safeTransferFrom(address,address,uint256).selector
-    || f.selector == safeTransferFrom(address,address,uint256,bytes).selector;
+       f.selector == sig:buy(uint256).selector
+    || f.selector == sig:withdraw().selector
+    || f.selector == sig:transferFrom(address,address,uint256).selector
+    || f.selector == sig:safeTransferFrom(address,address,uint256).selector
+    || f.selector == sig:safeTransferFrom(address,address,uint256,bytes).selector;
 }
 
 /**
